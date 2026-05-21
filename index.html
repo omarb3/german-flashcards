@@ -1265,13 +1265,17 @@ const GRAMMAR = [
   {topic:"focus_on_connectors",rule:"B1 improves a lot when you master connectors AND their word-order behavior.",examples:["weil (verb at end)","obwohl (verb at end)","deshalb (inversion)","trotzdem (inversion)","damit (verb at end)"]},
   {topic:"active_output",rule:"Practice speaking and writing with longer answers instead of single sentences.",examples:["Erzähle von einem Erlebnis.","Beschreibe ein Problem und eine Lösung.","Gib deine Meinung mit Gründen."]}
 ]},
-{level:"Cases",category:"case_meanings",title:"What the cases mean",items:[
-  {topic:"nominativ",rule:"Nominativ is the subject of the sentence — the person or thing DOING the action.",examples:["Der Mann liest.","Die Frau spricht.","Das Kind spielt."]},
-  {topic:"akkusativ",rule:"Akkusativ is the direct object — the person or thing RECEIVING the action.",examples:["Ich sehe den Mann.","Sie kauft das Buch.","Er besucht die Frau."]},
-  {topic:"dativ",rule:"Dativ is the indirect object (recipient) OR appears after dative prepositions and dative verbs.",examples:["Ich gebe dem Mann das Buch.","Sie hilft der Frau.","Wir danken den Kindern."]}
+{level:"Cases",category:"why_cases",title:"1. Why cases exist",items:[
+  {topic:"why_cases",rule:"English marks who-does-what with WORD ORDER. German marks it with CASES — the article changes shape based on the noun's role in the sentence. That's why German word order can be more flexible: the case tells you who's doing what to whom.",examples:["English: 'The dog bites the man' ≠ 'The man bites the dog' — word order decides the meaning.","German: 'Der Hund beißt den Mann' = 'Den Mann beißt der Hund' — same meaning either way.","The case marker (der vs den) tells you who bites whom — not the order."]}
 ]},
-{level:"Cases",category:"article_tables",title:"Article tables",items:[
-  {topic:"definite_articles",rule:"Definite articles (der/das/die) change based on case and gender. Notice that only the masculine column changes in Akkusativ; Dativ changes everything.",table:{
+{level:"Cases",category:"three_roles",title:"2. The three roles",items:[
+  {topic:"anchor_sentence",rule:"Memorize this single sentence — it contains all three cases. We'll return to it throughout: 'Der Mann gibt dem Kind den Ball.' (The man gives the child the ball.) Each noun in this sentence plays a different role.",examples:["Der Mann → Nominativ (the actor: who gives)","den Ball → Akkusativ (what is given)","dem Kind → Dativ (to whom it's given)"]},
+  {topic:"role_nominativ",rule:"Nominativ marks the SUBJECT — the actor doing the action. Every German sentence has exactly one Nominativ.",examples:["Anchor: Der Mann gibt dem Kind den Ball. → 'Der Mann' is in Nom: he does the giving.","Der Hund schläft.","Die Lehrerin arbeitet.","Das Kind spielt."]},
+  {topic:"role_akkusativ",rule:"Akkusativ marks the DIRECT OBJECT — the thing or person the action is done to.",examples:["Anchor: Der Mann gibt dem Kind den Ball. → 'den Ball' is in Akk: the ball is what's given.","Ich sehe den Mann.","Sie kauft das Buch.","Er besucht die Frau."]},
+  {topic:"role_dativ",rule:"Dativ marks the INDIRECT OBJECT — usually the recipient or person affected. (Dativ is ALSO triggered by certain prepositions and verbs — covered in section 4.)",examples:["Anchor: Der Mann gibt dem Kind den Ball. → 'dem Kind' is in Dat: the child receives.","Ich gebe dem Hund Wasser.","Sie hilft der Lehrerin.","Wir danken den Kindern."]}
+]},
+{level:"Cases",category:"article_forms",title:"3. The article forms",items:[
+  {topic:"definite_articles",rule:"Now that you know the roles, here are the article forms. Two key observations: Akkusativ only changes the MASCULINE article (der → den). Dativ changes EVERY form.",table:{
     headers:["Case","Masculine","Neuter","Feminine","Plural"],
     rows:[
       ["Nominativ","der","das","die","die"],
@@ -1279,7 +1283,7 @@ const GRAMMAR = [
       ["Dativ","dem","dem","der","den"]
     ]
   }},
-  {topic:"indefinite_articles",rule:"Indefinite articles (ein/eine). German has NO plural indefinite article — you simply drop it in the plural.",table:{
+  {topic:"indefinite_articles",rule:"Indefinite articles follow the SAME pattern as definite ones. There is NO plural indefinite article in German — you simply drop the article in the plural.",table:{
     headers:["Case","Masculine","Neuter","Feminine"],
     rows:[
       ["Nominativ","ein","ein","eine"],
@@ -1288,28 +1292,13 @@ const GRAMMAR = [
     ]
   }}
 ]},
-{level:"Cases",category:"how_they_change",title:"How the articles change",items:[
-  {topic:"nominativ_change",rule:"Nominativ keeps the base form.",examples:["der, das, die, die","ein, ein, eine"]},
-  {topic:"akkusativ_change",rule:"Akkusativ ONLY changes the masculine article. Neuter, feminine, and plural stay identical to nominativ.",examples:["der → den","ein → einen"]},
-  {topic:"dativ_change",rule:"Dativ changes ALL singular forms; plural takes 'den' and adds -n to the noun.",examples:["der → dem","das → dem","die → der","die (plural) → den","ein → einem","eine → einer"]}
+{level:"Cases",category:"forced_cases",title:"4. When rules override the role",items:[
+  {topic:"dativ_prepositions",rule:"Some prepositions ALWAYS take Dativ — regardless of what role the noun would otherwise play. Memorize as a group: aus, bei, mit, nach, seit, von, zu. Even if the noun looks like a direct object, the preposition wins.",examples:["Ich fahre mit dem Bus. (not 'den Bus' — 'mit' forces Dat)","Sie kommt aus der Türkei.","Wir gehen zu dem Markt. (→ 'zum Markt')","Ich wohne bei meiner Schwester."]},
+  {topic:"akkusativ_prepositions",rule:"These prepositions ALWAYS take Akkusativ: durch, für, gegen, ohne, um. Same logic — the preposition decides the case, not the noun's role.",examples:["Das Geschenk ist für dich.","Ich gehe ohne meine Jacke.","Wir laufen durch den Park.","Er fährt gegen den Baum."]},
+  {topic:"two_way_prepositions",rule:"Two-way prepositions (Wechselpräpositionen) can take EITHER case. The rule: ACCUSATIVE for direction (wohin? = where to?), DATIVE for location (wo? = where?). Memorize the 9: an, auf, hinter, in, neben, über, unter, vor, zwischen.",examples:["Ich gehe in die Stadt. (movement → Akk: wohin?)","Ich bin in der Stadt. (location → Dat: wo?)","Er stellt das Buch auf den Tisch. (movement → Akk)","Das Buch liegt auf dem Tisch. (location → Dat)"]}
 ]},
-{level:"Cases",category:"case_usage",title:"When to use each case",items:[
-  {topic:"nominativ_usage",rule:"Use Nominativ for the subject of the sentence (the WHO).",examples:["Der Hund schläft.","Die Lehrerin arbeitet.","Das Auto ist neu."]},
-  {topic:"akkusativ_usage",rule:"Use Akkusativ for the direct object (the WHAT/WHOM being acted on).",examples:["Ich habe den Hund.","Er sieht die Lehrerin.","Wir kaufen das Auto."]},
-  {topic:"dativ_usage",rule:"Use Dativ for the indirect object (TO WHOM) OR after dative prepositions/verbs.",examples:["Ich gebe dem Hund Wasser.","Er hilft der Lehrerin.","Wir fahren mit dem Auto."]}
-]},
-{level:"Cases",category:"prepositions_cases",title:"Prepositions by case",items:[
-  {topic:"dativ_prepositions",rule:"These ALWAYS take dative. Memorize them as a group: aus-bei-mit-nach-seit-von-zu.",examples:["aus","bei","mit","nach","seit","von","zu"]},
-  {topic:"akkusativ_prepositions",rule:"These ALWAYS take accusative. Memorize: durch-für-gegen-ohne-um.",examples:["durch","für","gegen","ohne","um"]},
-  {topic:"two_way_prepositions",rule:"Two-way prepositions (Wechselpräpositionen): accusative for MOVEMENT/direction (wohin?), dative for LOCATION (wo?).",examples:["an","auf","hinter","in","neben","über","unter","vor","zwischen"]}
-]},
-{level:"Cases",category:"case_examples",title:"Examples by case",items:[
-  {topic:"nominativ_examples",rule:"Examples with the subject in Nominativ.",examples:["Der Hund schläft.","Die Lehrerin arbeitet.","Das Kind spielt.","Die Kinder spielen."]},
-  {topic:"akkusativ_examples",rule:"Examples with a direct object in Akkusativ.",examples:["Ich habe den Hund.","Er sieht die Lehrerin.","Wir kaufen das Auto.","Sie kennt die Kinder."]},
-  {topic:"dativ_examples",rule:"Examples where Dativ is used (indirect object or after dative preposition).",examples:["Ich gebe dem Hund Wasser.","Er hilft der Lehrerin.","Wir fahren mit dem Auto.","Sie spricht mit den Kindern."]}
-]},
-{level:"Cases",category:"memory_trick",title:"Quick memory trick",items:[
-  {topic:"role_summary",rule:"Nominativ = WHO does it. Akkusativ = WHAT/WHOM is being acted on. Dativ = TO WHOM, or after dative prepositions/verbs.",examples:["Der Mann gibt dem Kind den Ball.","→ Der Mann (Nom: subject — who gives)","→ dem Kind (Dat: indirect object — to whom)","→ den Ball (Akk: direct object — what)"]}
+{level:"Cases",category:"quick_reference",title:"5. Quick reference",items:[
+  {topic:"anchor_decomposition",rule:"Your mental anchor for the three cases. Whenever you're stuck, return to this sentence. It's the fastest way to retest your understanding.",examples:["Der Mann gibt dem Kind den Ball.","→ Der Mann (Nominativ — the actor / who gives)","→ den Ball (Akkusativ — the direct object / what is given)","→ dem Kind (Dativ — the indirect object / to whom)","────────","ALWAYS Dativ: aus · bei · mit · nach · seit · von · zu","ALWAYS Akkusativ: durch · für · gegen · ohne · um","TWO-WAY (wohin? → Akk, wo? → Dat): an · auf · hinter · in · neben · über · unter · vor · zwischen"]}
 ]}
 ];
 
