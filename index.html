@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>German Flashcards</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f7f8;color:#111827;min-height:100vh;padding:20px;line-height:1.5}
+.container{max-width:600px;margin:0 auto;display:flex;flex-direction:column;min-height:calc(100vh - 40px)}
+h1{font-size:28px;margin-bottom:8px}
+h2{font-size:20px;margin-bottom:4px}
+p{color:#1f2937;margin-bottom:16px}
+.muted{color:#6b7280;font-size:13px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.card.active{border-color:#111827;border-width:2px;padding:19px}
+button{font:inherit;cursor:pointer;padding:14px 18px;border-radius:12px;border:1px solid;font-weight:600;font-size:16px;width:100%;margin-bottom:12px;transition:opacity 0.15s}
+button:hover:not(:disabled){opacity:0.85}
+button:disabled{opacity:0.5;cursor:not-allowed}
+.btn-primary{background:#111827;color:#fff;border-color:#111827}
+.btn-secondary{background:#fff;color:#111827;border-color:#d1d5db}
+.btn-danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+.btn-subtle{background:#f3f4f6;color:#111827;border-color:#e5e7eb}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.grid-3 .card{margin-bottom:0;padding:14px 10px;text-align:center}
+.row{display:flex;gap:8px}
+.row > *{flex:1;margin-bottom:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.grid-2 button{margin-bottom:0}
+.flashcard{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;cursor:pointer;user-select:none;transition:transform 0.15s ease}
+.flashcard:active{transform:scale(0.99)}
+.flashcard .german{font-size:34px;font-weight:700}
+.flashcard .translation{font-size:22px;font-weight:600;margin-top:4px}
+.flashcard .meaning{color:#4b5563;font-size:15px;line-height:1.4;font-style:italic;margin-top:2px}
+.flashcard .flip-hint{position:absolute;top:12px;right:14px;font-size:11px;color:#9ca3af;letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
+.flashcard{position:relative}
+.gender-badge{display:inline-block;padding:4px 14px;border-radius:999px;font-size:16px;font-weight:700;letter-spacing:0.5px}
+.gender-der{background:#dbeafe;color:#1e40af}
+.gender-die{background:#fce7f3;color:#9d174d}
+.gender-das{background:#d1fae5;color:#065f46}
+.example-block{margin-top:10px;padding:12px 16px;background:#f9fafb;border-radius:10px;border-left:3px solid #d1d5db;text-align:left;width:100%}
+.example-block .ex-de{font-weight:600;font-size:15px;color:#111827}
+.example-block .ex-en{color:#6b7280;font-size:14px;margin-top:4px}
+.example-block .case-label{font-size:11px;font-weight:700;color:#6b7280;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px}
+.example-block.case-nom{border-left-color:#3b82f6}
+.example-block.case-akk{border-left-color:#f59e0b}
+.example-block.case-dat{border-left-color:#10b981}
+.example-block.case-nom .case-label{color:#1e40af}
+.example-block.case-akk .case-label{color:#92400e}
+.example-block.case-dat .case-label{color:#065f46}
+.header-row{display:flex;justify-content:space-between;margin-bottom:12px}
+.stats-row{display:flex;justify-content:space-between;padding:4px 0}
+.stats-row .val{font-weight:600}
+.level-option{cursor:pointer;user-select:none}
+.level-option .state{color:#6b7280;font-size:14px}
+.spacer{flex:1}
+.size-label{font-size:14px;color:#6b7280;margin-bottom:6px;margin-top:4px}
+.size-row{display:flex;gap:8px;margin-bottom:16px}
+.size-row button{margin-bottom:0;padding:10px}
+.size-row button.active{background:#111827;color:#fff;border-color:#111827}
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+<script>
+// Compact card format. Variable-length arrays.
+// phrase/adjective (6 fields): [id, level, type, german, translation, meaning]
+// noun (7): [id, level, "n", gender, german, translation, meaning]
+// verb (8): [id, level, "v", german, translation, meaning, exGerman, exEnglish]
+const _D = [
+// ===== A1 =====
+["a1-001","A1","p","Hallo","Hello","Casual all-day greeting."],
+["a1-002","A1","p","Tschüss","Bye","Informal goodbye."],
+["a1-003","A1","p","Guten Morgen","Good morning","Used until about 11am."],
+["a1-004","A1","p","Guten Tag","Good day / hello","Formal daytime greeting."],
+["a1-005","A1","p","Guten Abend","Good evening","Used from late afternoon."],
+["a1-006","A1","p","Gute Nacht","Good night","Said before bed, not as greeting."],
+["a1-007","A1","p","Auf Wiedersehen","Goodbye","Formal farewell."],
+["a1-008","A1","p","Bis bald","See you soon","Casual; expects to meet soon."],
+["a1-009","A1","p","Danke","Thanks","Basic thank you."],
+["a1-010","A1","p","Danke schön","Thank you very much","Warmer thanks."],
+["a1-011","A1","p","Bitte","Please / You're welcome","Multi-use: please, here you go, you're welcome."],
+["a1-012","A1","p","Entschuldigung","Excuse me / Sorry","To get attention or apologize."],
+["a1-013","A1","p","Es tut mir leid","I'm sorry","Sincere apology, deeper than Entschuldigung."],
+["a1-014","A1","p","Ja","Yes","Affirmative."],
+["a1-015","A1","p","Nein","No","Negative."],
+["a1-016","A1","p","Vielleicht","Maybe","Expresses uncertainty."],
+["a1-017","A1","p","Wie heißt du?","What's your name?","Informal name question."],
+["a1-018","A1","p","Ich heiße ...","My name is ...","Standard self-introduction."],
+["a1-019","A1","p","Wie geht es dir?","How are you?","Informal, with friends."],
+["a1-020","A1","p","Mir geht es gut","I'm fine","Standard response."],
+["a1-021","A1","p","Ich komme aus ...","I'm from ...","State your origin."],
+["a1-022","A1","p","Woher kommst du?","Where are you from?","Asks origin."],
+["a1-023","A1","p","Wo wohnst du?","Where do you live?","Asks current residence."],
+["a1-024","A1","p","Ich verstehe nicht","I don't understand","Useful when lost in conversation."],
+["a1-025","A1","p","Kannst du das wiederholen?","Can you repeat that?","Polite request."],
+["a1-026","A1","n","der","Tag","day","24-hour period or daytime."],
+["a1-027","A1","n","die","Nacht","night","Period of darkness."],
+["a1-028","A1","n","die","Woche","week","Seven days."],
+["a1-029","A1","n","der","Monat","month","Calendar month."],
+["a1-030","A1","n","das","Jahr","year","365 days."],
+["a1-031","A1","n","die","Stunde","hour","60 minutes."],
+["a1-032","A1","n","die","Minute","minute","60 seconds."],
+["a1-033","A1","n","die","Sekunde","second","Smallest common time unit."],
+["a1-034","A1","n","die","Zeit","time","Concept of time. 'Wie viel Zeit?' = how much time?"],
+["a1-035","A1","n","der","Morgen","morning","Early part of day."],
+["a1-036","A1","n","der","Abend","evening","Late part of day."],
+["a1-037","A1","n","der","Mittag","noon / midday","Around 12pm."],
+["a1-038","A1","n","die","Mitternacht","midnight","12am."],
+["a1-039","A1","p","heute","today","This day."],
+["a1-040","A1","p","morgen","tomorrow","Same word as 'morning' but lowercase = tomorrow."],
+["a1-041","A1","p","gestern","yesterday","The day before today."],
+["a1-042","A1","p","jetzt","now","At this moment."],
+["a1-043","A1","p","später","later","At a future time."],
+["a1-044","A1","a","früh","early","Before expected time."],
+["a1-045","A1","a","spät","late","After expected time."],
+["a1-046","A1","n","der","Montag","Monday","First weekday."],
+["a1-047","A1","n","der","Dienstag","Tuesday","Second weekday."],
+["a1-048","A1","n","der","Mittwoch","Wednesday","Middle of week."],
+["a1-049","A1","n","der","Donnerstag","Thursday","Fourth weekday."],
+["a1-050","A1","n","der","Freitag","Friday","Last workday."],
+["a1-051","A1","n","der","Samstag","Saturday","Weekend day."],
+["a1-052","A1","n","der","Sonntag","Sunday","Rest day; shops closed in Germany."],
+["a1-053","A1","n","der","Januar","January","First month."],
+["a1-054","A1","n","der","Februar","February","Second month."],
+["a1-055","A1","n","der","März","March","Third month, start of spring."],
+["a1-056","A1","n","der","April","April","Fourth month."],
+["a1-057","A1","n","der","Mai","May","Fifth month."],
+["a1-058","A1","n","der","Juni","June","Sixth month, summer begins."],
+["a1-059","A1","n","der","Juli","July","Seventh month."],
+["a1-060","A1","n","der","August","August","Eighth month."],
+["a1-061","A1","n","die","Familie","family","Group of related people."],
+["a1-062","A1","n","die","Mutter","mother","Female parent."],
+["a1-063","A1","n","der","Vater","father","Male parent."],
+["a1-064","A1","n","der","Bruder","brother","Male sibling."],
+["a1-065","A1","n","die","Schwester","sister","Female sibling."],
+["a1-066","A1","n","die","Eltern","parents","Always plural in German."],
+["a1-067","A1","n","das","Kind","child","Young person; plural: Kinder."],
+["a1-068","A1","n","der","Sohn","son","Male child."],
+["a1-069","A1","n","die","Tochter","daughter","Female child."],
+["a1-070","A1","n","der","Mann","man / husband","Adult male; or 'my husband'."],
+["a1-071","A1","n","die","Frau","woman / wife","Adult female; also: Mrs."],
+["a1-072","A1","n","der","Freund","friend / boyfriend","Male friend or boyfriend."],
+["a1-073","A1","n","die","Freundin","friend / girlfriend","Female friend or girlfriend."],
+["a1-074","A1","n","der","Kopf","head","Body part on top."],
+["a1-075","A1","n","das","Gesicht","face","Front of head."],
+["a1-076","A1","n","das","Auge","eye","Plural: Augen."],
+["a1-077","A1","n","das","Ohr","ear","Organ of hearing."],
+["a1-078","A1","n","die","Nase","nose","For smell/breathing."],
+["a1-079","A1","n","der","Mund","mouth","For eating and speaking."],
+["a1-080","A1","n","die","Hand","hand","Body part with fingers."],
+["a1-081","A1","n","der","Fuß","foot","End of leg."],
+["a1-082","A1","n","der","Arm","arm","Between shoulder and hand."],
+["a1-083","A1","n","das","Bein","leg","Limb for walking."],
+["a1-084","A1","n","der","Bauch","stomach / belly","Abdominal area."],
+["a1-085","A1","n","der","Rücken","back","Behind body."],
+["a1-086","A1","n","das","Brot","bread","Central to German breakfast."],
+["a1-087","A1","n","der","Käse","cheese","Dairy product."],
+["a1-088","A1","n","die","Butter","butter","Spread made from cream."],
+["a1-089","A1","n","das","Ei","egg","Common food; plural: Eier."],
+["a1-090","A1","n","das","Fleisch","meat","Animal flesh as food."],
+["a1-091","A1","n","der","Fisch","fish","Aquatic animal or its meat."],
+["a1-092","A1","n","das","Obst","fruit","General term for fruit."],
+["a1-093","A1","n","das","Gemüse","vegetables","General term for vegetables."],
+["a1-094","A1","n","der","Apfel","apple","Common fruit."],
+["a1-095","A1","n","die","Banane","banana","Yellow tropical fruit."],
+["a1-096","A1","n","die","Tomate","tomato","Red vegetable/fruit."],
+["a1-097","A1","n","die","Kartoffel","potato","Very common in Germany."],
+["a1-098","A1","n","der","Reis","rice","Staple grain."],
+["a1-099","A1","n","die","Suppe","soup","Liquid meal."],
+["a1-100","A1","n","der","Salat","salad","Vegetable dish or lettuce."],
+["a1-101","A1","n","das","Wasser","water","Essential drink."],
+["a1-102","A1","n","der","Kaffee","coffee","Hot caffeinated drink."],
+["a1-103","A1","n","der","Tee","tea","Hot herbal drink."],
+["a1-104","A1","n","das","Bier","beer","Popular in Germany."],
+["a1-105","A1","n","der","Wein","wine","From grapes."],
+["a1-106","A1","n","die","Milch","milk","Dairy drink."],
+["a1-107","A1","n","der","Saft","juice","Fruit juice."],
+["a1-108","A1","n","die","Cola","Coke / cola","Soft drink."],
+["a1-109","A1","n","das","Haus","house","Standalone building to live in."],
+["a1-110","A1","n","die","Wohnung","apartment / flat","Living unit in a building."],
+["a1-111","A1","n","das","Zimmer","room","Single room in home."],
+["a1-112","A1","n","die","Küche","kitchen","Room for cooking."],
+["a1-113","A1","n","das","Bad","bathroom","Room with toilet/shower."],
+["a1-114","A1","n","das","Schlafzimmer","bedroom","Room with bed."],
+["a1-115","A1","n","das","Wohnzimmer","living room","Main relaxing room."],
+["a1-116","A1","n","die","Tür","door","Entrance to a room."],
+["a1-117","A1","n","das","Fenster","window","Glass opening."],
+["a1-118","A1","n","der","Tisch","table","Flat surface furniture."],
+["a1-119","A1","n","der","Stuhl","chair","Seat with backrest."],
+["a1-120","A1","n","das","Bett","bed","Furniture for sleeping."],
+["a1-121","A1","n","das","Hemd","shirt","Button-up upper garment."],
+["a1-122","A1","n","die","Hose","pants / trousers","Singular in German (one item)."],
+["a1-123","A1","n","der","Schuh","shoe","Plural: Schuhe."],
+["a1-124","A1","n","die","Jacke","jacket","Outer upper garment."],
+["a1-125","A1","n","der","Mantel","coat","Long heavy outer garment."],
+["a1-126","A1","n","das","Kleid","dress","One-piece female garment."],
+["a1-127","A1","n","die","Mütze","cap / beanie","Soft hat."],
+["a1-128","A1","n","die","Tasche","bag","Container to carry things."],
+["a1-129","A1","a","rot","red","Color of blood, fire."],
+["a1-130","A1","a","blau","blue","Color of sky, ocean."],
+["a1-131","A1","a","grün","green","Color of grass."],
+["a1-132","A1","a","gelb","yellow","Color of sun, bananas."],
+["a1-133","A1","a","schwarz","black","Darkest color."],
+["a1-134","A1","a","weiß","white","Lightest color."],
+["a1-135","A1","a","grau","gray","Between black and white."],
+["a1-136","A1","a","braun","brown","Color of wood, chocolate."],
+["a1-137","A1","v","sein","to be","Most basic verb. Irregular: bin, bist, ist, sind, seid.","Ich bin müde.","I am tired."],
+["a1-138","A1","v","haben","to have","Second most basic. Irregular.","Ich habe Hunger.","I'm hungry."],
+["a1-139","A1","v","werden","to become / will","Used for future tense and changes of state.","Es wird kalt.","It's getting cold."],
+["a1-140","A1","v","gehen","to go / walk","Move on foot or general 'go'.","Ich gehe nach Hause.","I'm going home."],
+["a1-141","A1","v","kommen","to come","Movement towards speaker.","Ich komme aus Berlin.","I come from Berlin."],
+["a1-142","A1","v","machen","to do / make","Very broad; used for many actions.","Was machst du?","What are you doing?"],
+["a1-143","A1","v","sehen","to see","Visual perception. Irregular: du siehst.","Ich sehe den Hund.","I see the dog."],
+["a1-144","A1","v","hören","to hear / listen","Auditory perception.","Ich höre Musik.","I listen to music."],
+["a1-145","A1","v","lesen","to read","Irregular: du liest, er liest.","Sie liest ein Buch.","She reads a book."],
+["a1-146","A1","v","schreiben","to write","Write text or letters.","Ich schreibe eine E-Mail.","I'm writing an email."],
+["a1-147","A1","v","sprechen","to speak","Verbal communication. Irregular.","Sprichst du Deutsch?","Do you speak German?"],
+["a1-148","A1","v","verstehen","to understand","Grasp meaning.","Ich verstehe dich nicht.","I don't understand you."],
+["a1-149","A1","v","lernen","to learn / study","Acquire knowledge.","Ich lerne Deutsch.","I'm learning German."],
+["a1-150","A1","v","arbeiten","to work","Have a job; perform labor.","Ich arbeite in Berlin.","I work in Berlin."],
+["a1-151","A1","v","wohnen","to live (reside)","Have residence in a place.","Ich wohne in München.","I live in Munich."],
+["a1-152","A1","v","leben","to live (be alive)","Broader than 'wohnen'.","Wir leben gut.","We live well."],
+["a1-153","A1","v","kaufen","to buy","Purchase something.","Ich kaufe Brot.","I'm buying bread."],
+["a1-154","A1","v","essen","to eat","Irregular: du isst, er isst.","Ich esse einen Apfel.","I'm eating an apple."],
+["a1-155","A1","v","trinken","to drink","Consume liquids.","Er trinkt Wasser.","He drinks water."],
+["a1-156","A1","v","schlafen","to sleep","Irregular.","Ich schlafe acht Stunden.","I sleep eight hours."],
+["a1-157","A1","v","fahren","to drive / travel","Travel by vehicle. Irregular.","Ich fahre nach Berlin.","I'm driving to Berlin."],
+["a1-158","A1","v","laufen","to run / walk","Move quickly on foot. Irregular.","Sie läuft schnell.","She runs fast."],
+["a1-159","A1","v","spielen","to play","Play game, sport, or instrument.","Wir spielen Fußball.","We play football."],
+["a1-160","A1","v","lieben","to love","Strong affection.","Ich liebe dich.","I love you."],
+["a1-161","A1","v","mögen","to like","Modal verb: have a preference.","Ich mag Kaffee.","I like coffee."],
+["a1-162","A1","v","wollen","to want","Modal verb: desire/intent.","Ich will gehen.","I want to go."],
+["a1-163","A1","v","können","can / to be able","Modal verb: ability or possibility.","Ich kann schwimmen.","I can swim."],
+["a1-164","A1","v","müssen","must / to have to","Modal verb: obligation.","Ich muss arbeiten.","I have to work."],
+["a1-165","A1","v","sollen","should / supposed to","Modal: external obligation.","Du sollst lernen.","You should study."],
+["a1-166","A1","v","dürfen","may / to be allowed","Modal: permission.","Darf ich gehen?","May I go?"],
+["a1-167","A1","v","brauchen","to need","Require something.","Ich brauche Hilfe.","I need help."],
+["a1-168","A1","v","helfen","to help","Takes dative case.","Ich helfe dir.","I help you."],
+["a1-169","A1","v","geben","to give","Also: 'es gibt' = there is.","Gib mir das Buch.","Give me the book."],
+["a1-170","A1","v","nehmen","to take","Grab or accept. Irregular.","Ich nehme den Bus.","I'm taking the bus."],
+["a1-171","A1","v","finden","to find / think","'find + adj' = think it is.","Ich finde es gut.","I think it's good."],
+["a1-172","A1","v","suchen","to search / look for","Try to locate.","Ich suche meine Schlüssel.","I'm looking for my keys."],
+["a1-173","A1","v","kennen","to know (person/place)","Be acquainted with. Different from 'wissen'.","Ich kenne ihn.","I know him."],
+["a1-174","A1","v","wissen","to know (fact)","Irregular: ich weiß.","Ich weiß es nicht.","I don't know."],
+["a1-175","A1","v","denken","to think","Have an opinion or use mind.","Ich denke an dich.","I'm thinking of you."],
+["a1-176","A1","v","fragen","to ask","Pose a question.","Darf ich dich fragen?","May I ask you?"],
+["a1-177","A1","a","gut","good","Positive quality. Comparative: besser."],
+["a1-178","A1","a","schlecht","bad","Negative quality."],
+["a1-179","A1","a","groß","big / tall","Large size or tall stature."],
+["a1-180","A1","a","klein","small","Little in size."],
+["a1-181","A1","a","alt","old","Aged or not new."],
+["a1-182","A1","a","jung","young","Of low age."],
+["a1-183","A1","a","neu","new","Recently made or unused."],
+["a1-184","A1","a","schön","beautiful / nice","Aesthetically pleasing."],
+["a1-185","A1","a","lang","long","Extended length or duration."],
+["a1-186","A1","a","kurz","short","Brief length or duration."],
+["a1-187","A1","a","schnell","fast","High speed."],
+["a1-188","A1","a","langsam","slow","Low speed."],
+["a1-189","A1","a","warm","warm","Pleasant heat."],
+["a1-190","A1","a","kalt","cold","Low temperature."],
+["a1-191","A1","a","heiß","hot","High temperature."],
+["a1-192","A1","a","voll","full","Filled completely."],
+["a1-193","A1","a","leer","empty","Containing nothing."],
+["a1-194","A1","a","leicht","easy / light","Simple or low weight."],
+["a1-195","A1","a","schwer","difficult / heavy","Hard or heavy weight."],
+["a1-196","A1","a","richtig","correct / right","Accurate or proper."],
+["a1-197","A1","n","die","Schule","school","Place for primary/secondary education."],
+["a1-198","A1","n","das","Auto","car","Personal vehicle."],
+["a1-199","A1","n","der","Bus","bus","Public transport vehicle."],
+["a1-200","A1","n","der","Zug","train","Rail transport."],
+// ===== A2 =====
+["a2-001","A2","n","die","Reise","trip / journey","A travel undertaking, often longer."],
+["a2-002","A2","n","der","Urlaub","vacation","Time off work for leisure travel."],
+["a2-003","A2","n","der","Flughafen","airport","Where planes land/depart."],
+["a2-004","A2","n","der","Bahnhof","train station","Where trains depart."],
+["a2-005","A2","n","das","Ticket","ticket","Modern German; also 'Fahrkarte'."],
+["a2-006","A2","n","die","Fahrkarte","ticket (transport)","Train/bus ticket."],
+["a2-007","A2","n","das","Gepäck","luggage","Uncountable collectively."],
+["a2-008","A2","n","der","Koffer","suitcase","Large rectangular travel bag."],
+["a2-009","A2","n","das","Hotel","hotel","Place to stay while travelling."],
+["a2-010","A2","n","die","Reservierung","reservation","Booking in advance."],
+["a2-011","A2","v","reisen","to travel","Auxiliary: sein.","Wir reisen nach Italien.","We're travelling to Italy."],
+["a2-012","A2","v","buchen","to book","Reserve in advance.","Ich buche das Hotel.","I'm booking the hotel."],
+["a2-013","A2","v","packen","to pack","Put things in luggage.","Ich packe meinen Koffer.","I'm packing my suitcase."],
+["a2-014","A2","v","ankommen","to arrive","Separable verb.","Der Zug kommt um 8 an.","The train arrives at 8."],
+["a2-015","A2","v","abfahren","to depart","Separable.","Wir fahren morgen ab.","We depart tomorrow."],
+["a2-016","A2","v","umsteigen","to change (transport)","Switch trains/buses. Separable.","Ich steige in Köln um.","I change trains in Cologne."],
+["a2-017","A2","n","der","Strand","beach","Sandy seaside area."],
+["a2-018","A2","n","das","Meer","sea","Body of saltwater."],
+["a2-019","A2","n","der","Berg","mountain","Large natural elevation."],
+["a2-020","A2","n","der","See","lake","'der See' = lake; 'die See' = sea. Tricky!"],
+["a2-021","A2","n","die","Gesundheit","health","Also said after someone sneezes."],
+["a2-022","A2","n","die","Krankheit","illness","Sickness or disease."],
+["a2-023","A2","n","der","Arzt","doctor (m)","Medical professional."],
+["a2-024","A2","n","die","Ärztin","doctor (f)","Female form of Arzt."],
+["a2-025","A2","n","das","Krankenhaus","hospital","Place for medical treatment."],
+["a2-026","A2","n","die","Apotheke","pharmacy","Shop for medicine."],
+["a2-027","A2","n","das","Medikament","medication","Drug for treatment."],
+["a2-028","A2","n","die","Tablette","pill","Solid medication."],
+["a2-029","A2","n","die","Schmerzen","pain","Usually plural in German."],
+["a2-030","A2","n","das","Fieber","fever","Elevated body temperature."],
+["a2-031","A2","v","weh tun","to hurt","Takes dative.","Mein Kopf tut weh.","My head hurts."],
+["a2-032","A2","a","krank","sick","Not healthy."],
+["a2-033","A2","a","gesund","healthy","In good health."],
+["a2-034","A2","a","müde","tired","Needing sleep or rest."],
+["a2-035","A2","v","sich fühlen","to feel","Reflexive: how one feels.","Ich fühle mich gut.","I feel good."],
+["a2-036","A2","n","das","Geld","money","Currency in general."],
+["a2-037","A2","n","der","Euro","euro","EU currency."],
+["a2-038","A2","n","der","Preis","price","Cost of something."],
+["a2-039","A2","n","die","Rechnung","bill / invoice","What you pay at a restaurant."],
+["a2-040","A2","n","das","Geschäft","shop / business","Shop, or business in general."],
+["a2-041","A2","n","der","Supermarkt","supermarket","Large grocery store."],
+["a2-042","A2","n","die","Bäckerei","bakery","Shop selling bread/pastries."],
+["a2-043","A2","n","der","Markt","market","Open-air shopping."],
+["a2-044","A2","v","bezahlen","to pay","Give money for something.","Ich bezahle mit Karte.","I'm paying by card."],
+["a2-045","A2","v","kosten","to cost","Have a price.","Das kostet zehn Euro.","That costs ten euros."],
+["a2-046","A2","v","verkaufen","to sell","Opposite of kaufen.","Sie verkauft Bücher.","She sells books."],
+["a2-047","A2","v","bestellen","to order","Request from menu or shop.","Ich bestelle eine Pizza.","I'll order a pizza."],
+["a2-048","A2","a","billig","cheap","Low price; can be negative."],
+["a2-049","A2","a","teuer","expensive","High price."],
+["a2-050","A2","a","günstig","affordable / favorable","More neutral than 'billig'."],
+["a2-051","A2","n","das","Hobby","hobby","Leisure activity."],
+["a2-052","A2","n","die","Freizeit","free time","Time off from work/school."],
+["a2-053","A2","n","der","Sport","sport","Physical activity for fun/competition."],
+["a2-054","A2","n","die","Musik","music","Sounds organized artistically."],
+["a2-055","A2","n","der","Film","movie","Cinematic work."],
+["a2-056","A2","n","das","Buch","book","Written work."],
+["a2-057","A2","v","schwimmen","to swim","Move through water.","Ich schwimme gern.","I like to swim."],
+["a2-058","A2","v","tanzen","to dance","Move rhythmically to music.","Wir tanzen jeden Samstag.","We dance every Saturday."],
+["a2-059","A2","v","singen","to sing","Produce musical sounds with voice.","Sie singt im Chor.","She sings in a choir."],
+["a2-060","A2","v","malen","to paint","Create art with paint.","Er malt ein Bild.","He's painting a picture."],
+["a2-061","A2","n","das","Telefon","telephone","Device for calling."],
+["a2-062","A2","n","das","Handy","mobile phone","Common in Germany. False friend with English."],
+["a2-063","A2","n","die","Nummer","number","Phone number or other."],
+["a2-064","A2","n","die","E-Mail","email","Electronic message."],
+["a2-065","A2","n","die","Nachricht","message / news","Communication or piece of news."],
+["a2-066","A2","v","anrufen","to call","Phone someone. Separable.","Ich rufe dich an.","I'll call you."],
+["a2-067","A2","v","schicken","to send","Send something.","Ich schicke eine SMS.","I'm sending a text."],
+["a2-068","A2","v","antworten","to answer","Reply. Dative for person.","Sie antwortet mir nicht.","She doesn't answer me."],
+["a2-069","A2","v","treffen","to meet","Meet up with. Irregular.","Ich treffe Freunde.","I'm meeting friends."],
+["a2-070","A2","v","einladen","to invite","Ask someone to come. Separable.","Ich lade dich ein.","I invite you."],
+["a2-071","A2","v","begrüßen","to greet","Welcome someone.","Er begrüßt die Gäste.","He greets the guests."],
+["a2-072","A2","v","sich verabreden","to arrange to meet","Reflexive.","Wir verabreden uns für morgen.","We're meeting tomorrow."],
+["a2-073","A2","a","glücklich","happy","Feeling joy."],
+["a2-074","A2","a","traurig","sad","Feeling sorrow."],
+["a2-075","A2","a","wütend","angry","Strong negative emotion."],
+["a2-076","A2","a","böse","angry / mean","Cross with someone, or evil."],
+["a2-077","A2","a","froh","glad","Relieved or pleased."],
+["a2-078","A2","a","ängstlich","anxious / fearful","Worried or scared."],
+["a2-079","A2","a","ruhig","calm / quiet","Without disturbance."],
+["a2-080","A2","a","freundlich","friendly","Kind and pleasant."],
+["a2-081","A2","a","nett","nice","Pleasant, kind."],
+["a2-082","A2","a","ehrlich","honest","Truthful."],
+["a2-083","A2","a","höflich","polite","Showing good manners."],
+["a2-084","A2","a","interessant","interesting","Holding attention."],
+["a2-085","A2","a","langweilig","boring","Not interesting."],
+["a2-086","A2","a","lustig","funny","Causing laughter."],
+["a2-087","A2","a","wichtig","important","Of significance."],
+["a2-088","A2","n","die","Arbeit","work","Job or labor in general."],
+["a2-089","A2","n","der","Beruf","profession","Career or trained job."],
+["a2-090","A2","n","die","Firma","company","Business enterprise."],
+["a2-091","A2","n","das","Büro","office","Workplace, usually desk work."],
+["a2-092","A2","n","der","Chef","boss","Workplace superior."],
+["a2-093","A2","n","der","Kollege","colleague (m)","Coworker."],
+["a2-094","A2","n","die","Kollegin","colleague (f)","Female coworker."],
+["a2-095","A2","n","der","Termin","appointment","Fixed appointment with someone specific."],
+["a2-096","A2","n","die","Besprechung","meeting","Work discussion."],
+["a2-097","A2","n","das","Gehalt","salary","Fixed monthly pay."],
+["a2-098","A2","n","die","Pause","break","Rest period."],
+["a2-099","A2","v","verdienen","to earn","Make money or deserve.","Sie verdient gut.","She earns well."],
+["a2-100","A2","v","anfangen","to begin","Start something. Separable.","Wann fängt das Meeting an?","When does the meeting start?"],
+["a2-101","A2","v","aufhören","to stop","Cease activity. Separable.","Hör auf zu schreien.","Stop yelling."],
+["a2-102","A2","v","warten","to wait","Often with 'auf' + acc.","Ich warte auf den Bus.","I'm waiting for the bus."],
+["a2-103","A2","n","das","Restaurant","restaurant","Place to eat out."],
+["a2-104","A2","n","die","Speisekarte","menu","List of dishes."],
+["a2-105","A2","n","der","Kellner","waiter","Restaurant staff (m)."],
+["a2-106","A2","n","die","Kellnerin","waitress","Restaurant staff (f)."],
+["a2-107","A2","n","das","Trinkgeld","tip","Extra money for service."],
+["a2-108","A2","n","die","Vorspeise","appetizer","First course."],
+["a2-109","A2","n","das","Hauptgericht","main course","Main dish."],
+["a2-110","A2","n","die","Nachspeise","dessert","Sweet course after main."],
+["a2-111","A2","n","das","Frühstück","breakfast","Morning meal."],
+["a2-112","A2","n","das","Mittagessen","lunch","Midday meal."],
+["a2-113","A2","n","das","Abendessen","dinner","Evening meal."],
+["a2-114","A2","v","kochen","to cook","Prepare food.","Ich koche gern.","I like cooking."],
+["a2-115","A2","v","schmecken","to taste","Be tasty.","Das schmeckt gut.","That tastes good."],
+["a2-116","A2","v","probieren","to try / taste","Sample something.","Probier mal!","Try it!"],
+["a2-117","A2","v","empfehlen","to recommend","Irregular.","Ich empfehle die Suppe.","I recommend the soup."],
+["a2-118","A2","v","erklären","to explain","Make clear.","Kannst du das erklären?","Can you explain that?"],
+["a2-119","A2","v","entscheiden","to decide","Reflexive: sich entscheiden.","Ich entscheide mich für Kaffee.","I'll go with coffee."],
+["a2-120","A2","v","vergessen","to forget","Irregular.","Ich habe es vergessen.","I forgot it."],
+["a2-121","A2","v","sich erinnern","to remember","Reflexive. With 'an' + acc.","Ich erinnere mich an dich.","I remember you."],
+["a2-122","A2","v","beschreiben","to describe","Give a description.","Beschreibe das Bild.","Describe the picture."],
+["a2-123","A2","v","versuchen","to try","Attempt something.","Ich versuche es noch einmal.","I'll try once more."],
+["a2-124","A2","v","verlieren","to lose","Lose object or competition.","Wir haben das Spiel verloren.","We lost the game."],
+["a2-125","A2","v","gewinnen","to win","Win competition or gain.","Sie gewinnt oft.","She wins often."],
+["a2-126","A2","v","wiederholen","to repeat","Do again.","Wiederhole das, bitte.","Repeat that, please."],
+["a2-127","A2","v","passieren","to happen","Auxiliary: sein.","Was ist passiert?","What happened?"],
+["a2-128","A2","v","stattfinden","to take place","Separable.","Das Konzert findet morgen statt.","The concert takes place tomorrow."],
+["a2-129","A2","v","bleiben","to stay","Remain. Auxiliary: sein.","Ich bleibe zu Hause.","I'm staying home."],
+["a2-130","A2","v","zeigen","to show","Display or point out.","Zeig mir das Foto.","Show me the photo."],
+["a2-131","A2","v","vergleichen","to compare","Examine differences.","Vergleiche die Preise.","Compare the prices."],
+["a2-132","A2","v","bedeuten","to mean","Have a meaning.","Was bedeutet das?","What does that mean?"],
+["a2-133","A2","v","übersetzen","to translate","Convert between languages.","Sie übersetzt den Text.","She translates the text."],
+["a2-134","A2","v","benutzen","to use","Use something.","Ich benutze ein Wörterbuch.","I use a dictionary."],
+["a2-135","A2","v","verändern","to change","Modify or transform.","Das verändert alles.","That changes everything."],
+["a2-136","A2","v","öffnen","to open","Open something.","Öffne die Tür.","Open the door."],
+["a2-137","A2","v","schließen","to close","Irregular.","Schließ das Fenster.","Close the window."],
+["a2-138","A2","n","die","Möglichkeit","possibility","Option or chance."],
+["a2-139","A2","n","die","Entscheidung","decision","Choice made."],
+["a2-140","A2","n","die","Erfahrung","experience","Knowledge from practice."],
+["a2-141","A2","n","das","Gespräch","conversation","Talking exchange."],
+["a2-142","A2","n","die","Idee","idea","Thought or plan."],
+["a2-143","A2","n","der","Plan","plan","Intended course of action."],
+["a2-144","A2","n","der","Grund","reason","Cause or explanation."],
+["a2-145","A2","n","die","Frage","question","Inquiry."],
+["a2-146","A2","n","die","Antwort","answer","Response."],
+["a2-147","A2","n","das","Problem","problem","Difficulty to solve."],
+["a2-148","A2","n","die","Lösung","solution","Answer to problem."],
+["a2-149","A2","n","das","Beispiel","example","Instance illustrating something."],
+["a2-150","A2","n","die","Information","information","Data or facts."],
+["a2-151","A2","n","die","Meinung","opinion","Personal view."],
+["a2-152","A2","n","die","Umgebung","surroundings","Environment around something."],
+["a2-153","A2","a","möglich","possible","Can happen."],
+["a2-154","A2","a","unmöglich","impossible","Cannot happen."],
+["a2-155","A2","a","schwierig","difficult","Hard, often abstract."],
+["a2-156","A2","a","einfach","simple / easy","Not complex."],
+["a2-157","A2","a","pünktlich","punctual","On time; highly valued in Germany."],
+["a2-158","A2","a","verschieden","different / various","Not the same."],
+["a2-159","A2","a","gleich","same / equal","Identical or shortly."],
+["a2-160","A2","a","ähnlich","similar","Comparable but not identical."],
+["a2-161","A2","a","frei","free","Not occupied or no cost."],
+["a2-162","A2","a","fertig","ready / finished","Completed or prepared."],
+["a2-163","A2","a","klar","clear / of course","Understandable; or 'sure!'"],
+["a2-164","A2","a","sicher","safe / certain","Safe or sure."],
+["a2-165","A2","a","wahr","true","Factual."],
+["a2-166","A2","a","falsch","wrong / false","Incorrect or fake."],
+["a2-167","A2","a","normal","normal","Usual or typical."],
+["a2-168","A2","p","Es kommt darauf an.","It depends.","Common evasion when answer isn't clear-cut."],
+["a2-169","A2","p","Das macht nichts.","It doesn't matter.","Brushes off an apology."],
+["a2-170","A2","p","Auf jeden Fall","In any case","Definitely; for sure."],
+["a2-171","A2","p","Auf keinen Fall","No way","Definitely not."],
+["a2-172","A2","p","Zum Beispiel","For example","Often abbreviated z.B."],
+["a2-173","A2","p","Vor allem","Above all","Emphasizes most important point."],
+["a2-174","A2","p","Im Moment","At the moment","Currently."],
+["a2-175","A2","p","Ab und zu","Now and then","Occasionally."],
+["a2-176","A2","p","Eigentlich","Actually","Versatile filler; mild contrast."],
+["a2-177","A2","p","Genau","Exactly","Strong agreement; very common."],
+["a2-178","A2","p","Auf einmal","Suddenly","All of a sudden."],
+["a2-179","A2","p","Es gibt","There is / there are","Always with accusative."],
+["a2-180","A2","p","Lass uns gehen","Let's go","Imperative suggestion."],
+["a2-181","A2","p","Mach dir keine Sorgen","Don't worry","Reassurance."],
+["a2-182","A2","p","Viel Spaß!","Have fun!","Wishing enjoyment."],
+["a2-183","A2","n","die","Stadt","city","Urban area."],
+["a2-184","A2","n","das","Dorf","village","Small rural settlement."],
+["a2-185","A2","n","das","Land","country / countryside","Nation or rural area."],
+["a2-186","A2","n","die","Welt","world","Earth or all of humanity."],
+["a2-187","A2","n","die","Natur","nature","Outdoors, plants, animals."],
+["a2-188","A2","n","der","Wald","forest","Area with many trees."],
+["a2-189","A2","n","der","Park","park","Urban green space."],
+["a2-190","A2","n","die","Straße","street","Road in a town."],
+["a2-191","A2","n","der","Weg","way / path","Route or path."],
+["a2-192","A2","v","sich freuen","to be pleased","'sich freuen auf' = look forward to.","Ich freue mich auf den Urlaub.","I'm looking forward to the vacation."],
+["a2-193","A2","v","sich ärgern","to get angry","'sich ärgern über' = be annoyed at.","Ich ärgere mich über ihn.","I'm annoyed at him."],
+["a2-194","A2","v","sich interessieren","to be interested","With 'für'.","Sie interessiert sich für Kunst.","She's interested in art."],
+["a2-195","A2","v","sich treffen","to meet (each other)","Reciprocal/reflexive form.","Wir treffen uns morgen.","We're meeting tomorrow."],
+["a2-196","A2","v","sich waschen","to wash oneself","Reflexive form.","Ich wasche mich.","I'm washing myself."],
+["a2-197","A2","v","aufstehen","to get up","Rise from bed/chair. Separable.","Ich stehe früh auf.","I get up early."],
+["a2-198","A2","v","einkaufen","to go shopping","Shop for groceries. Separable.","Wir kaufen am Samstag ein.","We shop on Saturdays."],
+["a2-199","A2","v","fernsehen","to watch TV","Separable.","Er sieht jeden Abend fern.","He watches TV every evening."],
+["a2-200","A2","v","sich entspannen","to relax","Reflexive.","Wir entspannen uns am Strand.","We're relaxing at the beach."],
+// ===== B1 =====
+["b1-001","B1","n","die","Gesellschaft","society","Collective community of people."],
+["b1-002","B1","n","die","Regierung","government","Ruling body of a country."],
+["b1-003","B1","n","die","Politik","politics / policy","Affairs of government."],
+["b1-004","B1","n","die","Wahl","election / choice","Voting or a choice made."],
+["b1-005","B1","n","die","Demokratie","democracy","Government by elected representatives."],
+["b1-006","B1","n","der","Bürger","citizen","Member of a state."],
+["b1-007","B1","n","das","Gesetz","law","Legal rule."],
+["b1-008","B1","n","das","Recht","right / law","Legal right or legal system."],
+["b1-009","B1","n","die","Pflicht","duty / obligation","What one must do."],
+["b1-010","B1","n","die","Freiheit","freedom","State of being free."],
+["b1-011","B1","n","die","Gleichheit","equality","Equal treatment or status."],
+["b1-012","B1","n","die","Gerechtigkeit","justice / fairness","Fair treatment."],
+["b1-013","B1","n","der","Streit","argument / dispute","Heated disagreement."],
+["b1-014","B1","n","der","Konflikt","conflict","Serious disagreement."],
+["b1-015","B1","n","der","Krieg","war","Armed conflict between states."],
+["b1-016","B1","n","der","Frieden","peace","Absence of war."],
+["b1-017","B1","v","wählen","to vote / choose","Cast a vote or pick.","Wir wählen am Sonntag.","We vote on Sunday."],
+["b1-018","B1","v","diskutieren","to discuss","Debate a topic. Often 'über'.","Wir diskutieren über das Thema.","We're discussing the topic."],
+["b1-019","B1","v","demonstrieren","to protest","Public protest.","Sie demonstrieren gegen das Gesetz.","They protest against the law."],
+["b1-020","B1","v","kämpfen","to fight","Struggle for or against.","Sie kämpfen für Gleichheit.","They fight for equality."],
+["b1-021","B1","n","die","Umwelt","environment","Natural environment, ecology."],
+["b1-022","B1","n","der","Klimawandel","climate change","Global climate shift."],
+["b1-023","B1","n","die","Verschmutzung","pollution","Contamination."],
+["b1-024","B1","n","der","Müll","trash","Waste, garbage."],
+["b1-025","B1","n","die","Energie","energy","Power source."],
+["b1-026","B1","n","der","Strom","electricity","Electric power; also: current."],
+["b1-027","B1","n","das","Klima","climate","Weather patterns over long term."],
+["b1-028","B1","v","schützen","to protect","Often 'vor' + dat.","Wir schützen die Umwelt.","We protect the environment."],
+["b1-029","B1","v","recyceln","to recycle","Reuse materials.","Ich recycle Papier.","I recycle paper."],
+["b1-030","B1","v","sparen","to save","Money or resources.","Wir sparen Energie.","We save energy."],
+["b1-031","B1","v","verschwenden","to waste","Use carelessly.","Verschwende kein Wasser.","Don't waste water."],
+["b1-032","B1","v","verschmutzen","to pollute","Make dirty/contaminated.","Autos verschmutzen die Luft.","Cars pollute the air."],
+["b1-033","B1","a","nachhaltig","sustainable","Environmentally responsible."],
+["b1-034","B1","a","umweltfreundlich","eco-friendly","Good for environment."],
+["b1-035","B1","a","erneuerbar","renewable","Replenishable energy/resource."],
+["b1-036","B1","n","die","Bildung","education","Education system or being educated."],
+["b1-037","B1","n","die","Universität","university","Higher education institution."],
+["b1-038","B1","n","die","Ausbildung","vocational training","Apprenticeship-style training, common in Germany."],
+["b1-039","B1","n","das","Studium","studies (university)","University degree program."],
+["b1-040","B1","n","die","Prüfung","exam","Test or examination."],
+["b1-041","B1","n","das","Wissen","knowledge","What one knows."],
+["b1-042","B1","n","die","Forschung","research","Systematic investigation."],
+["b1-043","B1","n","die","Wissenschaft","science / scholarship","Field of academic study."],
+["b1-044","B1","v","studieren","to study (university)","Attend university. Not 'lernen'.","Sie studiert Medizin.","She studies medicine."],
+["b1-045","B1","v","forschen","to research","Conduct research.","Er forscht über Klimawandel.","He researches climate change."],
+["b1-046","B1","v","unterrichten","to teach","Give lessons.","Sie unterrichtet Deutsch.","She teaches German."],
+["b1-047","B1","v","bestehen","to pass / consist of","'Eine Prüfung bestehen' = pass.","Ich habe die Prüfung bestanden.","I passed the exam."],
+["b1-048","B1","n","die","Karriere","career","Professional path."],
+["b1-049","B1","n","die","Bewerbung","application (job)","Job application."],
+["b1-050","B1","n","der","Lebenslauf","CV / resume","Document of work history."],
+["b1-051","B1","n","das","Vorstellungsgespräch","job interview","Meeting to assess job candidate."],
+["b1-052","B1","n","der","Vertrag","contract","Legal agreement."],
+["b1-053","B1","n","der","Arbeitgeber","employer","Person/company hiring."],
+["b1-054","B1","n","der","Arbeitnehmer","employee","Person hired to work."],
+["b1-055","B1","n","die","Arbeitslosigkeit","unemployment","State of having no job."],
+["b1-056","B1","n","der","Erfolg","success","Positive outcome."],
+["b1-057","B1","n","der","Misserfolg","failure","Negative outcome."],
+["b1-058","B1","v","sich bewerben","to apply (job)","Reflexive. 'um' + acc.","Ich bewerbe mich um die Stelle.","I'm applying for the position."],
+["b1-059","B1","v","einstellen","to hire / set","Hire employee. Separable.","Die Firma stellt Leute ein.","The company is hiring."],
+["b1-060","B1","v","kündigen","to fire / quit","End employment, either side.","Er hat gekündigt.","He quit."],
+["b1-061","B1","v","leiten","to lead / manage","Lead a team/project.","Sie leitet das Projekt.","She leads the project."],
+["b1-062","B1","v","fördern","to promote / support","Encourage growth.","Wir fördern junge Talente.","We support young talents."],
+["b1-063","B1","n","die","Medien","media","Plural; news/communication channels."],
+["b1-064","B1","n","die","Werbung","advertising","Marketing communications."],
+["b1-065","B1","n","die","Nachricht","news / message","Pieces of information."],
+["b1-066","B1","n","die","Zeitung","newspaper","Print news publication."],
+["b1-067","B1","n","die","Zeitschrift","magazine","Magazine publication."],
+["b1-068","B1","n","der","Artikel","article","Newspaper or grammar article."],
+["b1-069","B1","n","die","Technologie","technology","Applied science."],
+["b1-070","B1","n","das","Internet","internet","Global network."],
+["b1-071","B1","n","die","Software","software","Computer programs."],
+["b1-072","B1","n","das","Programm","program","Software or schedule."],
+["b1-073","B1","n","die","App","app","Mobile application."],
+["b1-074","B1","v","berichten","to report","Inform about. 'über' + acc.","Die Zeitung berichtet über den Skandal.","The paper reports on the scandal."],
+["b1-075","B1","v","informieren","to inform","'sich informieren' = inform oneself.","Ich informiere mich über das Thema.","I'm informing myself about the topic."],
+["b1-076","B1","v","veröffentlichen","to publish","Make public.","Sie veröffentlichen das Buch.","They publish the book."],
+["b1-077","B1","v","herunterladen","to download","Separable. Also 'downloaden'.","Ich lade die App herunter.","I'm downloading the app."],
+["b1-078","B1","v","behaupten","to claim / assert","State as true, even without proof.","Er behauptet, dass es wahr ist.","He claims it's true."],
+["b1-079","B1","v","argumentieren","to argue (a case)","Present arguments, not a fight.","Sie argumentiert gut.","She argues well."],
+["b1-080","B1","v","begründen","to justify / give reason","Provide reasons for.","Begründe deine Antwort.","Justify your answer."],
+["b1-081","B1","v","zustimmen","to agree","Dative. Separable.","Ich stimme dir zu.","I agree with you."],
+["b1-082","B1","v","ablehnen","to reject","Refuse or decline. Separable.","Sie lehnt den Vorschlag ab.","She rejects the proposal."],
+["b1-083","B1","v","widersprechen","to contradict","Dative. Irregular.","Ich widerspreche dir.","I contradict you."],
+["b1-084","B1","v","überzeugen","to convince","'von' + dat.","Er hat mich überzeugt.","He convinced me."],
+["b1-085","B1","v","betonen","to emphasize","Stress importance.","Ich betone diesen Punkt.","I emphasize this point."],
+["b1-086","B1","v","vermuten","to assume / suspect","Think without certainty.","Ich vermute, er kommt nicht.","I suspect he's not coming."],
+["b1-087","B1","v","bezweifeln","to doubt","Question something's truth.","Ich bezweifle das.","I doubt that."],
+["b1-088","B1","n","die","Tatsache","fact","Something proven true."],
+["b1-089","B1","n","der","Beweis","proof","Evidence."],
+["b1-090","B1","n","die","Behauptung","claim / assertion","Statement made as true."],
+["b1-091","B1","n","der","Standpunkt","point of view","Position on an issue."],
+["b1-092","B1","n","die","Diskussion","discussion","Talk/debate."],
+["b1-093","B1","n","die","Auswirkung","impact","Effect or consequence."],
+["b1-094","B1","n","die","Voraussetzung","prerequisite","Required precondition."],
+["b1-095","B1","n","der","Zusammenhang","connection / context","How things relate."],
+["b1-096","B1","n","die","Verantwortung","responsibility","Being accountable."],
+["b1-097","B1","n","der","Eindruck","impression","First feeling/perception."],
+["b1-098","B1","n","die","Entwicklung","development","Process of growth/change."],
+["b1-099","B1","n","das","Verhalten","behavior","How one acts."],
+["b1-100","B1","n","die","Bedeutung","meaning / importance","Sense or significance."],
+["b1-101","B1","n","die","Ursache","cause","Reason for something."],
+["b1-102","B1","n","die","Folge","consequence / sequel","Result; also TV episode."],
+["b1-103","B1","n","der","Zweck","purpose","Intended goal."],
+["b1-104","B1","n","das","Ziel","goal","Objective."],
+["b1-105","B1","n","der","Vorteil","advantage","Beneficial aspect."],
+["b1-106","B1","n","der","Nachteil","disadvantage","Drawback."],
+["b1-107","B1","n","der","Unterschied","difference","How things differ."],
+["b1-108","B1","n","die","Ähnlichkeit","similarity","How things are alike."],
+["b1-109","B1","n","die","Gewohnheit","habit","Repeated behavior."],
+["b1-110","B1","n","die","Gelegenheit","opportunity","Chance or occasion."],
+["b1-111","B1","n","der","Versuch","attempt / experiment","Trying or testing."],
+["b1-112","B1","n","der","Vorschlag","suggestion","Proposal."],
+["b1-113","B1","v","berücksichtigen","to take into account","Consciously factor in. Formal.","Wir berücksichtigen alle Faktoren.","We take all factors into account."],
+["b1-114","B1","v","beeinflussen","to influence","Have an effect on.","Das Wetter beeinflusst meine Stimmung.","Weather influences my mood."],
+["b1-115","B1","v","verursachen","to cause","Bring about.","Der Sturm verursacht Schäden.","The storm causes damage."],
+["b1-116","B1","v","vermeiden","to avoid","Stay away from.","Vermeide Stress.","Avoid stress."],
+["b1-117","B1","v","sich beschäftigen","to be occupied with","'mit' + dat. Reflexive.","Ich beschäftige mich mit Kunst.","I'm engaged with art."],
+["b1-118","B1","v","sich gewöhnen","to get used to","'an' + acc. Reflexive.","Ich gewöhne mich an das Wetter.","I'm getting used to the weather."],
+["b1-119","B1","v","verzichten","to do without","Give up. 'auf' + acc.","Ich verzichte auf Zucker.","I'm giving up sugar."],
+["b1-120","B1","v","unterscheiden","to distinguish","Tell apart.","Ich kann sie nicht unterscheiden.","I can't tell them apart."],
+["b1-121","B1","v","verbessern","to improve","Make better.","Ich verbessere mein Deutsch.","I'm improving my German."],
+["b1-122","B1","v","verschlechtern","to worsen","Make worse.","Die Lage verschlechtert sich.","The situation is worsening."],
+["b1-123","B1","v","erreichen","to reach / achieve","Get to or accomplish.","Sie hat ihr Ziel erreicht.","She reached her goal."],
+["b1-124","B1","v","ermöglichen","to enable","Make possible.","Das ermöglicht uns zu reisen.","That enables us to travel."],
+["b1-125","B1","v","entwickeln","to develop","Create or evolve.","Wir entwickeln eine App.","We're developing an app."],
+["b1-126","B1","v","verbreiten","to spread","Distribute widely.","Die Nachricht verbreitet sich schnell.","The news spreads fast."],
+["b1-127","B1","v","ersetzen","to replace","Substitute.","Roboter ersetzen Arbeiter.","Robots replace workers."],
+["b1-128","B1","v","erlauben","to allow","Give permission.","Mein Chef erlaubt es nicht.","My boss doesn't allow it."],
+["b1-129","B1","v","verbieten","to forbid","Prohibit.","Rauchen ist verboten.","Smoking is forbidden."],
+["b1-130","B1","v","verlangen","to demand","Demand or require.","Sie verlangt mehr Geld.","She demands more money."],
+["b1-131","B1","v","anbieten","to offer","Provide as option. Separable.","Wir bieten Hilfe an.","We offer help."],
+["b1-132","B1","v","annehmen","to accept / assume","Accept offer, or assume. Separable.","Ich nehme das Angebot an.","I accept the offer."],
+["b1-133","B1","v","vorschlagen","to suggest","Propose. Separable.","Ich schlage Pizza vor.","I suggest pizza."],
+["b1-134","B1","v","bemerken","to notice","Realize, perceive.","Ich bemerke den Unterschied.","I notice the difference."],
+["b1-135","B1","v","gelingen","to succeed","Dative. Auxiliary: sein.","Es ist mir gelungen.","I succeeded."],
+["b1-136","B1","v","scheitern","to fail","Not succeed.","Der Plan ist gescheitert.","The plan failed."],
+["b1-137","B1","v","bestehen aus","to consist of","Be made up of.","Das Team besteht aus fünf Leuten.","The team consists of five people."],
+["b1-138","B1","a","verantwortlich","responsible","Accountable."],
+["b1-139","B1","a","zuverlässig","reliable","Trustworthy, dependable."],
+["b1-140","B1","a","selbstständig","independent / self-employed","Acting alone or self-employed."],
+["b1-141","B1","a","erfolgreich","successful","Having success."],
+["b1-142","B1","a","notwendig","necessary","Required, essential."],
+["b1-143","B1","a","nützlich","useful","Helpful."],
+["b1-144","B1","a","deutlich","clear / distinct","Obvious, easy to see."],
+["b1-145","B1","a","üblich","common / usual","Normal, customary."],
+["b1-146","B1","a","wirklich","really / real","Truly or actual."],
+["b1-147","B1","a","tatsächlich","actually / in fact","Stronger than 'wirklich'."],
+["b1-148","B1","a","ausreichend","sufficient","Enough."],
+["b1-149","B1","a","umfangreich","extensive","Comprehensive, large in scope."],
+["b1-150","B1","a","begeistert","enthusiastic","Excited about something."],
+["b1-151","B1","a","enttäuscht","disappointed","Let down."],
+["b1-152","B1","a","überrascht","surprised","Caught off guard."],
+["b1-153","B1","p","deshalb","therefore","Indicates conclusion. Verb position 2."],
+["b1-154","B1","p","trotzdem","nevertheless","Despite that."],
+["b1-155","B1","p","allerdings","however","Adds qualification."],
+["b1-156","B1","p","dennoch","nonetheless","Stronger than 'trotzdem'."],
+["b1-157","B1","p","jedoch","however","Formal alternative to 'aber'."],
+["b1-158","B1","p","obwohl","although","Subordinator; verb at end."],
+["b1-159","B1","p","während","while / during","Time or contrast."],
+["b1-160","B1","p","indem","by (doing)","Means by which; subordinator."],
+["b1-161","B1","p","sodass","so that","Result; subordinator."],
+["b1-162","B1","p","damit","so that / with it","Purpose subordinator."],
+["b1-163","B1","p","außerdem","moreover / besides","Adds information."],
+["b1-164","B1","p","einerseits ... andererseits","on one hand ... on the other","Presents two sides."],
+["b1-165","B1","p","meiner Meinung nach","in my opinion","Express personal view."],
+["b1-166","B1","p","im Großen und Ganzen","by and large","Overall."],
+["b1-167","B1","p","unter Umständen","under some circumstances","Possibly, conditionally."],
+["b1-168","B1","n","die","Beziehung","relationship","Personal or other relationship."],
+["b1-169","B1","n","die","Hochzeit","wedding","Marriage ceremony."],
+["b1-170","B1","n","die","Scheidung","divorce","End of marriage."],
+["b1-171","B1","n","die","Schwangerschaft","pregnancy","Carrying a baby."],
+["b1-172","B1","n","die","Geburt","birth","Being born."],
+["b1-173","B1","n","der","Tod","death","End of life."],
+["b1-174","B1","v","heiraten","to marry","Get married.","Sie heiraten im Juni.","They're getting married in June."],
+["b1-175","B1","v","sich verlieben","to fall in love","'in' + acc.","Ich habe mich in dich verliebt.","I fell in love with you."],
+["b1-176","B1","v","sich trennen","to break up / separate","Reflexive.","Sie haben sich getrennt.","They broke up."],
+["b1-177","B1","v","sterben","to die","Irregular. Auxiliary: sein.","Er ist letztes Jahr gestorben.","He died last year."],
+["b1-178","B1","v","geboren werden","to be born","Passive construction.","Ich bin 1990 geboren.","I was born in 1990."],
+["b1-179","B1","n","die","Versicherung","insurance","Financial protection."],
+["b1-180","B1","n","die","Krankenversicherung","health insurance","Health coverage."],
+["b1-181","B1","n","die","Steuer","tax","Government revenue."],
+["b1-182","B1","n","die","Miete","rent","Payment for housing."],
+["b1-183","B1","n","der","Mieter","tenant","Person renting."],
+["b1-184","B1","n","der","Vermieter","landlord","Owner who rents out."],
+["b1-185","B1","v","mieten","to rent (to me)","Rent from someone.","Ich miete eine Wohnung.","I rent an apartment."],
+["b1-186","B1","v","vermieten","to rent out","Rent to someone.","Sie vermietet ihr Zimmer.","She rents out her room."],
+["b1-187","B1","n","die","Anmeldung","registration","Often at city office in Germany."],
+["b1-188","B1","v","sich anmelden","to register","Reflexive, separable.","Ich melde mich für den Kurs an.","I'm signing up for the course."],
+["b1-189","B1","n","der","Ausweis","ID card","Identity document."],
+["b1-190","B1","n","der","Pass","passport","Travel ID."],
+["b1-191","B1","n","die","Erlaubnis","permission / permit","Authorization."],
+["b1-192","B1","n","die","Genehmigung","approval","Official permission."],
+["b1-193","B1","v","genehmigen","to approve","Give official OK.","Der Antrag wurde genehmigt.","The application was approved."],
+["b1-194","B1","v","ablehnen","to reject (application)","Refuse. Separable.","Der Antrag wurde abgelehnt.","The application was rejected."],
+["b1-195","B1","n","der","Antrag","application / petition","Formal request, often bureaucratic."],
+["b1-196","B1","v","beantragen","to apply for (formal)","Submit formal application.","Ich beantrage ein Visum.","I'm applying for a visa."],
+["b1-197","B1","v","unterschreiben","to sign","Write signature.","Bitte unterschreiben Sie hier.","Please sign here."],
+["b1-198","B1","n","die","Unterschrift","signature","Written name."],
+["b1-199","B1","n","das","Formular","form","Document to fill out."],
+["b1-200","B1","v","ausfüllen","to fill out","Complete a form. Separable.","Füllen Sie das Formular aus.","Fill out the form."]
+];
+
+// Expand compact format to full objects
+const _T = { p: "phrase", n: "noun", v: "verb", a: "adjective" };
+const CARDS = _D.map(function(r) {
+  const t = r[2];
+  if (t === "n") return { id:r[0], level:r[1], type:"noun", gender:r[3], german:r[4], translation:r[5], meaning:r[6] };
+  if (t === "v") return { id:r[0], level:r[1], type:"verb", german:r[3], translation:r[4], meaning:r[5], exampleSentenceGerman:r[6]||"", exampleSentenceEnglish:r[7]||"" };
+  return { id:r[0], level:r[1], type:_T[t], german:r[3], translation:r[4], meaning:r[5] };
+});
+
+// Examples database. Format:
+//   noun: { n:["de","en"], a:["de","en"], d:["de","en"] }  (nominative, akkusativ, dativ)
+//   other: { e:["de","en"] }
+const _E = {
+// ===== B1 nouns (priority for B1 exam prep) =====
+"b1-001":{n:["Die Gesellschaft verändert sich.","Society is changing."],a:["Wir gestalten die Gesellschaft.","We shape society."],d:["In der Gesellschaft gibt es viele Probleme.","There are many problems in society."]},
+"b1-002":{n:["Die Regierung hat entschieden.","The government has decided."],a:["Wir kritisieren die Regierung.","We criticize the government."],d:["Mit der Regierung wird verhandelt.","Negotiations are held with the government."]},
+"b1-003":{n:["Die Politik ist kompliziert.","Politics is complicated."],a:["Ich interessiere mich für die Politik.","I'm interested in politics."],d:["In der Politik geht es um Macht.","Politics is about power."]},
+"b1-004":{n:["Die Wahl findet bald statt.","The election is coming up."],a:["Wir gewinnen die Wahl.","We win the election."],d:["Bei der Wahl entscheidet das Volk.","The people decide in the election."]},
+"b1-005":{n:["Die Demokratie ist wichtig.","Democracy is important."],a:["Wir verteidigen die Demokratie.","We defend democracy."],d:["In einer Demokratie hat jeder eine Stimme.","In a democracy everyone has a voice."]},
+"b1-006":{n:["Der Bürger hat Rechte.","The citizen has rights."],a:["Wir informieren den Bürger.","We inform the citizen."],d:["Dem Bürger muss man zuhören.","One must listen to the citizen."]},
+"b1-007":{n:["Das Gesetz tritt morgen in Kraft.","The law takes effect tomorrow."],a:["Wir respektieren das Gesetz.","We respect the law."],d:["Nach dem Gesetz ist das verboten.","According to the law, that's forbidden."]},
+"b1-008":{n:["Das Recht steht im Vordergrund.","Justice comes first."],a:["Ich habe das Recht zu schweigen.","I have the right to remain silent."],d:["Mit dem Recht kommt die Pflicht.","With rights come duties."]},
+"b1-009":{n:["Die Pflicht ruft.","Duty calls."],a:["Wir erfüllen unsere Pflicht.","We fulfill our duty."],d:["Aus der Pflicht heraus tat er es.","He did it out of duty."]},
+"b1-010":{n:["Die Freiheit ist kostbar.","Freedom is precious."],a:["Wir schätzen die Freiheit.","We value freedom."],d:["In Freiheit lebt es sich besser.","Life is better in freedom."]},
+"b1-011":{n:["Die Gleichheit ist ein Ziel.","Equality is a goal."],a:["Wir fördern die Gleichheit.","We promote equality."],d:["Mit der Gleichheit kommt der Frieden.","Peace comes with equality."]},
+"b1-012":{n:["Die Gerechtigkeit gewinnt.","Justice prevails."],a:["Wir suchen die Gerechtigkeit.","We seek justice."],d:["Nach der Gerechtigkeit streben alle.","Everyone strives for justice."]},
+"b1-013":{n:["Der Streit eskaliert.","The argument escalates."],a:["Wir lösen den Streit.","We resolve the argument."],d:["Nach dem Streit kam Versöhnung.","After the argument came reconciliation."]},
+"b1-014":{n:["Der Konflikt dauert lange.","The conflict lasts long."],a:["Wir vermeiden den Konflikt.","We avoid the conflict."],d:["In diesem Konflikt geht es um Land.","This conflict is about land."]},
+"b1-015":{n:["Der Krieg ist schrecklich.","War is terrible."],a:["Wir lehnen den Krieg ab.","We reject war."],d:["Im Krieg leiden alle.","Everyone suffers in war."]},
+"b1-016":{n:["Der Frieden ist möglich.","Peace is possible."],a:["Wir wollen den Frieden.","We want peace."],d:["Mit dem Frieden beginnt der Wiederaufbau.","Reconstruction begins with peace."]},
+"b1-021":{n:["Die Umwelt leidet.","The environment is suffering."],a:["Wir schützen die Umwelt.","We protect the environment."],d:["In der Umwelt sammelt sich Müll.","Trash accumulates in the environment."]},
+"b1-022":{n:["Der Klimawandel ist real.","Climate change is real."],a:["Wir bekämpfen den Klimawandel.","We fight climate change."],d:["Mit dem Klimawandel steigen die Temperaturen.","Temperatures rise with climate change."]},
+"b1-023":{n:["Die Verschmutzung nimmt zu.","Pollution is increasing."],a:["Wir reduzieren die Verschmutzung.","We reduce pollution."],d:["Unter der Verschmutzung leiden Tiere.","Animals suffer under pollution."]},
+"b1-024":{n:["Der Müll wächst täglich.","Trash grows daily."],a:["Wir trennen den Müll.","We separate the trash."],d:["Aus dem Müll wird Recycling.","Recycling comes from trash."]},
+"b1-025":{n:["Die Energie wird teurer.","Energy is getting more expensive."],a:["Wir sparen Energie.","We save energy."],d:["Mit erneuerbarer Energie bauen wir die Zukunft.","We build the future with renewable energy."]},
+"b1-026":{n:["Der Strom ist ausgefallen.","The electricity went out."],a:["Wir brauchen Strom.","We need electricity."],d:["Mit dem Strom funktioniert alles.","Everything works with electricity."]},
+"b1-027":{n:["Das Klima ändert sich.","The climate is changing."],a:["Wir schützen das Klima.","We protect the climate."],d:["Im Klima Berlins ist es mild.","Berlin's climate is mild."]},
+"b1-036":{n:["Die Bildung ist wichtig.","Education is important."],a:["Wir fördern die Bildung.","We promote education."],d:["Mit guter Bildung hat man Chancen.","With good education one has opportunities."]},
+"b1-037":{n:["Die Universität liegt im Zentrum.","The university is in the center."],a:["Sie besucht die Universität.","She attends university."],d:["An der Universität studiert man Vieles.","One studies many things at university."]},
+"b1-038":{n:["Die Ausbildung dauert drei Jahre.","The training lasts three years."],a:["Er macht eine Ausbildung.","He's doing vocational training."],d:["In der Ausbildung lernt man viel.","One learns a lot during training."]},
+"b1-039":{n:["Das Studium ist anstrengend.","University is demanding."],a:["Sie finanziert ihr Studium.","She finances her studies."],d:["Im Studium gibt es viele Prüfungen.","There are many exams during studies."]},
+"b1-040":{n:["Die Prüfung war schwer.","The exam was hard."],a:["Ich bestehe die Prüfung.","I'll pass the exam."],d:["Nach der Prüfung war ich erleichtert.","I was relieved after the exam."]},
+"b1-041":{n:["Das Wissen wächst täglich.","Knowledge grows daily."],a:["Wir teilen das Wissen.","We share knowledge."],d:["Mit Wissen kommt Verantwortung.","With knowledge comes responsibility."]},
+"b1-042":{n:["Die Forschung kostet viel Geld.","Research costs a lot of money."],a:["Wir finanzieren die Forschung.","We fund the research."],d:["In der Forschung wird viel entdeckt.","Much is discovered in research."]},
+"b1-043":{n:["Die Wissenschaft entwickelt sich schnell.","Science develops quickly."],a:["Wir vertrauen der Wissenschaft.","We trust science."],d:["In der Wissenschaft zählt der Beweis.","Proof matters in science."]},
+"b1-048":{n:["Die Karriere geht voran.","The career is moving forward."],a:["Sie verfolgt eine Karriere.","She pursues a career."],d:["In der Karriere gibt es Höhen und Tiefen.","A career has ups and downs."]},
+"b1-049":{n:["Die Bewerbung ist abgeschickt.","The application has been sent."],a:["Ich schreibe eine Bewerbung.","I'm writing an application."],d:["Mit der Bewerbung muss ein Foto kommen.","A photo must come with the application."]},
+"b1-050":{n:["Der Lebenslauf ist aktuell.","The CV is up to date."],a:["Ich aktualisiere den Lebenslauf.","I'm updating the CV."],d:["Im Lebenslauf stehen alle Stationen.","All stages are in the CV."]},
+"b1-051":{n:["Das Vorstellungsgespräch verlief gut.","The interview went well."],a:["Ich habe ein Vorstellungsgespräch morgen.","I have an interview tomorrow."],d:["Beim Vorstellungsgespräch sollte man pünktlich sein.","One should be punctual at the interview."]},
+"b1-052":{n:["Der Vertrag ist unterschrieben.","The contract is signed."],a:["Wir prüfen den Vertrag.","We review the contract."],d:["Im Vertrag steht alles geregelt.","Everything is regulated in the contract."]},
+"b1-053":{n:["Der Arbeitgeber zahlt pünktlich.","The employer pays on time."],a:["Wir suchen einen neuen Arbeitgeber.","We're looking for a new employer."],d:["Vom Arbeitgeber kam keine Antwort.","No answer came from the employer."]},
+"b1-054":{n:["Der Arbeitnehmer hat Rechte.","The employee has rights."],a:["Wir schützen den Arbeitnehmer.","We protect the employee."],d:["Dem Arbeitnehmer steht Urlaub zu.","The employee is entitled to vacation."]},
+"b1-055":{n:["Die Arbeitslosigkeit steigt.","Unemployment is rising."],a:["Wir bekämpfen die Arbeitslosigkeit.","We fight unemployment."],d:["Bei Arbeitslosigkeit gibt es Hilfe.","There's help in case of unemployment."]},
+"b1-056":{n:["Der Erfolg ist süß.","Success is sweet."],a:["Wir feiern den Erfolg.","We celebrate success."],d:["Mit Erfolg kommt Anerkennung.","With success comes recognition."]},
+"b1-057":{n:["Der Misserfolg trifft hart.","Failure hits hard."],a:["Wir akzeptieren den Misserfolg.","We accept the failure."],d:["Aus dem Misserfolg lernt man.","One learns from failure."]},
+"b1-063":{n:["Die Medien berichten überall.","The media report everywhere."],a:["Wir nutzen die Medien.","We use the media."],d:["In den Medien gibt es viele Meinungen.","There are many opinions in the media."]},
+"b1-064":{n:["Die Werbung nervt manchmal.","Advertising is sometimes annoying."],a:["Wir schalten die Werbung weg.","We turn off the ads."],d:["Durch die Werbung lernen wir Produkte kennen.","We learn about products through advertising."]},
+"b1-065":{n:["Die Nachricht überraschte alle.","The news surprised everyone."],a:["Ich erhalte eine Nachricht.","I receive a message."],d:["Mit der Nachricht kam die Wahrheit.","The truth came with the message."]},
+"b1-066":{n:["Die Zeitung liegt auf dem Tisch.","The newspaper is on the table."],a:["Ich lese die Zeitung.","I read the newspaper."],d:["In der Zeitung steht es geschrieben.","It's written in the newspaper."]},
+"b1-067":{n:["Die Zeitschrift erscheint monatlich.","The magazine comes out monthly."],a:["Ich abonniere die Zeitschrift.","I subscribe to the magazine."],d:["In der Zeitschrift gibt es viele Artikel.","There are many articles in the magazine."]},
+"b1-068":{n:["Der Artikel ist gut geschrieben.","The article is well written."],a:["Ich lese den Artikel.","I read the article."],d:["In diesem Artikel geht es um Klima.","This article is about climate."]},
+"b1-069":{n:["Die Technologie verändert die Welt.","Technology is changing the world."],a:["Wir entwickeln neue Technologie.","We develop new technology."],d:["Mit moderner Technologie geht es schneller.","It goes faster with modern technology."]},
+"b1-070":{n:["Das Internet ist langsam heute.","The internet is slow today."],a:["Wir benutzen das Internet.","We use the internet."],d:["Im Internet findet man alles.","One finds everything on the internet."]},
+"b1-071":{n:["Die Software ist veraltet.","The software is outdated."],a:["Wir installieren die Software.","We install the software."],d:["Mit der Software arbeitet jeder.","Everyone works with the software."]},
+"b1-072":{n:["Das Programm startet automatisch.","The program starts automatically."],a:["Ich starte das Programm.","I'm starting the program."],d:["Im Programm gibt es Fehler.","There are bugs in the program."]},
+"b1-073":{n:["Die App ist neu.","The app is new."],a:["Ich lade die App herunter.","I'm downloading the app."],d:["In der App findet man alle Funktionen.","All features are in the app."]},
+"b1-088":{n:["Die Tatsache ist klar.","The fact is clear."],a:["Wir akzeptieren die Tatsache.","We accept the fact."],d:["Mit dieser Tatsache müssen wir leben.","We have to live with this fact."]},
+"b1-089":{n:["Der Beweis fehlt noch.","Proof is still missing."],a:["Wir suchen den Beweis.","We're looking for proof."],d:["Mit dem Beweis kann man gewinnen.","One can win with proof."]},
+"b1-090":{n:["Die Behauptung ist falsch.","The claim is false."],a:["Wir widerlegen die Behauptung.","We refute the claim."],d:["An der Behauptung ist nichts dran.","There's nothing to the claim."]},
+"b1-091":{n:["Der Standpunkt ist verständlich.","The viewpoint is understandable."],a:["Ich vertrete einen anderen Standpunkt.","I hold a different view."],d:["Aus diesem Standpunkt sieht es anders aus.","From this viewpoint it looks different."]},
+"b1-092":{n:["Die Diskussion war hitzig.","The discussion was heated."],a:["Wir führen eine Diskussion.","We're having a discussion."],d:["In der Diskussion entstanden neue Ideen.","New ideas emerged in the discussion."]},
+"b1-093":{n:["Die Auswirkung war stark.","The impact was strong."],a:["Wir spüren die Auswirkung.","We feel the impact."],d:["Mit dieser Auswirkung haben wir gerechnet.","We expected this impact."]},
+"b1-094":{n:["Die Voraussetzung ist erfüllt.","The prerequisite is met."],a:["Wir prüfen die Voraussetzung.","We check the prerequisite."],d:["Unter dieser Voraussetzung stimme ich zu.","Under this condition I agree."]},
+"b1-095":{n:["Der Zusammenhang ist klar.","The connection is clear."],a:["Ich verstehe den Zusammenhang nicht.","I don't understand the connection."],d:["In diesem Zusammenhang ist das wichtig.","In this context that's important."]},
+"b1-096":{n:["Die Verantwortung wiegt schwer.","Responsibility weighs heavily."],a:["Wir übernehmen die Verantwortung.","We take responsibility."],d:["Mit der Verantwortung wachsen wir.","We grow with responsibility."]},
+"b1-097":{n:["Der Eindruck war positiv.","The impression was positive."],a:["Ich habe einen guten Eindruck gewonnen.","I got a good impression."],d:["Nach diesem Eindruck war ich überzeugt.","After this impression I was convinced."]},
+"b1-098":{n:["Die Entwicklung ist rasant.","The development is rapid."],a:["Wir verfolgen die Entwicklung.","We follow the development."],d:["In der Entwicklung gibt es Phasen.","There are phases in development."]},
+"b1-099":{n:["Das Verhalten ist seltsam.","The behavior is strange."],a:["Wir beobachten das Verhalten.","We observe the behavior."],d:["Mit diesem Verhalten überrascht er mich.","He surprises me with this behavior."]},
+"b1-100":{n:["Die Bedeutung ist groß.","The meaning is significant."],a:["Ich verstehe die Bedeutung nicht.","I don't understand the meaning."],d:["Aus der Bedeutung ergibt sich vieles.","Much follows from the meaning."]},
+"b1-101":{n:["Die Ursache ist unbekannt.","The cause is unknown."],a:["Wir suchen die Ursache.","We're looking for the cause."],d:["Mit dieser Ursache müssen wir umgehen.","We have to deal with this cause."]},
+"b1-102":{n:["Die Folge war katastrophal.","The consequence was catastrophic."],a:["Wir tragen die Folgen.","We bear the consequences."],d:["Aus dieser Folge lernen wir.","We learn from this consequence."]},
+"b1-103":{n:["Der Zweck heiligt die Mittel.","The end justifies the means."],a:["Wir kennen den Zweck.","We know the purpose."],d:["Zu diesem Zweck wurde es gebaut.","It was built for this purpose."]},
+"b1-104":{n:["Das Ziel ist klar.","The goal is clear."],a:["Wir erreichen das Ziel.","We reach the goal."],d:["Mit dem Ziel vor Augen geht es leichter.","It's easier with the goal in sight."]},
+"b1-105":{n:["Der Vorteil liegt auf der Hand.","The advantage is obvious."],a:["Wir nutzen den Vorteil.","We use the advantage."],d:["Mit dem Vorteil können wir gewinnen.","We can win with the advantage."]},
+"b1-106":{n:["Der Nachteil ist erheblich.","The disadvantage is considerable."],a:["Wir akzeptieren den Nachteil.","We accept the disadvantage."],d:["Mit diesem Nachteil müssen wir leben.","We have to live with this disadvantage."]},
+"b1-107":{n:["Der Unterschied ist klein.","The difference is small."],a:["Wir machen den Unterschied.","We make the difference."],d:["Zwischen den Modellen besteht ein Unterschied.","There's a difference between the models."]},
+"b1-108":{n:["Die Ähnlichkeit ist verblüffend.","The similarity is striking."],a:["Ich sehe die Ähnlichkeit.","I see the similarity."],d:["Mit der Ähnlichkeit kommt Verwirrung.","Confusion comes with the similarity."]},
+"b1-109":{n:["Die Gewohnheit lässt sich schwer ändern.","Habit is hard to change."],a:["Wir ändern die Gewohnheit.","We change the habit."],d:["Aus Gewohnheit handle ich so.","I act like this out of habit."]},
+"b1-110":{n:["Die Gelegenheit kommt selten.","The opportunity rarely comes."],a:["Wir nutzen die Gelegenheit.","We seize the opportunity."],d:["Bei dieser Gelegenheit grüße ich alle.","On this occasion I greet everyone."]},
+"b1-111":{n:["Der Versuch war erfolgreich.","The attempt was successful."],a:["Wir wagen den Versuch.","We dare the attempt."],d:["Bei diesem Versuch lernen wir viel.","We learn a lot in this attempt."]},
+"b1-112":{n:["Der Vorschlag ist gut.","The suggestion is good."],a:["Ich nehme den Vorschlag an.","I accept the suggestion."],d:["Mit diesem Vorschlag kommen wir weiter.","We make progress with this suggestion."]},
+"b1-168":{n:["Die Beziehung ist eng.","The relationship is close."],a:["Wir pflegen die Beziehung.","We maintain the relationship."],d:["In der Beziehung gibt es Probleme.","There are problems in the relationship."]},
+"b1-169":{n:["Die Hochzeit war wunderschön.","The wedding was beautiful."],a:["Wir planen die Hochzeit.","We're planning the wedding."],d:["Auf der Hochzeit tanzten alle.","Everyone danced at the wedding."]},
+"b1-170":{n:["Die Scheidung war schwer.","The divorce was hard."],a:["Sie reicht die Scheidung ein.","She's filing for divorce."],d:["Nach der Scheidung fühlt er sich frei.","He feels free after the divorce."]},
+"b1-171":{n:["Die Schwangerschaft verläuft normal.","The pregnancy is normal."],a:["Sie verkündet die Schwangerschaft.","She announces the pregnancy."],d:["In der Schwangerschaft sollte man nicht rauchen.","One shouldn't smoke during pregnancy."]},
+"b1-172":{n:["Die Geburt war einfach.","The birth was easy."],a:["Wir erwarten die Geburt.","We're expecting the birth."],d:["Nach der Geburt waren alle erschöpft.","Everyone was exhausted after the birth."]},
+"b1-173":{n:["Der Tod kam plötzlich.","Death came suddenly."],a:["Wir akzeptieren den Tod.","We accept death."],d:["Nach dem Tod kommt die Trauer.","Grief comes after death."]},
+"b1-179":{n:["Die Versicherung zahlt nicht.","The insurance won't pay."],a:["Ich schließe eine Versicherung ab.","I'm taking out an insurance."],d:["Mit der Versicherung sind wir geschützt.","We're protected with the insurance."]},
+"b1-180":{n:["Die Krankenversicherung ist Pflicht.","Health insurance is mandatory."],a:["Wir brauchen eine Krankenversicherung.","We need health insurance."],d:["Mit der Krankenversicherung gehen wir zum Arzt.","We go to the doctor with health insurance."]},
+"b1-181":{n:["Die Steuer ist hoch.","The tax is high."],a:["Wir zahlen die Steuer.","We pay the tax."],d:["Von der Steuer hängt vieles ab.","Much depends on the tax."]},
+"b1-182":{n:["Die Miete steigt jedes Jahr.","The rent rises every year."],a:["Ich bezahle die Miete.","I pay the rent."],d:["Mit der Miete leben wir gut.","We live well with the rent."]},
+"b1-183":{n:["Der Mieter ist zuverlässig.","The tenant is reliable."],a:["Wir suchen einen Mieter.","We're looking for a tenant."],d:["Dem Mieter wurde gekündigt.","The tenant was given notice."]},
+"b1-184":{n:["Der Vermieter ist freundlich.","The landlord is friendly."],a:["Wir kontaktieren den Vermieter.","We're contacting the landlord."],d:["Mit dem Vermieter sprechen wir morgen.","We're talking to the landlord tomorrow."]},
+"b1-187":{n:["Die Anmeldung ist Pflicht.","Registration is mandatory."],a:["Ich erledige die Anmeldung.","I'm handling the registration."],d:["Mit der Anmeldung geht alles los.","Everything starts with the registration."]},
+"b1-189":{n:["Der Ausweis ist abgelaufen.","The ID has expired."],a:["Ich zeige den Ausweis.","I show the ID."],d:["Ohne Ausweis kommst du nicht rein.","You can't get in without an ID."]},
+"b1-190":{n:["Der Pass liegt im Safe.","The passport is in the safe."],a:["Ich beantrage einen Pass.","I'm applying for a passport."],d:["Mit dem Pass kannst du reisen.","You can travel with the passport."]},
+"b1-191":{n:["Die Erlaubnis kommt schnell.","The permit comes quickly."],a:["Wir holen die Erlaubnis ein.","We're getting permission."],d:["Mit Erlaubnis darf man parken.","One may park with permission."]},
+"b1-192":{n:["Die Genehmigung dauert.","Approval takes time."],a:["Wir bekommen die Genehmigung.","We get the approval."],d:["Nach der Genehmigung beginnen wir.","We start after the approval."]},
+"b1-195":{n:["Der Antrag ist gestellt.","The application is filed."],a:["Ich reiche einen Antrag ein.","I'm submitting an application."],d:["Mit dem Antrag warten wir.","We're waiting with the application."]},
+"b1-198":{n:["Die Unterschrift fehlt noch.","The signature is still missing."],a:["Ich brauche deine Unterschrift.","I need your signature."],d:["Mit der Unterschrift wird es offiziell.","It becomes official with the signature."]},
+"b1-199":{n:["Das Formular ist lang.","The form is long."],a:["Ich fülle das Formular aus.","I'm filling out the form."],d:["Im Formular gibt es viele Fragen.","There are many questions in the form."]},
+// B1 adjectives & connectors
+"b1-033":{e:["Wir leben nachhaltig.","We live sustainably."]},
+"b1-034":{e:["Das Auto ist umweltfreundlich.","The car is eco-friendly."]},
+"b1-035":{e:["Solarenergie ist erneuerbar.","Solar energy is renewable."]},
+"b1-138":{e:["Er ist verantwortlich für das Projekt.","He's responsible for the project."]},
+"b1-139":{e:["Sie ist sehr zuverlässig.","She's very reliable."]},
+"b1-140":{e:["Er arbeitet selbstständig.","He works independently."]},
+"b1-141":{e:["Das Projekt war erfolgreich.","The project was successful."]},
+"b1-142":{e:["Es ist notwendig zu handeln.","It's necessary to act."]},
+"b1-143":{e:["Das ist sehr nützlich.","That's very useful."]},
+"b1-144":{e:["Sie spricht deutlich.","She speaks clearly."]},
+"b1-145":{e:["Das ist üblich in Deutschland.","That's common in Germany."]},
+"b1-146":{e:["Ist das wirklich wahr?","Is that really true?"]},
+"b1-147":{e:["Das ist tatsächlich richtig.","That's actually correct."]},
+"b1-148":{e:["Das Geld ist ausreichend.","The money is sufficient."]},
+"b1-149":{e:["Das Buch ist sehr umfangreich.","The book is very extensive."]},
+"b1-150":{e:["Ich bin begeistert von der Idee.","I'm enthusiastic about the idea."]},
+"b1-151":{e:["Sie war enttäuscht vom Ergebnis.","She was disappointed by the result."]},
+"b1-152":{e:["Ich war überrascht.","I was surprised."]},
+"b1-153":{e:["Es regnet, deshalb bleiben wir zu Hause.","It's raining, therefore we're staying home."]},
+"b1-154":{e:["Es war kalt, trotzdem gingen wir spazieren.","It was cold; nevertheless we went for a walk."]},
+"b1-155":{e:["Das Buch ist gut, allerdings teuer.","The book is good, however expensive."]},
+"b1-156":{e:["Ich war müde, dennoch arbeitete ich weiter.","I was tired, nonetheless I kept working."]},
+"b1-157":{e:["Er ist klug, jedoch faul.","He's smart, however lazy."]},
+"b1-158":{e:["Obwohl es regnet, gehen wir aus.","Although it's raining, we're going out."]},
+"b1-159":{e:["Während ich kochte, las er ein Buch.","While I was cooking, he read a book."]},
+"b1-160":{e:["Ich lerne, indem ich übe.","I learn by practicing."]},
+"b1-161":{e:["Ich übe viel, sodass ich besser werde.","I practice a lot so that I get better."]},
+"b1-162":{e:["Ich lerne, damit ich die Prüfung bestehe.","I study so that I pass the exam."]},
+"b1-163":{e:["Es ist kalt; außerdem regnet es.","It's cold; moreover, it's raining."]},
+"b1-164":{e:["Einerseits ist es gut, andererseits teuer.","On one hand it's good, on the other expensive."]},
+"b1-165":{e:["Meiner Meinung nach ist das falsch.","In my opinion, that's wrong."]},
+"b1-166":{e:["Im Großen und Ganzen läuft es gut.","By and large it's going well."]},
+"b1-167":{e:["Unter Umständen komme ich später.","Under some circumstances I'll come later."]}
+};
+
+// Merge examples into cards (overrides existing example if present)
+CARDS.forEach(function(card) {
+  const ex = _E[card.id];
+  if (!ex) return;
+  if (card.type === "noun") {
+    if (ex.n) card.nom = { de: ex.n[0], en: ex.n[1] };
+    if (ex.a) card.akk = { de: ex.a[0], en: ex.a[1] };
+    if (ex.d) card.dat = { de: ex.d[0], en: ex.d[1] };
+  } else if (ex.e) {
+    card.example = { de: ex.e[0], en: ex.e[1] };
+  }
+});
+
+// Storage
+const STORAGE_KEY = "GERMAN_FLASHCARDS_PROGRESS_V1";
+function loadProgress(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; } }
+function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress)); }
+
+// Scheduler
+const MS_PER_DAY = 86400000, DEFAULT_EASE = 2.5, MIN_EASE = 1.3;
+function applyRating(prev, rating, cardId, now) {
+  now = now || Date.now();
+  const base = prev || { cardId, easeFactor:DEFAULT_EASE, interval:0, repetitions:0, lastReviewedAt:0, nextReviewAt:now };
+  let ef = base.easeFactor, iv = base.interval, rp = base.repetitions;
+  if (rating === "again") return { cardId, easeFactor:Math.max(MIN_EASE, ef-0.2), interval:0, repetitions:0, lastReviewedAt:now, nextReviewAt:now + 600000 };
+  if (rating === "hard") { ef = Math.max(MIN_EASE, ef-0.15); iv = iv===0 ? 1 : Math.max(1, Math.round(iv*1.2)); rp++; }
+  else if (rating === "good") { iv = iv===0 ? 1 : Math.round(iv*ef); rp++; }
+  else if (rating === "easy") { ef += 0.15; iv = iv===0 ? 3 : Math.round(iv*ef*1.3); rp++; }
+  return { cardId, easeFactor:ef, interval:iv, repetitions:rp, lastReviewedAt:now, nextReviewAt:now + iv*MS_PER_DAY };
+}
+function getStatus(p) { if (!p || p.repetitions === 0) return "new"; if (p.interval < 7) return "learning"; return "learned"; }
+function dueScore(p, now) { if (!p) return 1; const d = p.nextReviewAt - now; return d <= 0 ? -1000000 + d : d; }
+function shuffle(arr) { const a = arr.slice(); for (let i=a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+function levelStats(level) {
+  const cards = CARDS.filter(function(c){ return c.level === level; });
+  let reviewed=0, n=0, learning=0, learned=0;
+  for (const c of cards) {
+    const p = state.progress[c.id]; const s = getStatus(p);
+    if (p && p.repetitions > 0) reviewed++;
+    if (s === "new") n++; else if (s === "learning") learning++; else learned++;
+  }
+  return { total:cards.length, reviewed, new:n, learning, learned };
+}
+
+// State
+const state = {
+  screen: "home",
+  selectedLevels: { A1:true, A2:false, B1:false },
+  sessionSize: 20,
+  session: null,
+  progress: loadProgress()
+};
+
+// Actions
+function go(s) { state.screen = s; render(); }
+function toggleLevel(l) { state.selectedLevels[l] = !state.selectedLevels[l]; render(); }
+function selectAllLevels() { state.selectedLevels = { A1:true, A2:true, B1:true }; render(); }
+function setSessionSize(n) { state.sessionSize = n; render(); }
+
+function startSession() {
+  const levels = Object.keys(state.selectedLevels).filter(function(l){ return state.selectedLevels[l]; });
+  if (levels.length === 0) return;
+  const now = Date.now();
+  const cards = CARDS.filter(function(c){ return levels.indexOf(c.level) !== -1; });
+  const shuffled = shuffle(cards);
+  shuffled.sort(function(a,b){ return dueScore(state.progress[a.id], now) - dueScore(state.progress[b.id], now); });
+  const limited = shuffled.slice(0, state.sessionSize);
+  state.session = { queue: limited.map(function(c){ return c.id; }), revealed:false };
+  state.screen = "practice";
+  render();
+}
+
+function reveal() { if (state.session) { state.session.revealed = true; render(); } }
+function rate(rating) {
+  if (!state.session || state.session.queue.length === 0) return;
+  const cardId = state.session.queue[0];
+  state.progress[cardId] = applyRating(state.progress[cardId], rating, cardId);
+  saveProgress();
+  if (rating === "again") { state.session.queue.shift(); state.session.queue.push(cardId); }
+  else state.session.queue.shift();
+  state.session.revealed = false;
+  render();
+}
+function skipCard() {
+  if (!state.session || state.session.queue.length === 0) return;
+  const id = state.session.queue.shift(); state.session.queue.push(id);
+  state.session.revealed = false; render();
+}
+function endSession() { state.session = null; state.screen = "home"; render(); }
+function resetProgress() {
+  if (!confirm("Reset all progress? This can't be undone.")) return;
+  state.progress = {}; localStorage.removeItem(STORAGE_KEY); render();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c];
+  });
+}
+
+// Screens
+function renderHome() {
+  const levels = ["A1","A2","B1"];
+  const cards = levels.map(function(level) {
+    const s = levelStats(level);
+    const mastery = s.total === 0 ? 0 : Math.round((s.learned / s.total) * 100);
+    return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' / '+s.total+' seen</div><div style="margin-top:4px;font-weight:600;">'+mastery+'% mastered</div></div>';
+  }).join("");
+  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="go(\'progress\')">View detailed progress</button>';
+}
+
+function renderLevels() {
+  const levels = ["A1","A2","B1"];
+  const someSelected = Object.values(state.selectedLevels).some(function(v){return v;});
+  const allSelected = Object.values(state.selectedLevels).every(function(v){return v;});
+  const options = levels.map(function(level) {
+    const active = state.selectedLevels[level];
+    return '<div class="card level-option '+(active?"active":"")+'" onclick="toggleLevel(\''+level+'\')"><h2>'+level+'</h2><div class="state">'+(active?"Included":"Not included")+'</div></div>';
+  }).join("");
+  const sizes = [10, 20, 50];
+  const sizeButtons = sizes.map(function(n) {
+    return '<button class="'+(state.sessionSize===n?"btn-primary active":"btn-secondary")+'" onclick="setSessionSize('+n+')">'+n+' cards</button>';
+  }).join("");
+  return '<h1>Choose levels</h1><p>Mix levels — the scheduler picks what is most useful now.</p>'+options+'<div class="size-label">Session size</div><div class="size-row">'+sizeButtons+'</div><button class="btn-'+(allSelected?"subtle":"secondary")+'" onclick="selectAllLevels()" '+(allSelected?"disabled":"")+'>'+(allSelected?"All levels selected":"Select all levels")+'</button><button class="btn-primary" onclick="startSession()" '+(!someSelected?"disabled":"")+'>Start session</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
+}
+
+function toggleFlip() { if (state.session) { state.session.revealed = !state.session.revealed; render(); } }
+
+function renderExample(label, ex, caseClass) {
+  if (!ex) return '';
+  return '<div class="example-block'+(caseClass?' '+caseClass:'')+'">'+
+    (label ? '<div class="case-label">'+label+'</div>' : '')+
+    '<div class="ex-de">'+escapeHtml(ex.de)+'</div>'+
+    (ex.en ? '<div class="ex-en">'+escapeHtml(ex.en)+'</div>' : '')+
+    '</div>';
+}
+
+function renderPractice() {
+  if (!state.session || state.session.queue.length === 0) {
+    return '<h1>Session complete!</h1><p>You went through all the cards. Come back later or start another session.</p><button class="btn-primary" onclick="endSession()">Back to Home</button>';
+  }
+  const cardId = state.session.queue[0];
+  const card = CARDS.find(function(c){ return c.id === cardId; });
+  const remaining = state.session.queue.length;
+
+  const front = '<div class="header-row"><span class="muted">'+card.level+' · '+card.type+'</span><span class="muted">'+remaining+' left</span></div>';
+  const isNoun = card.type === "noun";
+  const genderBadge = isNoun && card.gender ? '<div class="gender-badge gender-'+card.gender+'">'+card.gender+'</div>' : '';
+  const flipHint = '<div class="flip-hint">'+(state.session.revealed?'Tap to hide':'Tap to flip')+'</div>';
+
+  let backContent = '';
+  if (state.session.revealed) {
+    backContent = '<div class="translation">'+escapeHtml(card.translation)+'</div>'+
+      (card.meaning ? '<div class="meaning">'+escapeHtml(card.meaning)+'</div>' : '');
+    if (isNoun && (card.nom || card.akk || card.dat)) {
+      backContent += renderExample('Nominativ', card.nom, 'case-nom');
+      backContent += renderExample('Akkusativ', card.akk, 'case-akk');
+      backContent += renderExample('Dativ', card.dat, 'case-dat');
+    } else if (card.example) {
+      backContent += renderExample('', card.example, '');
+    } else if (card.exampleSentenceGerman) {
+      backContent += renderExample('', { de: card.exampleSentenceGerman, en: card.exampleSentenceEnglish }, '');
+    }
+  }
+
+  const body = '<div class="card flashcard" onclick="toggleFlip()">'+flipHint+genderBadge+'<div class="german">'+escapeHtml(card.german)+'</div>'+backContent+'</div>';
+
+  const actions = state.session.revealed
+    ? '<div class="grid-2"><button class="btn-danger" onclick="rate(\'again\')">↺ Repeat</button><button class="btn-secondary" onclick="rate(\'good\')">Next →</button><button class="btn-subtle" onclick="rate(\'hard\')">Hard</button><button class="btn-primary" onclick="rate(\'easy\')">Easy</button></div>'
+    : '';
+
+  const footer = '<div class="spacer"></div><div class="row"><button class="btn-subtle" onclick="skipCard()">Skip</button><button class="btn-secondary" onclick="endSession()">End session</button></div>';
+
+  return front + body + actions + footer;
+}
+
+function renderProgress() {
+  const levels = ["A1","A2","B1"];
+  const cards = levels.map(function(level) {
+    const s = levelStats(level);
+    return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' of '+s.total+' cards reviewed at least once</div><div class="stats-row"><span>New</span><span class="val">'+s.new+'</span></div><div class="stats-row"><span>Learning</span><span class="val">'+s.learning+'</span></div><div class="stats-row"><span>Learned</span><span class="val">'+s.learned+'</span></div></div>';
+  }).join("");
+  return '<h1>Your progress</h1><p>Status is derived from how long the scheduler will wait before showing a card again.</p>'+cards+'<button class="btn-danger" onclick="resetProgress()">Reset all progress</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
+}
+
+function render() {
+  const app = document.getElementById("app");
+  if (state.screen === "home") app.innerHTML = renderHome();
+  else if (state.screen === "levels") app.innerHTML = renderLevels();
+  else if (state.screen === "practice") app.innerHTML = renderPractice();
+  else if (state.screen === "progress") app.innerHTML = renderProgress();
+}
+
+render();
+</script>
+</body>
+</html>
