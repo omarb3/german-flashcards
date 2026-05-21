@@ -1144,7 +1144,7 @@ function startSession() {
   const cards = CARDS.filter(function(c){ return levels.indexOf(c.level) !== -1; });
   const shuffled = shuffle(cards);
   shuffled.sort(function(a,b){ return dueScore(state.progress[a.id], now) - dueScore(state.progress[b.id], now); });
-  const limited = shuffled.slice(0, state.sessionSize);
+  const limited = state.sessionSize === 0 ? shuffled : shuffled.slice(0, state.sessionSize);
   state.session = { queue: limited.map(function(c){ return c.id; }), revealed:false };
   state.screen = "practice";
   render();
@@ -1197,9 +1197,10 @@ function renderLevels() {
     const active = state.selectedLevels[level];
     return '<div class="card level-option '+(active?"active":"")+'" onclick="toggleLevel(\''+level+'\')"><h2>'+level+'</h2><div class="state">'+(active?"Included":"Not included")+'</div></div>';
   }).join("");
-  const sizes = [10, 20, 50];
+  const sizes = [10, 20, 50, 0];
   const sizeButtons = sizes.map(function(n) {
-    return '<button class="'+(state.sessionSize===n?"btn-primary active":"btn-secondary")+'" onclick="setSessionSize('+n+')">'+n+' cards</button>';
+    const label = n === 0 ? 'Total' : String(n);
+    return '<button class="'+(state.sessionSize===n?"btn-primary active":"btn-secondary")+'" onclick="setSessionSize('+n+')">'+label+'</button>';
   }).join("");
   return '<h1>Choose levels</h1><p>Mix levels — the scheduler picks what is most useful now.</p>'+options+'<div class="size-label">Session size</div><div class="size-row">'+sizeButtons+'</div><button class="btn-'+(allSelected?"subtle":"secondary")+'" onclick="selectAllLevels()" '+(allSelected?"disabled":"")+'>'+(allSelected?"All levels selected":"Select all levels")+'</button><button class="btn-primary" onclick="startSession()" '+(!someSelected?"disabled":"")+'>Start session</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
 }
