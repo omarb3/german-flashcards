@@ -60,6 +60,14 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .size-row button.active{background:#111827;color:#fff;border-color:#111827}
 .level-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;letter-spacing:0.5px}
 .level-chip.chip-cases{background:#fef3c7;color:#92400e}
+.grammar-filter-row{display:flex;gap:6px;margin-bottom:16px}
+.grammar-filter-row button{margin-bottom:0;padding:10px;font-size:14px;flex:1}
+.case-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px;background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb}
+.case-table th,.case-table td{padding:10px 12px;text-align:left;border-bottom:1px solid #e5e7eb}
+.case-table tr:last-child td{border-bottom:none}
+.case-table th{background:#f9fafb;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:#374151}
+.case-table td:first-child{font-weight:600;color:#111827}
+.case-table-label{font-weight:700;font-size:14px;color:#374151;margin-top:14px;margin-bottom:-4px}
 .grammar-card{cursor:pointer;display:flex;flex-direction:column;gap:6px}
 .grammar-card-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .grammar-rule-card{text-align:left;padding:24px}
@@ -1262,15 +1270,23 @@ const GRAMMAR = [
   {topic:"akkusativ",rule:"Akkusativ is the direct object — the person or thing RECEIVING the action.",examples:["Ich sehe den Mann.","Sie kauft das Buch.","Er besucht die Frau."]},
   {topic:"dativ",rule:"Dativ is the indirect object (recipient) OR appears after dative prepositions and dative verbs.",examples:["Ich gebe dem Mann das Buch.","Sie hilft der Frau.","Wir danken den Kindern."]}
 ]},
-{level:"Cases",category:"definite_articles",title:"Definite article table",items:[
-  {topic:"nominativ_definite",rule:"Nominativ definite articles by gender.",examples:["Maskulin: der","Neutrum: das","Feminin: die","Plural: die"]},
-  {topic:"akkusativ_definite",rule:"Akkusativ changes ONLY the masculine article (der → den). Everything else stays the same.",examples:["Maskulin: den","Neutrum: das","Feminin: die","Plural: die"]},
-  {topic:"dativ_definite",rule:"Dativ changes all singular articles. Plural takes 'den' and adds -n to the noun.",examples:["Maskulin: dem","Neutrum: dem","Feminin: der","Plural: den (+ -n on noun)"]}
-]},
-{level:"Cases",category:"indefinite_articles",title:"Indefinite article table",items:[
-  {topic:"nominativ_indefinite",rule:"Nominativ indefinite articles. Note: German has no plural indefinite article — you simply drop it.",examples:["Maskulin: ein","Neutrum: ein","Feminin: eine","Plural: — (no article)"]},
-  {topic:"akkusativ_indefinite",rule:"Akkusativ changes only the masculine indefinite (ein → einen).",examples:["Maskulin: einen","Neutrum: ein","Feminin: eine","Plural: — (no article)"]},
-  {topic:"dativ_indefinite",rule:"Dativ changes all singular indefinites.",examples:["Maskulin: einem","Neutrum: einem","Feminin: einer","Plural: — (no article)"]}
+{level:"Cases",category:"article_tables",title:"Article tables",items:[
+  {topic:"definite_articles",rule:"Definite articles (der/das/die) change based on case and gender. Notice that only the masculine column changes in Akkusativ; Dativ changes everything.",table:{
+    headers:["Case","Masculine","Neuter","Feminine","Plural"],
+    rows:[
+      ["Nominativ","der","das","die","die"],
+      ["Akkusativ","den","das","die","die"],
+      ["Dativ","dem","dem","der","den"]
+    ]
+  }},
+  {topic:"indefinite_articles",rule:"Indefinite articles (ein/eine). German has NO plural indefinite article — you simply drop it in the plural.",table:{
+    headers:["Case","Masculine","Neuter","Feminine"],
+    rows:[
+      ["Nominativ","ein","ein","eine"],
+      ["Akkusativ","einen","ein","eine"],
+      ["Dativ","einem","einem","einer"]
+    ]
+  }}
 ]},
 {level:"Cases",category:"how_they_change",title:"How the articles change",items:[
   {topic:"nominativ_change",rule:"Nominativ keeps the base form.",examples:["der, das, die, die","ein, ein, eine"]},
@@ -1343,6 +1359,7 @@ const state = {
   progress: loadProgress(),
   grammarSectionIdx: 0,
   grammarItemIdx: 0,
+  grammarFilter: "A1",
   grammarProgress: loadGrammarProgress()
 };
 
@@ -1353,6 +1370,7 @@ function selectAllLevels() { state.selectedLevels = { A1:true, A2:true, B1:true 
 function setSessionSize(n) { state.sessionSize = n; render(); }
 
 function openGrammar() { state.screen = "grammar"; render(); }
+function setGrammarFilter(f) { state.grammarFilter = f; render(); }
 function openGrammarSection(i) { state.grammarSectionIdx = i; state.grammarItemIdx = 0; state.screen = "grammar-section"; render(); }
 function nextGrammarItem() {
   const section = GRAMMAR[state.grammarSectionIdx];
@@ -1504,7 +1522,20 @@ function renderProgress() {
 }
 
 function renderGrammar() {
-  const sections = GRAMMAR.map(function(section, i) {
+  const filters = ["A1", "A2", "B1", "Cases"];
+  const filterButtons = filters.map(function(f) {
+    const cls = state.grammarFilter === f ? "btn-primary" : "btn-secondary";
+    return '<button class="'+cls+'" onclick="setGrammarFilter(\''+f+'\')">'+f+'</button>';
+  }).join("");
+
+  const filtered = GRAMMAR.map(function(s, i){ return {s:s, i:i}; }).filter(function(e) {
+    const lv = e.s.level;
+    if (state.grammarFilter === "A1") return lv === "A1" || lv === "A1-A2";
+    return lv === state.grammarFilter;
+  });
+
+  const sections = filtered.map(function(e) {
+    const i = e.i, section = e.s;
     const seen = sectionSeenCount(i);
     const total = section.items.length;
     const done = seen === total;
@@ -1513,10 +1544,20 @@ function renderGrammar() {
       '<div class="grammar-section-progress">'+seen+' / '+total+' topics seen'+(done?' ✓':'')+'</div>'+
     '</div>';
   }).join("");
+
   return '<h1>Grammar training</h1>'+
-    '<p>Short rules and examples for A1 and A2. Read through topics at your own pace — the flashcards stay your main study tool.</p>'+
-    sections+
+    '<div class="grammar-filter-row">'+filterButtons+'</div>'+
+    (sections || '<div class="muted" style="margin-bottom:16px">No sections under this filter.</div>')+
     '<button class="btn-secondary" onclick="go(\'home\')">Back to Home</button>';
+}
+
+function renderTable(t) {
+  if (!t || !t.headers || !t.rows) return '';
+  const head = '<thead><tr>' + t.headers.map(function(h){return '<th>'+escapeHtml(h)+'</th>';}).join('') + '</tr></thead>';
+  const body = '<tbody>' + t.rows.map(function(row){
+    return '<tr>' + row.map(function(cell){return '<td>'+escapeHtml(cell)+'</td>';}).join('') + '</tr>';
+  }).join('') + '</tbody>';
+  return '<table class="case-table">'+head+body+'</table>';
 }
 
 function renderGrammarSection() {
@@ -1527,9 +1568,10 @@ function renderGrammarSection() {
   const dots = section.items.map(function(_, i) {
     return '<span class="dot'+(i <= idx ? ' done' : '')+'"></span>';
   }).join("");
-  const examples = item.examples.map(function(ex) {
-    return '<div class="grammar-example">'+escapeHtml(ex)+'</div>';
-  }).join("");
+  const tableHtml = item.table ? renderTable(item.table) : '';
+  const examplesHtml = (item.examples && item.examples.length)
+    ? '<div class="grammar-examples-block">'+item.examples.map(function(ex){return '<div class="grammar-example">'+escapeHtml(ex)+'</div>';}).join("")+'</div>'
+    : '';
   return '<div class="header-row">'+
     '<span class="muted">'+escapeHtml(section.title)+' · '+section.level+'</span>'+
     '<span class="muted">'+(idx+1)+' / '+total+'</span>'+
@@ -1538,7 +1580,8 @@ function renderGrammarSection() {
     '<div class="card grammar-rule-card">'+
       '<div class="grammar-topic">'+escapeHtml(formatTopic(item.topic))+'</div>'+
       '<div class="grammar-rule-text">'+escapeHtml(item.rule)+'</div>'+
-      '<div class="grammar-examples-block">'+examples+'</div>'+
+      tableHtml +
+      examplesHtml +
     '</div>'+
     '<div class="spacer"></div>'+
     '<div class="row">'+
