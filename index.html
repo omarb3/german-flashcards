@@ -1114,26 +1114,26 @@ CARDS.forEach(function(card) {
 
 // Grammar cheat sheets
 const GRAMMAR = [
-{level:"A1",category:"speaking_rules",title:"Speaking basics",items:[
+{level:"A1",category:"speaking_rules",title:"1. Speaking basics",items:[
   {topic:"du_vs_Sie",rule:"Use 'du' for informal situations and 'Sie' for formal situations.",examples:["Wie heißt du?","Wie heißen Sie?"]},
   {topic:"introductions",rule:"Use simple chunks to introduce yourself.",examples:["Ich heiße Omar.","Ich komme aus Berlin.","Ich wohne in Berlin.","Ich spreche Deutsch und Englisch."]},
   {topic:"greetings",rule:"Use time-based greetings and standard farewells.",examples:["Guten Morgen","Guten Tag","Guten Abend","Tschüs","Auf Wiedersehen","Gute Nacht"]},
   {topic:"how_are_you",rule:"Ask 'How are you?' differently in informal and formal speech.",examples:["Wie geht's dir?","Wie geht es Ihnen?"]}
 ]},
-{level:"A1",category:"word_order",title:"Core sentence rules",items:[
+{level:"A1",category:"word_order",title:"2. Sentence rules",items:[
   {topic:"statement",rule:"In a main statement, the conjugated verb is usually in position 2.",examples:["Ich wohne in Berlin."]},
   {topic:"w_question",rule:"In a W-question, the question word comes first and the conjugated verb comes next.",examples:["Wo wohnst du?","Was machst du?"]},
   {topic:"yes_no_question",rule:"In a yes/no question, the conjugated verb comes first.",examples:["Kommst du aus Deutschland?","Hast du Zeit?"]},
   {topic:"time_first",rule:"A time expression can come first, but the conjugated verb still stays in position 2.",examples:["Am Abend lerne ich Deutsch."]}
 ]},
-{level:"A1",category:"grammar",title:"Essential grammar",items:[
+{level:"A1",category:"grammar",title:"3. Pronouns, verbs & nouns",items:[
   {topic:"personal_pronouns",rule:"Learn the main subject pronouns.",examples:["ich","du","er","sie","es","wir","ihr","sie","Sie"]},
   {topic:"present_tense",rule:"Conjugate common verbs in the present tense.",examples:["ich bin","du bist","er ist","ich habe","wir kommen"]},
   {topic:"noun_gender",rule:"German nouns have gender and should be learned with their article.",examples:["der Tisch","das Buch","die Lampe"]},
   {topic:"negation_nicht",rule:"Use 'nicht' to negate verbs, adjectives, or whole statements.",examples:["Ich komme nicht heute.","Das ist nicht gut."]},
   {topic:"negation_kein",rule:"Use 'kein' to negate nouns with indefinite meaning.",examples:["Ich habe kein Auto.","Wir kaufen keine Milch."]}
 ]},
-{level:"A1",category:"cases_articles",title:"Cases and articles",items:[
+{level:"A1",category:"cases_articles",title:"4. Cases & articles (intro)",items:[
   {topic:"nominative",rule:"Use nominative for the subject of the sentence.",examples:["Der Mann ist hier."]},
   {topic:"accusative",rule:"Use accusative for the direct object.",examples:["Ich sehe den Mann."]},
   {topic:"dative_basics",rule:"Use dative after common dative prepositions and for indirect objects.",examples:["Ich fahre mit dem Bus.","Ich gebe dem Kind das Buch."]},
@@ -1141,126 +1141,134 @@ const GRAMMAR = [
   {topic:"accusative_masculine",rule:"Masculine articles change in the accusative.",examples:["der Mann -> den Mann","ein Mann -> einen Mann"]},
   {topic:"dative_articles",rule:"Dative articles are dem, dem, der, den; plural nouns often add -n.",examples:["mit dem Auto","bei der Arbeit","mit den Kindern"]}
 ]},
-{level:"A1",category:"verbs",title:"Verb patterns",items:[
+{level:"A1",category:"verbs",title:"5. Modal & separable verbs",items:[
   {topic:"modal_verbs",rule:"With modal verbs, the modal is conjugated and the main verb goes to the end in infinitive form.",examples:["Ich will Deutsch lernen.","Wir können heute kommen."]},
   {topic:"separable_verbs",rule:"In main clauses, separable verb prefixes split off and move to the end.",examples:["Ich rufe dich an.","Er steht um 7 Uhr auf."]},
   {topic:"separable_with_modal",rule:"With a modal verb, the separable verb stays together in infinitive form at the end.",examples:["Ich kann dich anrufen."]},
   {topic:"imperative",rule:"Use the imperative for commands and requests.",examples:["Komm!","Helfen Sie mir bitte!","Mach die Tür zu!"]}
 ]},
-{level:"A1",category:"prepositions_time",title:"Prepositions and time",items:[
+{level:"A1",category:"prepositions_time",title:"6. Prepositions & time",items:[
   {topic:"dative_prepositions",rule:"Common dative prepositions are aus, bei, mit, nach, seit, von, zu.",examples:["Ich komme aus der Türkei.","Ich fahre mit dem Bus."]},
   {topic:"accusative_prepositions",rule:"Common accusative prepositions include für and ohne.",examples:["Das Geschenk ist für dich.","Ich gehe ohne Jacke."]},
   {topic:"time_phrases",rule:"Use am for days, im for months/seasons, and um for clock times.",examples:["am Montag","im April","um 8 Uhr","von 8 bis 16 Uhr"]},
   {topic:"sequence_words",rule:"Use sequence words to speak about routines or instructions.",examples:["zuerst","dann","danach","später","zuletzt"]}
 ]},
-{level:"A1",category:"pronouns_possession",title:"Pronouns and possession",items:[
+{level:"A1",category:"pronouns_possession",title:"7. Pronouns & possession",items:[
   {topic:"possessive_articles",rule:"Use possessive articles to show ownership.",examples:["mein Buch","deine Tasche","unser Auto","Ihr Name"]},
   {topic:"accusative_pronouns",rule:"Accusative pronouns replace direct objects.",examples:["mich","dich","ihn","es","sie","uns","euch","Sie"]},
   {topic:"dative_pronouns",rule:"Dative pronouns replace indirect objects.",examples:["mir","dir","ihm","ihr","uns","euch","Ihnen"]},
   {topic:"simple_possession",rule:"Possession can be shown with a name plus -s or with 'von'.",examples:["Marias Handy","die Tasche von Ali"]}
 ]},
-{level:"A1",category:"past_tense",title:"Past tense basics",items:[
+{level:"A1",category:"past_tense",title:"8. Past tense basics",items:[
   {topic:"prateritum_basics",rule:"At beginner level, simple past often appears first with 'sein' and 'haben'.",examples:["Ich war müde.","Ich hatte Stress."]},
   {topic:"perfekt",rule:"Use haben/sein plus Partizip II to talk about completed past actions.",examples:["Ich habe gearbeitet.","Er ist gefahren."]},
   {topic:"sein_verbs",rule:"Many movement verbs use 'sein' in Perfekt.",examples:["Ich bin gegangen.","Wir sind gekommen."]}
 ]},
-{level:"A2",category:"grammar_extension",title:"A2 extension",items:[
-  {topic:"case_control",rule:"A2 strengthens control of nominative, accusative, and dative in longer sentences.",examples:["Ich gebe dem Mann das Buch."]},
-  {topic:"tenses",rule:"A2 expects more confident use of Perfekt and some Präteritum, especially with common verbs.",examples:["Ich habe gestern gelernt.","Früher war ich in Köln."]},
-  {topic:"reflexive_verbs",rule:"Reflexive verbs become more common.",examples:["Ich freue mich.","Wir treffen uns um acht."]},
-  {topic:"comparisons",rule:"A2 adds comparative structures and simple comparisons.",examples:["Berlin ist größer als Bonn.","Das ist besser."]},
-  {topic:"adjective_endings",rule:"Adjective endings start to matter more with articles and cases.",examples:["ein kleines Kind","das kleine Kind"]},
-  {topic:"polite_requests",rule:"Simple polite request forms like 'könnte' and 'hätte' begin to appear.",examples:["Könnte ich bitte zahlen?","Ich hätte gern einen Kaffee."]}
+{level:"A2",category:"case_control",title:"1. Sharper case control",items:[
+  {topic:"case_control",rule:"At A2 you should handle Nominativ, Akkusativ, and Dativ confidently in longer sentences with multiple objects.",examples:["Ich gebe dem Mann das Buch.","Sie zeigt der Frau die Karte.","Er erklärt dem Kind die Aufgabe."]}
 ]},
-{level:"A2",category:"subordinate_clauses",title:"Subordinate clauses",items:[
-  {topic:"weil",rule:"Use 'weil' to give a reason; the conjugated verb goes to the end of the subordinate clause.",examples:["Ich lerne Deutsch, weil ich in Berlin wohne."]},
-  {topic:"dass",rule:"Use 'dass' to introduce a subordinate clause with a statement or opinion.",examples:["Ich glaube, dass er heute kommt."]},
-  {topic:"wenn",rule:"Use 'wenn' for repeated conditions or future conditions; the conjugated verb goes to the end.",examples:["Wenn ich Zeit habe, komme ich."]},
-  {topic:"als",rule:"Use 'als' for a single event in the past.",examples:["Als ich klein war, wohnte ich in Ankara."]}
+{level:"A2",category:"adjective_endings",title:"2. Adjective endings",items:[
+  {topic:"adjective_endings",rule:"Adjective endings start to matter — they change with the article and the case. Two main patterns at A2: after a definite article (der/die/das), and after an indefinite article (ein/eine).",examples:["das kleine Kind (after definite article)","ein kleines Kind (after indefinite article)","mit dem kleinen Kind (Dativ)"]}
 ]},
-{level:"A1-A2",category:"learning_tips",title:"App-friendly reminders",items:[
+{level:"A2",category:"reflexive_verbs",title:"3. Reflexive verbs",items:[
+  {topic:"reflexive_verbs",rule:"Reflexive verbs use a pronoun (mich/dich/sich/uns/euch) that refers back to the subject. Very common at A2: sich freuen, sich treffen, sich fühlen, sich interessieren.",examples:["Ich freue mich.","Wir treffen uns um acht.","Sie interessiert sich für Musik."]}
+]},
+{level:"A2",category:"comparisons",title:"4. Comparisons",items:[
+  {topic:"comparisons",rule:"Comparative: add -er (größer, besser). Superlative: am + -sten OR der/die/das + -ste. Use 'als' for than, 'so ... wie' for equal comparisons.",examples:["Berlin ist größer als Bonn.","Das ist besser.","Sie ist so groß wie ich."]}
+]},
+{level:"A2",category:"tenses_polite",title:"5. Confident tenses & polite requests",items:[
+  {topic:"tenses",rule:"At A2, you should use Perfekt confidently for past events and Präteritum for common verbs (sein, haben, modals).",examples:["Ich habe gestern gelernt.","Früher war ich in Köln.","Wir mussten warten."]},
+  {topic:"polite_requests",rule:"Polite request forms appear at A2 — 'könnte' (Konjunktiv II of können) and 'hätte gern' (would like).",examples:["Könnte ich bitte zahlen?","Ich hätte gern einen Kaffee.","Könnten Sie mir helfen?"]}
+]},
+{level:"A2",category:"subordinate_clauses",title:"6. Subordinate clauses",items:[
+  {topic:"weil",rule:"Use 'weil' to give a reason. The conjugated verb goes to the END of the subordinate clause.",examples:["Ich lerne Deutsch, weil ich in Berlin wohne."]},
+  {topic:"dass",rule:"Use 'dass' to introduce a subordinate clause with a statement or opinion. Verb goes to the end.",examples:["Ich glaube, dass er heute kommt."]},
+  {topic:"wenn",rule:"Use 'wenn' for repeated conditions or future conditions; verb goes to the end.",examples:["Wenn ich Zeit habe, komme ich."]},
+  {topic:"als",rule:"Use 'als' for a SINGLE event in the past (different from 'wenn' which is for repeated events).",examples:["Als ich klein war, wohnte ich in Ankara."]}
+]},
+{level:"A1-A2",category:"learning_tips",title:"9. How to study at A1",items:[
   {topic:"learn_articles",rule:"Always learn nouns together with their article.",examples:["der Tisch","das Buch","die Lampe"]},
   {topic:"learn_chunks",rule:"Learn verbs and speaking phrases as chunks, not in isolation.",examples:["Ich komme aus ...","Ich möchte ... bestellen.","Kannst du ...?"]},
   {topic:"speaking_priority",rule:"For beginner speaking, focus first on greetings, introductions, daily routines, asking questions, shopping, invitations, and simple past events.",examples:["Wo ist ...?","Wann beginnt ...?","Ich habe gestern gearbeitet."]}
 ]},
-{level:"B1",category:"speaking_rules",title:"Speaking at B1",items:[
+{level:"B1",category:"speaking_rules",title:"1. Speaking at B1",items:[
   {topic:"expressing_opinions",rule:"At B1, learners should express opinions, reasons, agreement, and disagreement more clearly.",examples:["Ich denke, dass das eine gute Idee ist.","Meiner Meinung nach ist das wichtig.","Ich bin damit einverstanden.","Ich sehe das anders."]},
   {topic:"giving_reasons",rule:"Use connectors to explain causes, consequences, and contrasts in spoken German.",examples:["Ich lerne Deutsch, weil ich in Deutschland arbeite.","Es ist teuer, aber sehr praktisch.","Deshalb fahre ich mit der Bahn."]},
   {topic:"making_suggestions",rule:"Use softer and more natural phrasing for suggestions, requests, and advice.",examples:["Wir könnten am Wochenende ins Kino gehen.","Du solltest früher schlafen.","An deiner Stelle würde ich das machen."]},
   {topic:"narrating_events",rule:"At B1, you should be able to describe experiences, plans, goals, and past events in more detail.",examples:["Letztes Jahr bin ich nach Hamburg gefahren und habe dort Freunde besucht.","In Zukunft möchte ich besser Deutsch sprechen."]}
 ]},
-{level:"B1",category:"sentence_structure",title:"Sentence structure",items:[
+{level:"B1",category:"sentence_structure",title:"2. Sentence structure",items:[
   {topic:"main_clause",rule:"In a main clause, the conjugated verb stays in position 2.",examples:["Heute gehe ich früher nach Hause."]},
   {topic:"subordinate_clause",rule:"In subordinate clauses, the conjugated verb goes to the end.",examples:["Ich bleibe zu Hause, weil ich krank bin.","Er sagt, dass er heute keine Zeit hat."]},
   {topic:"two_part_connectors",rule:"B1 increasingly uses paired connectors to link two ideas.",examples:["sowohl ... als auch — Er spricht sowohl Deutsch als auch Englisch.","entweder ... oder — Entweder du kommst, oder du bleibst.","weder ... noch — Ich habe weder Zeit noch Geld.","nicht nur ... sondern auch — Sie ist nicht nur klug, sondern auch nett.","zwar ... aber — Es ist zwar teuer, aber sehr gut."]},
   {topic:"inversion",rule:"When an element other than the subject (time, place, adverb) comes first, the subject moves AFTER the verb.",examples:["Deshalb gehe ich früher.","Morgen fahre ich nach Leipzig."]}
 ]},
-{level:"B1",category:"connectors_causal",title:"Causal connectors by word order",items:[
+{level:"B1",category:"connectors_causal",title:"3. Causal connectors",items:[
   {topic:"subordinator_causal",rule:"Subordinators (weil, da) push the verb to the END of their clause.",examples:["Ich bleibe zu Hause, weil ich krank bin.","Da es regnet, nehmen wir den Bus."]},
   {topic:"coordinator_causal",rule:"The coordinator 'denn' does NOT change word order — both clauses stay normal.",examples:["Ich bleibe zu Hause, denn ich bin krank."]},
   {topic:"adverbial_causal",rule:"Adverbials (deshalb, deswegen, darum) cause INVERSION — verb comes before subject.",examples:["Ich bin krank. Deshalb bleibe ich zu Hause.","Es regnet, deswegen nehme ich den Bus."]}
 ]},
-{level:"B1",category:"connectors_contrast_time",title:"Contrast and time connectors",items:[
+{level:"B1",category:"connectors_contrast_time",title:"4. Contrast & time connectors",items:[
   {topic:"subordinator_contrast",rule:"Subordinators of contrast (obwohl, während) push the verb to the END.",examples:["Ich gehe joggen, obwohl es regnet.","Während er kocht, lese ich."]},
   {topic:"coordinator_contrast",rule:"'aber' is a coordinator — it keeps normal word order.",examples:["Es ist kalt, aber ich gehe spazieren."]},
   {topic:"adverbial_contrast",rule:"'trotzdem' is an adverb — it causes inversion just like deshalb.",examples:["Es regnet. Trotzdem gehe ich raus."]},
   {topic:"time_subordinators",rule:"Time subordinators (bevor, nachdem, als, wenn, sobald, während) push the verb to the end. 'als' = single past event; 'wenn' = repeated or future.",examples:["Bevor ich gehe, mache ich Kaffee.","Als ich klein war, wohnte ich in Köln.","Wenn ich Zeit habe, lese ich."]},
   {topic:"purpose_connectors",rule:"Use 'damit' when subjects of the two clauses differ; 'um ... zu' when the subject is the same.",examples:["Ich lerne viel, damit ich die Prüfung bestehe.","Ich gehe zur Bank, um Geld abzuheben."]}
 ]},
-{level:"B1",category:"tenses",title:"Tenses at B1",items:[
+{level:"B1",category:"tenses",title:"5. Tenses",items:[
   {topic:"perfekt",rule:"Perfekt remains the most common spoken past tense. Use 'haben' or 'sein' as auxiliary.",examples:["Ich habe gestern lange gearbeitet.","Wir sind spät angekommen."]},
   {topic:"prateritum_common_verbs",rule:"Präteritum is preferred in writing and with common verbs (sein, haben, modals) in speech.",examples:["Ich war müde.","Er hatte keine Zeit.","Wir mussten warten."]},
   {topic:"plusquamperfekt",rule:"Use Plusquamperfekt for an action that happened BEFORE another past action. Often paired with 'nachdem'.",examples:["Nachdem ich gegessen hatte, bin ich spazieren gegangen."]},
   {topic:"futur_1",rule:"Futur I is used for future plans, predictions, or assumptions about the present.",examples:["Ich werde morgen früher kommen.","Er wird jetzt wohl zu Hause sein."]}
 ]},
-{level:"B1",category:"relative_clauses",title:"Relative clauses",items:[
+{level:"B1",category:"relative_clauses",title:"6. Relative clauses",items:[
   {topic:"relative_nominative",rule:"Relative pronouns (der/die/das) match the GENDER of the noun and the CASE they have in the clause.",examples:["Das ist der Mann, der nebenan wohnt."]},
   {topic:"relative_accusative",rule:"When the pronoun is the direct object of the relative clause, use accusative.",examples:["Das ist der Film, den ich gestern gesehen habe."]},
   {topic:"relative_dative",rule:"When the pronoun is the indirect object or follows a dative-taking verb, use dative.",examples:["Das ist die Frau, der ich geholfen habe."]},
   {topic:"relative_with_preposition",rule:"The preposition sits right before the relative pronoun and determines its case.",examples:["Das ist der Kollege, mit dem ich arbeite."]}
 ]},
-{level:"B1",category:"passive",title:"Passive voice",items:[
+{level:"B1",category:"passive",title:"7. Passive voice",items:[
   {topic:"passive_present",rule:"Vorgangspassiv (action passive): werden + Partizip II. Focuses on the action, not the doer.",examples:["Das Auto wird repariert."]},
   {topic:"passive_past",rule:"For past passive, use 'wurde' (Präteritum) + Partizip II.",examples:["Die Straße wurde gesperrt."]},
   {topic:"state_passive",rule:"Zustandspassiv (state passive): sein + Partizip II. Describes the resulting state, not the action.",examples:["Die Tür ist geschlossen."]}
 ]},
-{level:"B1",category:"konjunktiv_ii",title:"Konjunktiv II",items:[
+{level:"B1",category:"konjunktiv_ii",title:"8. Konjunktiv II",items:[
   {topic:"polite_requests",rule:"Use Konjunktiv II for polite requests. 'könnten' and 'hätte gern' are the most common.",examples:["Könnten Sie mir helfen?","Ich hätte gern einen Tee."]},
   {topic:"hypothetical_situations",rule:"For unreal or hypothetical situations use 'wenn ... hätte/wäre, würde ...'.",examples:["Wenn ich mehr Zeit hätte, würde ich öfter reisen."]},
   {topic:"wurde_form",rule:"For most verbs, 'würde + infinitive' replaces the proper Konjunktiv II in spoken German.",examples:["Ich würde gern in Deutschland studieren."]},
   {topic:"wishes",rule:"Use Konjunktiv II to express wishes and unreal desires.",examples:["Ich wünschte, ich hätte mehr Urlaub."]}
 ]},
-{level:"B1",category:"infinitive_constructions",title:"Infinitive constructions",items:[
+{level:"B1",category:"infinitive_constructions",title:"9. Infinitive constructions",items:[
   {topic:"um_zu",rule:"Use 'um ... zu' when the subject of both parts is the SAME. Expresses purpose.",examples:["Ich lerne viel, um die Prüfung zu bestehen."]},
   {topic:"ohne_zu",rule:"Use 'ohne ... zu' to express 'without doing something'.",examples:["Er ist gegangen, ohne etwas zu sagen."]},
   {topic:"anstatt_zu",rule:"Use 'anstatt ... zu' to express 'instead of doing something'.",examples:["Sie bleibt zu Hause, anstatt zur Party zu gehen."]},
   {topic:"brauchen_nicht_zu",rule:"'nicht brauchen + zu + Infinitiv' means something is not necessary. The 'zu' is sometimes dropped in speech.",examples:["Du brauchst morgen nicht zu kommen."]}
 ]},
-{level:"B1",category:"cases_and_prepositions",title:"Cases and prepositions",items:[
+{level:"B1",category:"cases_and_prepositions",title:"10. Cases & prepositions",items:[
   {topic:"genitive",rule:"Genitive shows possession or specification. Common in writing.",examples:["die Farbe des Autos","während des Urlaubs"]},
   {topic:"genitive_prepositions",rule:"wegen, während, trotz take genitive in formal/written German. In casual spoken German they are often used with dative ('wegen dem Wetter'). On the B1 exam, use genitive.",examples:["wegen des Wetters","während des Urlaubs","trotz des Regens"]},
   {topic:"two_way_prepositions",rule:"Wechselpräpositionen (in, auf, an, unter, über, vor, hinter, neben, zwischen): accusative for DIRECTION (wohin?), dative for LOCATION (wo?).",examples:["Ich gehe in die Stadt. (direction → Akk)","Ich bin in der Stadt. (location → Dat)"]},
   {topic:"verbs_with_prepositions",rule:"Many verbs are fixed with a specific preposition + case. Learn them together as a unit.",examples:["warten auf + Akkusativ","sich interessieren für + Akkusativ","teilnehmen an + Dativ","denken an + Akkusativ"]}
 ]},
-{level:"B1",category:"adjectives_nouns",title:"Adjectives and noun forms",items:[
+{level:"B1",category:"adjectives_nouns",title:"11. Adjectives & noun forms",items:[
   {topic:"adjective_endings",rule:"Endings depend on the article: weak (after der/die/das), mixed (after ein/kein/mein), strong (no article).",examples:["der kleine Hund (weak)","ein kleiner Hund (mixed)","frisches Brot (strong)"]},
   {topic:"comparative_superlative",rule:"Comparative: stem + -er. Superlative: am + -sten OR der/die/das + -ste.",examples:["größer","interessanter","am besten","der schönste Park"]},
   {topic:"nominalization",rule:"Adjectives and verbs can become nouns. Capitalize them; they take a gendered article.",examples:["das Essen","beim Lesen","der Alte"]},
   {topic:"weak_nouns_n_deklination",rule:"Some masculine nouns (Student, Junge, Mensch, Herr) take -n or -en in ALL cases except nominative singular.",examples:["der Student (Nom)","des Studenten (Gen)","dem Studenten (Dat)","den Studenten (Akk)"]}
 ]},
-{level:"B1",category:"special_verbs_patterns",title:"Special verb patterns",items:[
+{level:"B1",category:"special_verbs_patterns",title:"12. Special verb patterns",items:[
   {topic:"reflexive_verbs",rule:"Reflexive verbs use 'sich' and often pair with a fixed preposition.",examples:["Ich interessiere mich für Musik.","Er erinnert sich an das Gespräch."]},
   {topic:"lassen",rule:"'lassen' has two main B1 uses: (1) have something done by someone else, (2) allow / let.",examples:["Ich lasse mein Handy reparieren. (have it repaired)","Lass mich bitte ausreden. (let me finish)"]},
   {topic:"da_compounds",rule:"da + preposition refers back to a THING/IDEA (not a person). Use 'darauf', 'dafür', 'daran', etc.",examples:["Ich interessiere mich dafür.","Daran kann ich mich nicht erinnern."]},
   {topic:"wo_compounds",rule:"wo + preposition asks about a THING/IDEA. For people use 'mit wem', 'für wen', etc.",examples:["Worauf wartest du?","Womit fährst du zur Arbeit?"]}
 ]},
-{level:"B1",category:"writing_speaking_functions",title:"Communication functions",items:[
+{level:"B1",category:"writing_speaking_functions",title:"13. Communication functions",items:[
   {topic:"formal_messages",rule:"For semi-formal/formal messages: open with 'Sehr geehrte/r ...', use 'Sie', close with 'Mit freundlichen Grüßen'.",examples:["Ich schreibe Ihnen, weil ...","Vielen Dank für Ihre Nachricht.","Mit freundlichen Grüßen"]},
   {topic:"giving_advice",rule:"Use 'sollte' for advice or 'würde + empfehlen' for softer suggestions.",examples:["Du solltest mehr schlafen.","Ich würde dir empfehlen, früher anzufangen."]},
   {topic:"describing_problems",rule:"State the problem with enough detail to get help or make a complaint.",examples:["Ich habe ein Problem mit meiner Heizung.","Das Paket ist noch nicht angekommen."]},
   {topic:"arguing_structurally",rule:"Structure your argument: opinion → reason → example → conclusion.",examples:["Ich finde das wichtig, weil ...","Ein gutes Beispiel dafür ist ...","Deshalb bin ich dafür."]}
 ]},
-{level:"B1",category:"learning_tips",title:"B1 reminders",items:[
+{level:"B1",category:"learning_tips",title:"14. How to study at B1",items:[
   {topic:"learn_with_patterns",rule:"Learn B1 grammar as sentence patterns, not isolated rules.",examples:["Ich denke, dass ...","Wenn ich Zeit hätte, würde ich ...","Das ist etwas, das ..."]},
   {topic:"focus_on_connectors",rule:"B1 improves a lot when you master connectors AND their word-order behavior.",examples:["weil (verb at end)","obwohl (verb at end)","deshalb (inversion)","trotzdem (inversion)","damit (verb at end)"]},
   {topic:"active_output",rule:"Practice speaking and writing with longer answers instead of single sentences.",examples:["Erzähle von einem Erlebnis.","Beschreibe ein Problem und eine Lösung.","Gib deine Meinung mit Gründen."]}
@@ -1424,7 +1432,7 @@ function renderHome() {
     const mastery = s.total === 0 ? 0 : Math.round((s.learned / s.total) * 100);
     return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' / '+s.total+' seen</div><div style="margin-top:4px;font-weight:600;">'+mastery+'% mastered</div></div>';
   }).join("");
-  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="openGrammar()">Grammar training</button><button class="btn-subtle" onclick="go(\'progress\')">View detailed progress</button>';
+  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="openGrammar()">Grammar guide</button><button class="btn-subtle" onclick="go(\'progress\')">View detailed progress</button>';
 }
 
 function renderLevels() {
@@ -1534,7 +1542,7 @@ function renderGrammar() {
     '</div>';
   }).join("");
 
-  return '<h1>Grammar training</h1>'+
+  return '<h1>Grammar guide</h1>'+
     '<div class="grammar-filter-row">'+filterButtons+'</div>'+
     (sections || '<div class="muted" style="margin-bottom:16px">No sections under this filter.</div>')+
     '<button class="btn-secondary" onclick="go(\'home\')">Back to Home</button>';
