@@ -58,6 +58,19 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .size-row{display:flex;gap:8px;margin-bottom:16px}
 .size-row button{margin-bottom:0;padding:10px}
 .size-row button.active{background:#111827;color:#fff;border-color:#111827}
+.level-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;letter-spacing:0.5px}
+.grammar-card{cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.grammar-card-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.grammar-rule-card{text-align:left;padding:24px}
+.grammar-topic{font-size:13px;font-weight:700;color:#6b7280;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px}
+.grammar-rule-text{font-size:18px;line-height:1.5;color:#111827;margin-bottom:16px}
+.grammar-examples-block{background:#f9fafb;border-radius:10px;border-left:3px solid #3b82f6;padding:12px 16px;margin-top:8px}
+.grammar-example{font-size:16px;color:#111827;padding:6px 0;font-weight:500}
+.grammar-example:not(:last-child){border-bottom:1px solid #e5e7eb}
+.grammar-section-progress{font-size:13px;color:#6b7280}
+.dot-progress{display:flex;gap:4px;align-items:center}
+.dot-progress .dot{width:6px;height:6px;border-radius:999px;background:#d1d5db}
+.dot-progress .dot.done{background:#111827}
 </style>
 </head>
 <body>
@@ -1090,9 +1103,87 @@ CARDS.forEach(function(card) {
   }
 });
 
+// Grammar cheat sheets
+const GRAMMAR = [
+{level:"A1",category:"speaking_rules",title:"Speaking basics",items:[
+  {topic:"du_vs_Sie",rule:"Use 'du' for informal situations and 'Sie' for formal situations.",examples:["Wie heißt du?","Wie heißen Sie?"]},
+  {topic:"introductions",rule:"Use simple chunks to introduce yourself.",examples:["Ich heiße Omar.","Ich komme aus Berlin.","Ich wohne in Berlin.","Ich spreche Deutsch und Englisch."]},
+  {topic:"greetings",rule:"Use time-based greetings and standard farewells.",examples:["Guten Morgen","Guten Tag","Guten Abend","Tschüs","Auf Wiedersehen","Gute Nacht"]},
+  {topic:"how_are_you",rule:"Ask 'How are you?' differently in informal and formal speech.",examples:["Wie geht's dir?","Wie geht es Ihnen?"]}
+]},
+{level:"A1",category:"word_order",title:"Core sentence rules",items:[
+  {topic:"statement",rule:"In a main statement, the conjugated verb is usually in position 2.",examples:["Ich wohne in Berlin."]},
+  {topic:"w_question",rule:"In a W-question, the question word comes first and the conjugated verb comes next.",examples:["Wo wohnst du?","Was machst du?"]},
+  {topic:"yes_no_question",rule:"In a yes/no question, the conjugated verb comes first.",examples:["Kommst du aus Deutschland?","Hast du Zeit?"]},
+  {topic:"time_first",rule:"A time expression can come first, but the conjugated verb still stays in position 2.",examples:["Am Abend lerne ich Deutsch."]}
+]},
+{level:"A1",category:"grammar",title:"Essential grammar",items:[
+  {topic:"personal_pronouns",rule:"Learn the main subject pronouns.",examples:["ich","du","er","sie","es","wir","ihr","sie","Sie"]},
+  {topic:"present_tense",rule:"Conjugate common verbs in the present tense.",examples:["ich bin","du bist","er ist","ich habe","wir kommen"]},
+  {topic:"noun_gender",rule:"German nouns have gender and should be learned with their article.",examples:["der Tisch","das Buch","die Lampe"]},
+  {topic:"negation_nicht",rule:"Use 'nicht' to negate verbs, adjectives, or whole statements.",examples:["Ich komme nicht heute.","Das ist nicht gut."]},
+  {topic:"negation_kein",rule:"Use 'kein' to negate nouns with indefinite meaning.",examples:["Ich habe kein Auto.","Wir kaufen keine Milch."]}
+]},
+{level:"A1",category:"cases_articles",title:"Cases and articles",items:[
+  {topic:"nominative",rule:"Use nominative for the subject of the sentence.",examples:["Der Mann ist hier."]},
+  {topic:"accusative",rule:"Use accusative for the direct object.",examples:["Ich sehe den Mann."]},
+  {topic:"dative_basics",rule:"Use dative after common dative prepositions and for indirect objects.",examples:["Ich fahre mit dem Bus.","Ich gebe dem Kind das Buch."]},
+  {topic:"nominative_articles",rule:"Nominative definite articles are der, das, die, die.",examples:["der Kaffee","das Brot","die Tasche"]},
+  {topic:"accusative_masculine",rule:"Masculine articles change in the accusative.",examples:["der Mann -> den Mann","ein Mann -> einen Mann"]},
+  {topic:"dative_articles",rule:"Dative articles are dem, dem, der, den; plural nouns often add -n.",examples:["mit dem Auto","bei der Arbeit","mit den Kindern"]}
+]},
+{level:"A1",category:"verbs",title:"Verb patterns",items:[
+  {topic:"modal_verbs",rule:"With modal verbs, the modal is conjugated and the main verb goes to the end in infinitive form.",examples:["Ich will Deutsch lernen.","Wir können heute kommen."]},
+  {topic:"separable_verbs",rule:"In main clauses, separable verb prefixes split off and move to the end.",examples:["Ich rufe dich an.","Er steht um 7 Uhr auf."]},
+  {topic:"separable_with_modal",rule:"With a modal verb, the separable verb stays together in infinitive form at the end.",examples:["Ich kann dich anrufen."]},
+  {topic:"imperative",rule:"Use the imperative for commands and requests.",examples:["Komm!","Helfen Sie mir bitte!","Mach die Tür zu!"]}
+]},
+{level:"A1",category:"prepositions_time",title:"Prepositions and time",items:[
+  {topic:"dative_prepositions",rule:"Common dative prepositions are aus, bei, mit, nach, seit, von, zu.",examples:["Ich komme aus der Türkei.","Ich fahre mit dem Bus."]},
+  {topic:"accusative_prepositions",rule:"Common accusative prepositions include für and ohne.",examples:["Das Geschenk ist für dich.","Ich gehe ohne Jacke."]},
+  {topic:"time_phrases",rule:"Use am for days, im for months/seasons, and um for clock times.",examples:["am Montag","im April","um 8 Uhr","von 8 bis 16 Uhr"]},
+  {topic:"sequence_words",rule:"Use sequence words to speak about routines or instructions.",examples:["zuerst","dann","danach","später","zuletzt"]}
+]},
+{level:"A1",category:"pronouns_possession",title:"Pronouns and possession",items:[
+  {topic:"possessive_articles",rule:"Use possessive articles to show ownership.",examples:["mein Buch","deine Tasche","unser Auto","Ihr Name"]},
+  {topic:"accusative_pronouns",rule:"Accusative pronouns replace direct objects.",examples:["mich","dich","ihn","es","sie","uns","euch","Sie"]},
+  {topic:"dative_pronouns",rule:"Dative pronouns replace indirect objects.",examples:["mir","dir","ihm","ihr","uns","euch","Ihnen"]},
+  {topic:"simple_possession",rule:"Possession can be shown with a name plus -s or with 'von'.",examples:["Marias Handy","die Tasche von Ali"]}
+]},
+{level:"A1",category:"past_tense",title:"Past tense basics",items:[
+  {topic:"prateritum_basics",rule:"At beginner level, simple past often appears first with 'sein' and 'haben'.",examples:["Ich war müde.","Ich hatte Stress."]},
+  {topic:"perfekt",rule:"Use haben/sein plus Partizip II to talk about completed past actions.",examples:["Ich habe gearbeitet.","Er ist gefahren."]},
+  {topic:"sein_verbs",rule:"Many movement verbs use 'sein' in Perfekt.",examples:["Ich bin gegangen.","Wir sind gekommen."]}
+]},
+{level:"A2",category:"grammar_extension",title:"A2 extension",items:[
+  {topic:"case_control",rule:"A2 strengthens control of nominative, accusative, and dative in longer sentences.",examples:["Ich gebe dem Mann das Buch."]},
+  {topic:"tenses",rule:"A2 expects more confident use of Perfekt and some Präteritum, especially with common verbs.",examples:["Ich habe gestern gelernt.","Früher war ich in Köln."]},
+  {topic:"reflexive_verbs",rule:"Reflexive verbs become more common.",examples:["Ich freue mich.","Wir treffen uns um acht."]},
+  {topic:"comparisons",rule:"A2 adds comparative structures and simple comparisons.",examples:["Berlin ist größer als Bonn.","Das ist besser."]},
+  {topic:"adjective_endings",rule:"Adjective endings start to matter more with articles and cases.",examples:["ein kleines Kind","das kleine Kind"]},
+  {topic:"polite_requests",rule:"Simple polite request forms like 'könnte' and 'hätte' begin to appear.",examples:["Könnte ich bitte zahlen?","Ich hätte gern einen Kaffee."]}
+]},
+{level:"A2",category:"subordinate_clauses",title:"Subordinate clauses",items:[
+  {topic:"weil",rule:"Use 'weil' to give a reason; the conjugated verb goes to the end of the subordinate clause.",examples:["Ich lerne Deutsch, weil ich in Berlin wohne."]},
+  {topic:"dass",rule:"Use 'dass' to introduce a subordinate clause with a statement or opinion.",examples:["Ich glaube, dass er heute kommt."]},
+  {topic:"wenn",rule:"Use 'wenn' for repeated conditions or future conditions; the conjugated verb goes to the end.",examples:["Wenn ich Zeit habe, komme ich."]},
+  {topic:"als",rule:"Use 'als' for a single event in the past.",examples:["Als ich klein war, wohnte ich in Ankara."]}
+]},
+{level:"A1-A2",category:"learning_tips",title:"App-friendly reminders",items:[
+  {topic:"learn_articles",rule:"Always learn nouns together with their article.",examples:["der Tisch","das Buch","die Lampe"]},
+  {topic:"learn_chunks",rule:"Learn verbs and speaking phrases as chunks, not in isolation.",examples:["Ich komme aus ...","Ich möchte ... bestellen.","Kannst du ...?"]},
+  {topic:"speaking_priority",rule:"For beginner speaking, focus first on greetings, introductions, daily routines, asking questions, shopping, invitations, and simple past events.",examples:["Wo ist ...?","Wann beginnt ...?","Ich habe gestern gearbeitet."]}
+]}
+];
+
+function formatTopic(s) { return s.replace(/_/g, " ").replace(/^./, function(c){ return c.toUpperCase(); }); }
+
 // Storage
 const STORAGE_KEY = "GERMAN_FLASHCARDS_PROGRESS_V1";
+const GRAMMAR_KEY = "GERMAN_GRAMMAR_PROGRESS_V1";
 function loadProgress(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; } }
+function loadGrammarProgress(){ try { return JSON.parse(localStorage.getItem(GRAMMAR_KEY) || "{}"); } catch(e) { return {}; } }
+function saveGrammarProgress(){ localStorage.setItem(GRAMMAR_KEY, JSON.stringify(state.grammarProgress)); }
 function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress)); }
 
 // Scheduler
@@ -1128,7 +1219,10 @@ const state = {
   selectedLevels: { A1:true, A2:false, B1:false },
   sessionSize: 20,
   session: null,
-  progress: loadProgress()
+  progress: loadProgress(),
+  grammarSectionIdx: 0,
+  grammarItemIdx: 0,
+  grammarProgress: loadGrammarProgress()
 };
 
 // Actions
@@ -1136,6 +1230,22 @@ function go(s) { state.screen = s; render(); }
 function toggleLevel(l) { state.selectedLevels[l] = !state.selectedLevels[l]; render(); }
 function selectAllLevels() { state.selectedLevels = { A1:true, A2:true, B1:true }; render(); }
 function setSessionSize(n) { state.sessionSize = n; render(); }
+
+function openGrammar() { state.screen = "grammar"; render(); }
+function openGrammarSection(i) { state.grammarSectionIdx = i; state.grammarItemIdx = 0; state.screen = "grammar-section"; render(); }
+function nextGrammarItem() {
+  const section = GRAMMAR[state.grammarSectionIdx];
+  state.grammarProgress[state.grammarSectionIdx + ":" + state.grammarItemIdx] = true;
+  saveGrammarProgress();
+  if (state.grammarItemIdx < section.items.length - 1) { state.grammarItemIdx++; render(); }
+  else { state.screen = "grammar"; render(); }
+}
+function prevGrammarItem() { if (state.grammarItemIdx > 0) { state.grammarItemIdx--; render(); } }
+function sectionSeenCount(idx) {
+  const section = GRAMMAR[idx]; let c = 0;
+  for (let i = 0; i < section.items.length; i++) if (state.grammarProgress[idx + ":" + i]) c++;
+  return c;
+}
 
 function startSession() {
   const levels = Object.keys(state.selectedLevels).filter(function(l){ return state.selectedLevels[l]; });
@@ -1186,7 +1296,7 @@ function renderHome() {
     const mastery = s.total === 0 ? 0 : Math.round((s.learned / s.total) * 100);
     return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' / '+s.total+' seen</div><div style="margin-top:4px;font-weight:600;">'+mastery+'% mastered</div></div>';
   }).join("");
-  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="go(\'progress\')">View detailed progress</button>';
+  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="openGrammar()">Grammar training</button><button class="btn-subtle" onclick="go(\'progress\')">View detailed progress</button>';
 }
 
 function renderLevels() {
@@ -1255,10 +1365,10 @@ function renderPractice() {
   const body = '<div class="card flashcard" onclick="toggleFlip()">' + cardContent + '</div>';
 
   const actions = state.session.revealed
-    ? '<div class="grid-2"><button class="btn-danger" onclick="rate(\'again\')">↺ Repeat</button><button class="btn-secondary" onclick="rate(\'good\')">Next →</button><button class="btn-subtle" onclick="rate(\'hard\')">Hard</button><button class="btn-primary" onclick="rate(\'easy\')">Easy</button></div>'
+    ? '<div class="row"><button class="btn-danger" onclick="rate(\'again\')">↺ Repeat</button><button class="btn-primary" onclick="rate(\'good\')">Next →</button></div>'
     : '';
 
-  const footer = '<div class="spacer"></div><div class="row"><button class="btn-subtle" onclick="skipCard()">Skip</button><button class="btn-secondary" onclick="endSession()">End session</button></div>';
+  const footer = '<div class="spacer"></div><button class="btn-secondary" onclick="endSession()">End session</button>';
 
   return front + body + actions + footer;
 }
@@ -1272,12 +1382,59 @@ function renderProgress() {
   return '<h1>Your progress</h1><p>Status is derived from how long the scheduler will wait before showing a card again.</p>'+cards+'<button class="btn-danger" onclick="resetProgress()">Reset all progress</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
 }
 
+function renderGrammar() {
+  const sections = GRAMMAR.map(function(section, i) {
+    const seen = sectionSeenCount(i);
+    const total = section.items.length;
+    const done = seen === total;
+    return '<div class="card grammar-card" onclick="openGrammarSection('+i+')">'+
+      '<div class="grammar-card-head"><h2>'+escapeHtml(section.title)+'</h2><span class="level-chip">'+section.level+'</span></div>'+
+      '<div class="grammar-section-progress">'+seen+' / '+total+' topics seen'+(done?' ✓':'')+'</div>'+
+    '</div>';
+  }).join("");
+  return '<h1>Grammar training</h1>'+
+    '<p>Short rules and examples for A1 and A2. Read through topics at your own pace — the flashcards stay your main study tool.</p>'+
+    sections+
+    '<button class="btn-secondary" onclick="go(\'home\')">Back to Home</button>';
+}
+
+function renderGrammarSection() {
+  const section = GRAMMAR[state.grammarSectionIdx];
+  const idx = state.grammarItemIdx;
+  const item = section.items[idx];
+  const total = section.items.length;
+  const dots = section.items.map(function(_, i) {
+    return '<span class="dot'+(i <= idx ? ' done' : '')+'"></span>';
+  }).join("");
+  const examples = item.examples.map(function(ex) {
+    return '<div class="grammar-example">'+escapeHtml(ex)+'</div>';
+  }).join("");
+  return '<div class="header-row">'+
+    '<span class="muted">'+escapeHtml(section.title)+' · '+section.level+'</span>'+
+    '<span class="muted">'+(idx+1)+' / '+total+'</span>'+
+    '</div>'+
+    '<div class="dot-progress" style="margin-bottom:12px">'+dots+'</div>'+
+    '<div class="card grammar-rule-card">'+
+      '<div class="grammar-topic">'+escapeHtml(formatTopic(item.topic))+'</div>'+
+      '<div class="grammar-rule-text">'+escapeHtml(item.rule)+'</div>'+
+      '<div class="grammar-examples-block">'+examples+'</div>'+
+    '</div>'+
+    '<div class="spacer"></div>'+
+    '<div class="row">'+
+      (idx > 0 ? '<button class="btn-subtle" onclick="prevGrammarItem()">← Previous</button>' : '')+
+      '<button class="btn-primary" onclick="nextGrammarItem()">'+(idx === total - 1 ? 'Finish' : 'Next →')+'</button>'+
+    '</div>'+
+    '<button class="btn-secondary" onclick="openGrammar()">Back to topics</button>';
+}
+
 function render() {
   const app = document.getElementById("app");
   if (state.screen === "home") app.innerHTML = renderHome();
   else if (state.screen === "levels") app.innerHTML = renderLevels();
   else if (state.screen === "practice") app.innerHTML = renderPractice();
   else if (state.screen === "progress") app.innerHTML = renderProgress();
+  else if (state.screen === "grammar") app.innerHTML = renderGrammar();
+  else if (state.screen === "grammar-section") app.innerHTML = renderGrammarSection();
 }
 
 render();
