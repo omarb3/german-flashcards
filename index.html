@@ -27,13 +27,13 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .row > *{flex:1;margin-bottom:0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .grid-2 button{margin-bottom:0}
-.flashcard{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;cursor:pointer;user-select:none;transition:transform 0.15s ease}
+.flashcard{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;cursor:pointer;user-select:none;transition:transform 0.15s ease;position:relative}
 .flashcard:active{transform:scale(0.99)}
 .flashcard .german{font-size:34px;font-weight:700}
 .flashcard .translation{font-size:22px;font-weight:600;margin-top:4px}
 .flashcard .meaning{color:#4b5563;font-size:15px;line-height:1.4;font-style:italic;margin-top:2px}
+.flashcard .front-example{font-size:18px;color:#4b5563;font-style:italic;margin-top:16px;max-width:90%;line-height:1.45}
 .flashcard .flip-hint{position:absolute;top:12px;right:14px;font-size:11px;color:#9ca3af;letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
-.flashcard{position:relative}
 .gender-badge{display:inline-block;padding:4px 14px;border-radius:999px;font-size:16px;font-weight:700;letter-spacing:0.5px}
 .gender-der{background:#dbeafe;color:#1e40af}
 .gender-die{background:#fce7f3;color:#9d174d}
@@ -817,7 +817,264 @@ const _E = {
 "b1-164":{e:["Einerseits ist es gut, andererseits teuer.","On one hand it's good, on the other expensive."]},
 "b1-165":{e:["Meiner Meinung nach ist das falsch.","In my opinion, that's wrong."]},
 "b1-166":{e:["Im Großen und Ganzen läuft es gut.","By and large it's going well."]},
-"b1-167":{e:["Unter Umständen komme ich später.","Under some circumstances I'll come later."]}
+"b1-167":{e:["Unter Umständen komme ich später.","Under some circumstances I'll come later."]},
+// ===== A2 nouns =====
+"a2-001":{n:["Die Reise war lang.","The trip was long."],a:["Wir planen eine Reise.","We're planning a trip."],d:["Auf der Reise war es schön.","It was lovely on the trip."]},
+"a2-002":{n:["Der Urlaub beginnt morgen.","The vacation starts tomorrow."],a:["Ich brauche einen Urlaub.","I need a vacation."],d:["Im Urlaub entspannen wir uns.","We relax on vacation."]},
+"a2-003":{n:["Der Flughafen ist groß.","The airport is big."],a:["Wir erreichen den Flughafen.","We reach the airport."],d:["Am Flughafen warten wir.","We wait at the airport."]},
+"a2-004":{n:["Der Bahnhof liegt im Zentrum.","The station is in the center."],a:["Ich suche den Bahnhof.","I'm looking for the station."],d:["Am Bahnhof treffen wir uns.","We're meeting at the station."]},
+"a2-005":{n:["Das Ticket ist teuer.","The ticket is expensive."],a:["Ich kaufe ein Ticket.","I'm buying a ticket."],d:["Mit dem Ticket fahre ich gratis.","I travel free with the ticket."]},
+"a2-006":{n:["Die Fahrkarte gilt einen Tag.","The ticket is valid one day."],a:["Ich brauche eine Fahrkarte.","I need a ticket."],d:["Mit der Fahrkarte darf man fahren.","One may travel with the ticket."]},
+"a2-007":{n:["Das Gepäck ist schwer.","The luggage is heavy."],a:["Ich trage das Gepäck.","I'm carrying the luggage."],d:["Mit dem Gepäck ist es mühsam.","It's hard with the luggage."]},
+"a2-008":{n:["Der Koffer ist neu.","The suitcase is new."],a:["Ich packe den Koffer.","I'm packing the suitcase."],d:["Im Koffer ist alles drin.","Everything's in the suitcase."]},
+"a2-009":{n:["Das Hotel ist sehr schön.","The hotel is very nice."],a:["Wir buchen das Hotel.","We book the hotel."],d:["Im Hotel gibt es Frühstück.","There's breakfast at the hotel."]},
+"a2-010":{n:["Die Reservierung ist bestätigt.","The reservation is confirmed."],a:["Ich mache eine Reservierung.","I'm making a reservation."],d:["Mit der Reservierung bekommt man Rabatt.","One gets a discount with a reservation."]},
+"a2-017":{n:["Der Strand ist sandig.","The beach is sandy."],a:["Wir besuchen den Strand.","We're visiting the beach."],d:["Am Strand spielen Kinder.","Children play at the beach."]},
+"a2-018":{n:["Das Meer ist heute ruhig.","The sea is calm today."],a:["Ich liebe das Meer.","I love the sea."],d:["Im Meer schwimmen Fische.","Fish swim in the sea."]},
+"a2-019":{n:["Der Berg ist hoch.","The mountain is high."],a:["Wir besteigen den Berg.","We climb the mountain."],d:["Auf dem Berg liegt Schnee.","There's snow on the mountain."]},
+"a2-020":{n:["Der See ist kalt.","The lake is cold."],a:["Wir umrunden den See.","We go around the lake."],d:["Am See picknicken wir.","We picnic at the lake."]},
+"a2-021":{n:["Die Gesundheit ist wichtig.","Health is important."],a:["Wir pflegen die Gesundheit.","We take care of our health."],d:["Auf die Gesundheit!","To your health!"]},
+"a2-022":{n:["Die Krankheit ist ansteckend.","The illness is contagious."],a:["Wir bekämpfen die Krankheit.","We fight the illness."],d:["Mit der Krankheit muss er leben.","He has to live with the illness."]},
+"a2-023":{n:["Der Arzt hilft mir.","The doctor helps me."],a:["Ich besuche den Arzt.","I'm visiting the doctor."],d:["Beim Arzt warte ich lange.","I wait long at the doctor's."]},
+"a2-024":{n:["Die Ärztin ist freundlich.","The doctor is friendly."],a:["Ich frage die Ärztin.","I ask the doctor."],d:["Bei der Ärztin fühle ich mich gut.","I feel good at the doctor's."]},
+"a2-025":{n:["Das Krankenhaus ist modern.","The hospital is modern."],a:["Wir erreichen das Krankenhaus.","We reach the hospital."],d:["Im Krankenhaus arbeiten viele Leute.","Many people work in the hospital."]},
+"a2-026":{n:["Die Apotheke ist geschlossen.","The pharmacy is closed."],a:["Ich finde die Apotheke nicht.","I can't find the pharmacy."],d:["In der Apotheke kaufe ich Medikamente.","I buy medication at the pharmacy."]},
+"a2-027":{n:["Das Medikament wirkt schnell.","The medication works fast."],a:["Ich nehme das Medikament.","I'm taking the medication."],d:["Mit dem Medikament geht es mir besser.","I feel better with the medication."]},
+"a2-028":{n:["Die Tablette ist klein.","The pill is small."],a:["Ich schlucke die Tablette.","I'm swallowing the pill."],d:["Mit dieser Tablette hilft es.","It helps with this pill."]},
+"a2-029":{n:["Die Schmerzen sind stark.","The pain is strong."],a:["Ich habe Schmerzen.","I have pain."],d:["Bei den Schmerzen hilft Wärme.","Warmth helps with the pain."]},
+"a2-030":{n:["Das Fieber steigt.","The fever is rising."],a:["Ich habe Fieber.","I have a fever."],d:["Bei Fieber soll man ruhen.","One should rest with a fever."]},
+"a2-036":{n:["Das Geld liegt auf dem Tisch.","The money is on the table."],a:["Ich brauche Geld.","I need money."],d:["Mit Geld kann man vieles kaufen.","One can buy a lot with money."]},
+"a2-037":{n:["Der Euro ist die EU-Währung.","The euro is the EU currency."],a:["Ich habe einen Euro.","I have one euro."],d:["Mit einem Euro kauft man wenig.","One buys little with a euro."]},
+"a2-038":{n:["Der Preis ist gut.","The price is good."],a:["Ich vergleiche den Preis.","I'm comparing the price."],d:["Bei diesem Preis kaufe ich es.","I'll buy it at this price."]},
+"a2-039":{n:["Die Rechnung kommt morgen.","The bill comes tomorrow."],a:["Ich bezahle die Rechnung.","I'm paying the bill."],d:["Auf der Rechnung steht alles.","Everything's on the bill."]},
+"a2-040":{n:["Das Geschäft ist offen.","The shop is open."],a:["Wir besuchen das Geschäft.","We visit the shop."],d:["Im Geschäft gibt es Rabatte.","There are discounts in the shop."]},
+"a2-041":{n:["Der Supermarkt ist riesig.","The supermarket is huge."],a:["Ich gehe in den Supermarkt.","I'm going to the supermarket."],d:["Im Supermarkt findet man alles.","One finds everything in the supermarket."]},
+"a2-042":{n:["Die Bäckerei riecht gut.","The bakery smells good."],a:["Ich liebe die Bäckerei.","I love the bakery."],d:["In der Bäckerei kaufe ich Brot.","I buy bread at the bakery."]},
+"a2-043":{n:["Der Markt ist heute geöffnet.","The market is open today."],a:["Wir besuchen den Markt.","We're visiting the market."],d:["Auf dem Markt ist es bunt.","It's colorful at the market."]},
+"a2-051":{n:["Mein Hobby ist Lesen.","My hobby is reading."],a:["Ich habe ein neues Hobby.","I have a new hobby."],d:["Mit diesem Hobby entspanne ich.","I relax with this hobby."]},
+"a2-052":{n:["Die Freizeit ist kostbar.","Free time is precious."],a:["Ich nutze die Freizeit.","I use my free time."],d:["In der Freizeit lese ich.","I read in my free time."]},
+"a2-053":{n:["Der Sport macht Spaß.","Sport is fun."],a:["Ich liebe den Sport.","I love sport."],d:["Mit dem Sport bleibt man fit.","One stays fit with sport."]},
+"a2-054":{n:["Die Musik ist schön.","The music is beautiful."],a:["Ich höre Musik.","I'm listening to music."],d:["Bei der Musik entspanne ich.","I relax with music."]},
+"a2-055":{n:["Der Film war spannend.","The movie was exciting."],a:["Ich sehe den Film.","I'm watching the movie."],d:["In dem Film geht es um Liebe.","The film is about love."]},
+"a2-056":{n:["Das Buch ist interessant.","The book is interesting."],a:["Ich lese das Buch.","I'm reading the book."],d:["Im Buch findet man Antworten.","One finds answers in the book."]},
+"a2-061":{n:["Das Telefon klingelt.","The phone is ringing."],a:["Ich nehme das Telefon.","I'm picking up the phone."],d:["Am Telefon spreche ich oft.","I talk on the phone often."]},
+"a2-062":{n:["Das Handy ist neu.","The mobile is new."],a:["Ich verliere das Handy.","I'm losing the mobile."],d:["Mit dem Handy mache ich Fotos.","I take photos with the mobile."]},
+"a2-063":{n:["Die Nummer stimmt nicht.","The number is wrong."],a:["Ich wähle die Nummer.","I'm dialing the number."],d:["Unter der Nummer erreicht man mich.","One can reach me at this number."]},
+"a2-064":{n:["Die E-Mail ist angekommen.","The email arrived."],a:["Ich schreibe eine E-Mail.","I'm writing an email."],d:["In der E-Mail steht alles.","Everything is in the email."]},
+"a2-065":{n:["Die Nachricht ist wichtig.","The message is important."],a:["Ich lese die Nachricht.","I'm reading the message."],d:["Mit der Nachricht kam Hoffnung.","Hope came with the message."]},
+"a2-088":{n:["Die Arbeit ist anstrengend.","The work is tiring."],a:["Ich liebe meine Arbeit.","I love my work."],d:["Bei der Arbeit konzentriere ich mich.","I concentrate at work."]},
+"a2-089":{n:["Der Beruf gefällt mir.","I like the profession."],a:["Ich wähle einen Beruf.","I'm choosing a profession."],d:["In meinem Beruf reise ich viel.","I travel a lot in my profession."]},
+"a2-090":{n:["Die Firma wächst schnell.","The company is growing fast."],a:["Wir gründen eine Firma.","We're founding a company."],d:["In der Firma arbeiten viele.","Many people work at the company."]},
+"a2-091":{n:["Das Büro ist hell.","The office is bright."],a:["Ich verlasse das Büro.","I'm leaving the office."],d:["Im Büro arbeite ich viel.","I work a lot in the office."]},
+"a2-092":{n:["Der Chef ist streng.","The boss is strict."],a:["Ich treffe den Chef.","I'm meeting the boss."],d:["Mit dem Chef rede ich morgen.","I'll talk to the boss tomorrow."]},
+"a2-093":{n:["Der Kollege ist nett.","The colleague is nice."],a:["Ich kenne den Kollegen.","I know the colleague."],d:["Mit dem Kollegen arbeite ich gut.","I work well with the colleague."]},
+"a2-094":{n:["Die Kollegin hilft mir.","The colleague helps me."],a:["Ich frage die Kollegin.","I'm asking the colleague."],d:["Mit der Kollegin gehe ich essen.","I'm going to eat with the colleague."]},
+"a2-095":{n:["Der Termin ist morgen.","The appointment is tomorrow."],a:["Ich habe einen Termin.","I have an appointment."],d:["Bei dem Termin war ich pünktlich.","I was punctual at the appointment."]},
+"a2-096":{n:["Die Besprechung dauert eine Stunde.","The meeting lasts an hour."],a:["Wir planen die Besprechung.","We're planning the meeting."],d:["In der Besprechung gibt es Neuigkeiten.","There's news in the meeting."]},
+"a2-097":{n:["Das Gehalt ist gut.","The salary is good."],a:["Ich bekomme mein Gehalt.","I'm getting my salary."],d:["Mit dem Gehalt komme ich aus.","I get by with my salary."]},
+"a2-098":{n:["Die Pause war kurz.","The break was short."],a:["Ich brauche eine Pause.","I need a break."],d:["In der Pause trinke ich Kaffee.","I drink coffee during the break."]},
+"a2-103":{n:["Das Restaurant ist voll.","The restaurant is full."],a:["Wir besuchen das Restaurant.","We're visiting the restaurant."],d:["Im Restaurant essen wir gut.","We eat well at the restaurant."]},
+"a2-104":{n:["Die Speisekarte ist lang.","The menu is long."],a:["Ich lese die Speisekarte.","I'm reading the menu."],d:["Auf der Speisekarte steht alles.","Everything's on the menu."]},
+"a2-105":{n:["Der Kellner kommt.","The waiter is coming."],a:["Ich rufe den Kellner.","I'm calling the waiter."],d:["Dem Kellner gebe ich Trinkgeld.","I'm giving the waiter a tip."]},
+"a2-106":{n:["Die Kellnerin ist schnell.","The waitress is fast."],a:["Ich danke der Kellnerin.","I thank the waitress."],d:["Bei der Kellnerin bestelle ich.","I'm ordering with the waitress."]},
+"a2-107":{n:["Das Trinkgeld ist üblich.","Tipping is customary."],a:["Ich gebe Trinkgeld.","I'm giving a tip."],d:["Vom Trinkgeld lebt der Kellner.","The waiter lives off tips."]},
+"a2-108":{n:["Die Vorspeise war lecker.","The appetizer was delicious."],a:["Ich bestelle eine Vorspeise.","I'm ordering an appetizer."],d:["Bei der Vorspeise gibt es Salat.","There's salad as appetizer."]},
+"a2-109":{n:["Das Hauptgericht ist warm.","The main course is hot."],a:["Ich wähle das Hauptgericht.","I'm choosing the main course."],d:["Beim Hauptgericht gibt es Wein.","There's wine with the main course."]},
+"a2-110":{n:["Die Nachspeise ist süß.","The dessert is sweet."],a:["Ich esse eine Nachspeise.","I'm eating a dessert."],d:["Bei der Nachspeise trinken wir Kaffee.","We drink coffee with dessert."]},
+"a2-111":{n:["Das Frühstück ist fertig.","Breakfast is ready."],a:["Ich mache das Frühstück.","I'm making breakfast."],d:["Beim Frühstück lese ich Zeitung.","I read the paper at breakfast."]},
+"a2-112":{n:["Das Mittagessen schmeckt gut.","Lunch tastes good."],a:["Wir kochen das Mittagessen.","We're cooking lunch."],d:["Beim Mittagessen reden wir.","We talk at lunch."]},
+"a2-113":{n:["Das Abendessen war spät.","Dinner was late."],a:["Ich bereite das Abendessen vor.","I'm preparing dinner."],d:["Beim Abendessen trinken wir Wein.","We drink wine at dinner."]},
+"a2-138":{n:["Die Möglichkeit besteht.","The possibility exists."],a:["Ich sehe eine Möglichkeit.","I see a possibility."],d:["Mit dieser Möglichkeit gewinnen wir.","We win with this possibility."]},
+"a2-139":{n:["Die Entscheidung ist gefallen.","The decision has been made."],a:["Ich treffe die Entscheidung.","I'm making the decision."],d:["Mit der Entscheidung leben wir.","We live with the decision."]},
+"a2-140":{n:["Die Erfahrung war wertvoll.","The experience was valuable."],a:["Ich sammle Erfahrung.","I'm gathering experience."],d:["Aus der Erfahrung lerne ich.","I learn from the experience."]},
+"a2-141":{n:["Das Gespräch war interessant.","The conversation was interesting."],a:["Wir führen ein Gespräch.","We're having a conversation."],d:["In dem Gespräch kam Wahrheit.","Truth came out in the conversation."]},
+"a2-142":{n:["Die Idee ist genial.","The idea is brilliant."],a:["Ich habe eine Idee.","I have an idea."],d:["Mit der Idee kommen wir weiter.","We make progress with the idea."]},
+"a2-143":{n:["Der Plan funktioniert.","The plan works."],a:["Wir machen einen Plan.","We're making a plan."],d:["Nach dem Plan handeln wir.","We act according to the plan."]},
+"a2-144":{n:["Der Grund ist klar.","The reason is clear."],a:["Ich nenne den Grund.","I'll name the reason."],d:["Aus diesem Grund bleibe ich.","I'm staying for this reason."]},
+"a2-145":{n:["Die Frage ist schwierig.","The question is difficult."],a:["Ich stelle eine Frage.","I'm asking a question."],d:["Bei dieser Frage zögere ich.","I hesitate at this question."]},
+"a2-146":{n:["Die Antwort kommt bald.","The answer is coming soon."],a:["Ich kenne die Antwort.","I know the answer."],d:["Mit der Antwort bin ich zufrieden.","I'm satisfied with the answer."]},
+"a2-147":{n:["Das Problem ist gelöst.","The problem is solved."],a:["Wir haben ein Problem.","We have a problem."],d:["Mit dem Problem kämpfen wir.","We struggle with the problem."]},
+"a2-148":{n:["Die Lösung ist einfach.","The solution is simple."],a:["Wir finden die Lösung.","We find the solution."],d:["Mit der Lösung sind alle zufrieden.","Everyone's happy with the solution."]},
+"a2-149":{n:["Das Beispiel ist gut.","The example is good."],a:["Ich gebe ein Beispiel.","I'll give an example."],d:["Mit dem Beispiel verstehe ich es.","I understand it with the example."]},
+"a2-150":{n:["Die Information ist wertvoll.","The information is valuable."],a:["Ich brauche die Information.","I need the information."],d:["Mit dieser Information helfe ich.","I help with this information."]},
+"a2-151":{n:["Die Meinung zählt.","The opinion counts."],a:["Ich respektiere die Meinung.","I respect the opinion."],d:["Bei dieser Meinung bleibe ich.","I stick with this opinion."]},
+"a2-152":{n:["Die Umgebung ist ruhig.","The surroundings are quiet."],a:["Wir erkunden die Umgebung.","We're exploring the surroundings."],d:["In der Umgebung gibt es Wälder.","There are forests in the surroundings."]},
+"a2-183":{n:["Die Stadt ist groß.","The city is big."],a:["Ich liebe die Stadt.","I love the city."],d:["In der Stadt gibt es Cafés.","There are cafés in the city."]},
+"a2-184":{n:["Das Dorf ist klein.","The village is small."],a:["Wir besuchen das Dorf.","We're visiting the village."],d:["Im Dorf kennt jeder jeden.","Everyone knows everyone in the village."]},
+"a2-185":{n:["Das Land ist schön.","The country is beautiful."],a:["Ich liebe das Land.","I love the country."],d:["Im Land gibt es viel zu sehen.","There's much to see in the country."]},
+"a2-186":{n:["Die Welt ist riesig.","The world is huge."],a:["Wir erkunden die Welt.","We're exploring the world."],d:["In der Welt gibt es viel zu lernen.","There's much to learn in the world."]},
+"a2-187":{n:["Die Natur ist beeindruckend.","Nature is impressive."],a:["Ich liebe die Natur.","I love nature."],d:["In der Natur entspanne ich.","I relax in nature."]},
+"a2-188":{n:["Der Wald ist dicht.","The forest is dense."],a:["Wir durchqueren den Wald.","We cross the forest."],d:["Im Wald ist es kühl.","It's cool in the forest."]},
+"a2-189":{n:["Der Park ist gepflegt.","The park is well-kept."],a:["Wir besuchen den Park.","We're visiting the park."],d:["Im Park spielen Kinder.","Children play in the park."]},
+"a2-190":{n:["Die Straße ist breit.","The street is wide."],a:["Ich überquere die Straße.","I'm crossing the street."],d:["Auf der Straße fahren Autos.","Cars drive on the street."]},
+"a2-191":{n:["Der Weg ist lang.","The way is long."],a:["Wir kennen den Weg.","We know the way."],d:["Auf dem Weg sahen wir Tiere.","We saw animals on the way."]},
+// A2 adjectives + phrases
+"a2-032":{e:["Ich bin krank.","I am sick."]},
+"a2-033":{e:["Sie ist sehr gesund.","She is very healthy."]},
+"a2-034":{e:["Ich bin heute müde.","I'm tired today."]},
+"a2-048":{e:["Das Auto ist billig.","The car is cheap."]},
+"a2-049":{e:["Das Restaurant ist teuer.","The restaurant is expensive."]},
+"a2-050":{e:["Der Preis ist günstig.","The price is favorable."]},
+"a2-073":{e:["Ich bin sehr glücklich.","I'm very happy."]},
+"a2-074":{e:["Sie ist heute traurig.","She's sad today."]},
+"a2-075":{e:["Er ist wütend auf mich.","He's angry at me."]},
+"a2-076":{e:["Bist du böse auf mich?","Are you angry at me?"]},
+"a2-077":{e:["Ich bin froh, dich zu sehen.","I'm glad to see you."]},
+"a2-078":{e:["Sie ist sehr ängstlich.","She's very anxious."]},
+"a2-079":{e:["Bitte sei ruhig!","Please be quiet!"]},
+"a2-080":{e:["Er ist sehr freundlich.","He's very friendly."]},
+"a2-081":{e:["Das ist ein netter Mensch.","That's a nice person."]},
+"a2-082":{e:["Sei ehrlich mit mir.","Be honest with me."]},
+"a2-083":{e:["Er ist immer höflich.","He's always polite."]},
+"a2-084":{e:["Das Buch ist interessant.","The book is interesting."]},
+"a2-085":{e:["Der Film ist langweilig.","The movie is boring."]},
+"a2-086":{e:["Die Geschichte ist lustig.","The story is funny."]},
+"a2-087":{e:["Das ist sehr wichtig.","That's very important."]},
+"a2-153":{e:["Ist das überhaupt möglich?","Is that even possible?"]},
+"a2-154":{e:["Das ist unmöglich.","That's impossible."]},
+"a2-155":{e:["Deutsch ist schwierig.","German is difficult."]},
+"a2-156":{e:["Die Antwort ist einfach.","The answer is simple."]},
+"a2-157":{e:["Sei bitte pünktlich.","Please be on time."]},
+"a2-158":{e:["Wir haben verschiedene Meinungen.","We have different opinions."]},
+"a2-159":{e:["Wir kommen zur gleichen Zeit.","We're coming at the same time."]},
+"a2-160":{e:["Das Bild ist ähnlich.","The picture is similar."]},
+"a2-161":{e:["Der Platz ist frei.","The seat is free."]},
+"a2-162":{e:["Bist du fertig?","Are you ready?"]},
+"a2-163":{e:["Alles klar!","Got it!"]},
+"a2-164":{e:["Bist du dir sicher?","Are you sure?"]},
+"a2-165":{e:["Das ist wahr.","That is true."]},
+"a2-166":{e:["Die Antwort ist falsch.","The answer is wrong."]},
+"a2-167":{e:["Das ist ganz normal.","That's totally normal."]},
+// ===== A1 nouns =====
+"a1-026":{n:["Der Tag ist schön.","The day is beautiful."],a:["Ich habe einen langen Tag.","I'm having a long day."],d:["An diesem Tag regnete es.","It rained that day."]},
+"a1-027":{n:["Die Nacht ist dunkel.","The night is dark."],a:["Ich liebe die Nacht.","I love the night."],d:["In der Nacht schlafen wir.","We sleep at night."]},
+"a1-028":{n:["Die Woche beginnt am Montag.","The week starts on Monday."],a:["Ich habe eine gute Woche.","I'm having a good week."],d:["In der Woche arbeite ich.","I work during the week."]},
+"a1-029":{n:["Der Monat ist fast vorbei.","The month is almost over."],a:["Ich brauche einen Monat.","I need a month."],d:["In diesem Monat regnet es viel.","It rains a lot this month."]},
+"a1-030":{n:["Das Jahr war schön.","The year was nice."],a:["Ich habe ein Jahr Zeit.","I have one year."],d:["In diesem Jahr lerne ich Deutsch.","I'm learning German this year."]},
+"a1-031":{n:["Die Stunde vergeht schnell.","The hour passes fast."],a:["Ich warte eine Stunde.","I'm waiting one hour."],d:["In einer Stunde komme ich.","I'll come in an hour."]},
+"a1-032":{n:["Die Minute zählt.","Every minute counts."],a:["Gib mir eine Minute.","Give me a minute."],d:["In einer Minute bin ich da.","I'll be there in a minute."]},
+"a1-033":{n:["Die Sekunde reicht nicht.","One second isn't enough."],a:["Warte eine Sekunde.","Wait a second."],d:["In jeder Sekunde lernt man.","One learns every second."]},
+"a1-034":{n:["Die Zeit vergeht schnell.","Time flies."],a:["Ich brauche Zeit.","I need time."],d:["Mit der Zeit lernt man.","One learns with time."]},
+"a1-035":{n:["Der Morgen war kalt.","The morning was cold."],a:["Ich liebe den Morgen.","I love the morning."],d:["Am Morgen trinke ich Kaffee.","I drink coffee in the morning."]},
+"a1-036":{n:["Der Abend ist ruhig.","The evening is calm."],a:["Ich genieße den Abend.","I enjoy the evening."],d:["Am Abend lesen wir.","We read in the evening."]},
+"a1-037":{n:["Der Mittag ist warm.","Midday is warm."],a:["Ich erwarte den Mittag.","I'm awaiting noon."],d:["Am Mittag essen wir.","We eat at noon."]},
+"a1-038":{n:["Die Mitternacht naht.","Midnight is near."],a:["Ich erlebe die Mitternacht.","I'm experiencing midnight."],d:["Um Mitternacht schlafe ich.","I sleep at midnight."]},
+"a1-046":{n:["Der Montag ist anstrengend.","Monday is exhausting."],a:["Ich liebe den Montag nicht.","I don't love Monday."],d:["Am Montag arbeite ich.","I work on Monday."]},
+"a1-047":{n:["Der Dienstag ist normal.","Tuesday is normal."],a:["Ich plane den Dienstag.","I'm planning Tuesday."],d:["Am Dienstag habe ich Sport.","I have sports on Tuesday."]},
+"a1-048":{n:["Der Mittwoch ist Bergfest.","Wednesday is hump day."],a:["Ich freue mich auf den Mittwoch.","I look forward to Wednesday."],d:["Am Mittwoch treffen wir uns.","We meet on Wednesday."]},
+"a1-049":{n:["Der Donnerstag kommt.","Thursday is coming."],a:["Ich erwarte den Donnerstag.","I'm awaiting Thursday."],d:["Am Donnerstag gehe ich aus.","I go out on Thursday."]},
+"a1-050":{n:["Der Freitag ist toll.","Friday is great."],a:["Ich liebe den Freitag.","I love Friday."],d:["Am Freitag feiern wir.","We celebrate on Friday."]},
+"a1-051":{n:["Der Samstag ist frei.","Saturday is free."],a:["Ich genieße den Samstag.","I enjoy Saturday."],d:["Am Samstag schlafe ich lange.","I sleep in on Saturday."]},
+"a1-052":{n:["Der Sonntag ist heilig.","Sunday is sacred."],a:["Ich liebe den Sonntag.","I love Sunday."],d:["Am Sonntag ruhe ich mich aus.","I rest on Sunday."]},
+"a1-053":{n:["Der Januar ist kalt.","January is cold."],a:["Ich erwarte den Januar.","I'm awaiting January."],d:["Im Januar schneit es.","It snows in January."]},
+"a1-054":{n:["Der Februar ist kurz.","February is short."],a:["Ich plane den Februar.","I'm planning February."],d:["Im Februar ist Karneval.","Carnival is in February."]},
+"a1-055":{n:["Der März bringt Frühling.","March brings spring."],a:["Ich liebe den März.","I love March."],d:["Im März blühen Blumen.","Flowers bloom in March."]},
+"a1-056":{n:["Der April ist wechselhaft.","April is changeable."],a:["Ich überstehe den April.","I'm getting through April."],d:["Im April regnet es viel.","It rains a lot in April."]},
+"a1-057":{n:["Der Mai ist schön.","May is beautiful."],a:["Ich liebe den Mai.","I love May."],d:["Im Mai blüht alles.","Everything blooms in May."]},
+"a1-058":{n:["Der Juni ist warm.","June is warm."],a:["Ich erwarte den Juni.","I'm awaiting June."],d:["Im Juni feiern wir.","We celebrate in June."]},
+"a1-059":{n:["Der Juli ist heiß.","July is hot."],a:["Ich liebe den Juli.","I love July."],d:["Im Juli sind Ferien.","Holidays are in July."]},
+"a1-060":{n:["Der August ist sonnig.","August is sunny."],a:["Ich genieße den August.","I enjoy August."],d:["Im August reisen wir.","We travel in August."]},
+"a1-061":{n:["Die Familie ist groß.","The family is big."],a:["Ich liebe meine Familie.","I love my family."],d:["In der Familie hilft man sich.","People help each other in the family."]},
+"a1-062":{n:["Die Mutter kocht.","Mother is cooking."],a:["Ich umarme die Mutter.","I'm hugging mother."],d:["Mit der Mutter spreche ich oft.","I often talk to mother."]},
+"a1-063":{n:["Der Vater arbeitet.","Father is working."],a:["Ich liebe den Vater.","I love father."],d:["Mit dem Vater spiele ich.","I play with father."]},
+"a1-064":{n:["Der Bruder ist nett.","The brother is nice."],a:["Ich habe einen Bruder.","I have a brother."],d:["Mit meinem Bruder streite ich.","I argue with my brother."]},
+"a1-065":{n:["Die Schwester ist klein.","The sister is small."],a:["Ich liebe meine Schwester.","I love my sister."],d:["Mit der Schwester spiele ich.","I play with the sister."]},
+"a1-066":{n:["Die Eltern sind streng.","The parents are strict."],a:["Ich respektiere die Eltern.","I respect the parents."],d:["Bei den Eltern wohne ich.","I live with my parents."]},
+"a1-067":{n:["Das Kind ist müde.","The child is tired."],a:["Ich habe ein Kind.","I have a child."],d:["Mit dem Kind spiele ich.","I play with the child."]},
+"a1-068":{n:["Der Sohn ist erwachsen.","The son is grown up."],a:["Ich liebe meinen Sohn.","I love my son."],d:["Mit dem Sohn rede ich.","I talk to my son."]},
+"a1-069":{n:["Die Tochter studiert.","The daughter is studying."],a:["Ich umarme die Tochter.","I'm hugging the daughter."],d:["Mit der Tochter koche ich.","I cook with the daughter."]},
+"a1-070":{n:["Der Mann ist freundlich.","The man is friendly."],a:["Ich sehe den Mann.","I see the man."],d:["Mit dem Mann spreche ich.","I'm talking to the man."]},
+"a1-071":{n:["Die Frau lacht.","The woman is laughing."],a:["Ich kenne die Frau.","I know the woman."],d:["Mit der Frau gehe ich.","I'm going with the woman."]},
+"a1-072":{n:["Der Freund kommt vorbei.","The friend is coming over."],a:["Ich treffe meinen Freund.","I'm meeting my friend."],d:["Mit dem Freund spiele ich.","I play with the friend."]},
+"a1-073":{n:["Die Freundin ist lieb.","The girlfriend is sweet."],a:["Ich rufe die Freundin an.","I'm calling the girlfriend."],d:["Mit der Freundin gehe ich aus.","I'm going out with the girlfriend."]},
+"a1-074":{n:["Der Kopf tut weh.","The head hurts."],a:["Ich halte den Kopf.","I'm holding my head."],d:["Auf dem Kopf trage ich Hut.","I wear a hat on my head."]},
+"a1-075":{n:["Das Gesicht lächelt.","The face smiles."],a:["Ich wasche das Gesicht.","I'm washing my face."],d:["Im Gesicht zeigt sich Müdigkeit.","Tiredness shows in the face."]},
+"a1-076":{n:["Das Auge sieht alles.","The eye sees everything."],a:["Ich schließe das Auge.","I'm closing my eye."],d:["Mit dem Auge sehe ich.","I see with my eye."]},
+"a1-077":{n:["Das Ohr ist klein.","The ear is small."],a:["Ich höre mit dem Ohr.","I hear with my ear."],d:["Auf einem Ohr höre ich schlecht.","I hear badly in one ear."]},
+"a1-078":{n:["Die Nase läuft.","The nose is running."],a:["Ich putze die Nase.","I'm wiping my nose."],d:["Mit der Nase rieche ich.","I smell with my nose."]},
+"a1-079":{n:["Der Mund ist offen.","The mouth is open."],a:["Ich öffne den Mund.","I'm opening my mouth."],d:["Mit dem Mund spreche ich.","I speak with my mouth."]},
+"a1-080":{n:["Die Hand ist warm.","The hand is warm."],a:["Ich gebe dir die Hand.","I'm shaking your hand."],d:["In der Hand halte ich Geld.","I'm holding money in my hand."]},
+"a1-081":{n:["Der Fuß ist müde.","The foot is tired."],a:["Ich verletze den Fuß.","I'm hurting my foot."],d:["Auf dem Fuß stehe ich.","I'm standing on my foot."]},
+"a1-082":{n:["Der Arm ist lang.","The arm is long."],a:["Ich hebe den Arm.","I'm raising my arm."],d:["Mit dem Arm umarme ich.","I hug with my arm."]},
+"a1-083":{n:["Das Bein ist gebrochen.","The leg is broken."],a:["Ich strecke das Bein.","I'm stretching my leg."],d:["Auf einem Bein stehe ich.","I'm standing on one leg."]},
+"a1-084":{n:["Der Bauch ist voll.","The belly is full."],a:["Ich halte den Bauch.","I'm holding my belly."],d:["Im Bauch tut es weh.","It hurts in my belly."]},
+"a1-085":{n:["Der Rücken schmerzt.","The back hurts."],a:["Ich strecke den Rücken.","I'm stretching my back."],d:["Auf dem Rücken liege ich.","I'm lying on my back."]},
+"a1-086":{n:["Das Brot ist frisch.","The bread is fresh."],a:["Ich kaufe das Brot.","I'm buying the bread."],d:["Mit dem Brot esse ich Käse.","I'm eating cheese with the bread."]},
+"a1-087":{n:["Der Käse schmeckt gut.","The cheese tastes good."],a:["Ich liebe den Käse.","I love the cheese."],d:["Mit dem Käse mache ich Brot.","I make sandwich with the cheese."]},
+"a1-088":{n:["Die Butter ist weich.","The butter is soft."],a:["Ich nehme die Butter.","I'm taking the butter."],d:["Mit der Butter koche ich.","I cook with butter."]},
+"a1-089":{n:["Das Ei ist hart gekocht.","The egg is hard boiled."],a:["Ich esse ein Ei.","I'm eating an egg."],d:["Mit einem Ei mache ich Omelett.","I make omelette with an egg."]},
+"a1-090":{n:["Das Fleisch ist zart.","The meat is tender."],a:["Ich esse das Fleisch.","I'm eating the meat."],d:["Mit dem Fleisch koche ich.","I cook with the meat."]},
+"a1-091":{n:["Der Fisch ist frisch.","The fish is fresh."],a:["Ich kaufe den Fisch.","I'm buying the fish."],d:["Mit dem Fisch koche ich.","I cook with the fish."]},
+"a1-092":{n:["Das Obst ist süß.","The fruit is sweet."],a:["Ich esse Obst.","I'm eating fruit."],d:["Aus dem Obst mache ich Saft.","I make juice from the fruit."]},
+"a1-093":{n:["Das Gemüse ist gesund.","Vegetables are healthy."],a:["Ich esse Gemüse.","I'm eating vegetables."],d:["Aus dem Gemüse mache ich Suppe.","I make soup from the vegetables."]},
+"a1-094":{n:["Der Apfel ist rot.","The apple is red."],a:["Ich esse einen Apfel.","I'm eating an apple."],d:["Aus dem Apfel mache ich Saft.","I make juice from the apple."]},
+"a1-095":{n:["Die Banane ist gelb.","The banana is yellow."],a:["Ich kaufe eine Banane.","I'm buying a banana."],d:["Aus der Banane mache ich Shake.","I make a shake from the banana."]},
+"a1-096":{n:["Die Tomate ist rot.","The tomato is red."],a:["Ich schneide die Tomate.","I'm cutting the tomato."],d:["Aus der Tomate mache ich Salat.","I make salad from the tomato."]},
+"a1-097":{n:["Die Kartoffel ist groß.","The potato is big."],a:["Ich koche die Kartoffel.","I'm cooking the potato."],d:["Aus der Kartoffel mache ich Pommes.","I make fries from the potato."]},
+"a1-098":{n:["Der Reis ist gar.","The rice is done."],a:["Ich koche den Reis.","I'm cooking the rice."],d:["Mit dem Reis esse ich Curry.","I eat curry with the rice."]},
+"a1-099":{n:["Die Suppe ist heiß.","The soup is hot."],a:["Ich esse die Suppe.","I'm eating the soup."],d:["Aus der Suppe wird ein Eintopf.","The soup becomes a stew."]},
+"a1-100":{n:["Der Salat ist frisch.","The salad is fresh."],a:["Ich mache einen Salat.","I'm making a salad."],d:["Mit dem Salat esse ich Brot.","I eat bread with the salad."]},
+"a1-101":{n:["Das Wasser ist kalt.","The water is cold."],a:["Ich trinke das Wasser.","I'm drinking the water."],d:["Aus dem Wasser steige ich.","I'm getting out of the water."]},
+"a1-102":{n:["Der Kaffee ist heiß.","The coffee is hot."],a:["Ich trinke den Kaffee.","I'm drinking the coffee."],d:["Mit dem Kaffee wache ich auf.","I wake up with coffee."]},
+"a1-103":{n:["Der Tee ist lecker.","The tea is delicious."],a:["Ich trinke den Tee.","I'm drinking the tea."],d:["Mit dem Tee entspanne ich.","I relax with the tea."]},
+"a1-104":{n:["Das Bier ist kalt.","The beer is cold."],a:["Ich bestelle ein Bier.","I'm ordering a beer."],d:["Mit dem Bier feiern wir.","We celebrate with beer."]},
+"a1-105":{n:["Der Wein ist trocken.","The wine is dry."],a:["Ich trinke den Wein.","I'm drinking the wine."],d:["Mit dem Wein esse ich Käse.","I'm eating cheese with the wine."]},
+"a1-106":{n:["Die Milch ist frisch.","The milk is fresh."],a:["Ich kaufe die Milch.","I'm buying the milk."],d:["Mit der Milch mache ich Kaffee.","I make coffee with the milk."]},
+"a1-107":{n:["Der Saft ist süß.","The juice is sweet."],a:["Ich trinke den Saft.","I'm drinking the juice."],d:["Mit dem Saft frühstücke ich.","I have breakfast with juice."]},
+"a1-108":{n:["Die Cola ist eiskalt.","The Coke is ice cold."],a:["Ich trinke eine Cola.","I'm drinking a Coke."],d:["Mit der Cola esse ich Pizza.","I eat pizza with Coke."]},
+"a1-109":{n:["Das Haus ist groß.","The house is big."],a:["Wir kaufen das Haus.","We're buying the house."],d:["In dem Haus wohnen wir.","We live in the house."]},
+"a1-110":{n:["Die Wohnung ist klein.","The apartment is small."],a:["Ich miete die Wohnung.","I'm renting the apartment."],d:["In der Wohnung ist es warm.","It's warm in the apartment."]},
+"a1-111":{n:["Das Zimmer ist hell.","The room is bright."],a:["Ich putze das Zimmer.","I'm cleaning the room."],d:["In dem Zimmer schlafe ich.","I sleep in the room."]},
+"a1-112":{n:["Die Küche ist modern.","The kitchen is modern."],a:["Ich putze die Küche.","I'm cleaning the kitchen."],d:["In der Küche koche ich.","I cook in the kitchen."]},
+"a1-113":{n:["Das Bad ist sauber.","The bathroom is clean."],a:["Ich putze das Bad.","I'm cleaning the bathroom."],d:["Im Bad dusche ich.","I shower in the bathroom."]},
+"a1-114":{n:["Das Schlafzimmer ist ruhig.","The bedroom is quiet."],a:["Ich verlasse das Schlafzimmer.","I'm leaving the bedroom."],d:["Im Schlafzimmer schlafe ich.","I sleep in the bedroom."]},
+"a1-115":{n:["Das Wohnzimmer ist gemütlich.","The living room is cozy."],a:["Ich putze das Wohnzimmer.","I'm cleaning the living room."],d:["Im Wohnzimmer sehen wir fern.","We watch TV in the living room."]},
+"a1-116":{n:["Die Tür ist offen.","The door is open."],a:["Ich öffne die Tür.","I'm opening the door."],d:["An der Tür klingelt es.","Someone's at the door."]},
+"a1-117":{n:["Das Fenster ist groß.","The window is big."],a:["Ich öffne das Fenster.","I'm opening the window."],d:["Am Fenster sitze ich gerne.","I like sitting by the window."]},
+"a1-118":{n:["Der Tisch ist rund.","The table is round."],a:["Ich decke den Tisch.","I'm setting the table."],d:["Am Tisch essen wir.","We eat at the table."]},
+"a1-119":{n:["Der Stuhl ist bequem.","The chair is comfortable."],a:["Ich nehme den Stuhl.","I'm taking the chair."],d:["Auf dem Stuhl sitze ich.","I'm sitting on the chair."]},
+"a1-120":{n:["Das Bett ist weich.","The bed is soft."],a:["Ich mache das Bett.","I'm making the bed."],d:["Im Bett lese ich.","I read in bed."]},
+"a1-121":{n:["Das Hemd ist weiß.","The shirt is white."],a:["Ich kaufe ein Hemd.","I'm buying a shirt."],d:["Mit dem Hemd sehe ich gut aus.","I look good in the shirt."]},
+"a1-122":{n:["Die Hose ist blau.","The pants are blue."],a:["Ich trage die Hose.","I'm wearing the pants."],d:["In der Hose ist es eng.","It's tight in the pants."]},
+"a1-123":{n:["Der Schuh ist neu.","The shoe is new."],a:["Ich putze den Schuh.","I'm cleaning the shoe."],d:["Im Schuh ist ein Stein.","There's a stone in the shoe."]},
+"a1-124":{n:["Die Jacke ist warm.","The jacket is warm."],a:["Ich ziehe die Jacke an.","I'm putting on the jacket."],d:["In der Jacke ist es warm.","It's warm in the jacket."]},
+"a1-125":{n:["Der Mantel ist lang.","The coat is long."],a:["Ich ziehe den Mantel an.","I'm putting on the coat."],d:["Im Mantel friere ich nicht.","I'm not cold in the coat."]},
+"a1-126":{n:["Das Kleid ist schön.","The dress is beautiful."],a:["Ich kaufe das Kleid.","I'm buying the dress."],d:["In dem Kleid sieht sie toll aus.","She looks great in the dress."]},
+"a1-127":{n:["Die Mütze ist warm.","The cap is warm."],a:["Ich setze die Mütze auf.","I'm putting on the cap."],d:["Mit der Mütze friere ich nicht.","I'm not cold with the cap."]},
+"a1-128":{n:["Die Tasche ist schwer.","The bag is heavy."],a:["Ich trage die Tasche.","I'm carrying the bag."],d:["In der Tasche ist mein Geld.","My money is in the bag."]},
+"a1-197":{n:["Die Schule ist neu.","The school is new."],a:["Ich besuche die Schule.","I'm attending the school."],d:["In der Schule lerne ich.","I learn at school."]},
+"a1-198":{n:["Das Auto ist schnell.","The car is fast."],a:["Ich fahre das Auto.","I'm driving the car."],d:["In dem Auto sitzen vier Personen.","Four people sit in the car."]},
+"a1-199":{n:["Der Bus ist voll.","The bus is full."],a:["Ich nehme den Bus.","I'm taking the bus."],d:["Im Bus sind viele Leute.","There are many people on the bus."]},
+"a1-200":{n:["Der Zug ist pünktlich.","The train is on time."],a:["Ich nehme den Zug.","I'm taking the train."],d:["Im Zug lese ich.","I read on the train."]},
+// A1 adjectives + phrases
+"a1-129":{e:["Der Apfel ist rot.","The apple is red."]},
+"a1-130":{e:["Der Himmel ist blau.","The sky is blue."]},
+"a1-131":{e:["Das Gras ist grün.","The grass is green."]},
+"a1-132":{e:["Die Banane ist gelb.","The banana is yellow."]},
+"a1-133":{e:["Die Nacht ist schwarz.","The night is black."]},
+"a1-134":{e:["Der Schnee ist weiß.","The snow is white."]},
+"a1-135":{e:["Der Himmel ist grau heute.","The sky is gray today."]},
+"a1-136":{e:["Die Schokolade ist braun.","The chocolate is brown."]},
+"a1-177":{e:["Das Essen ist gut.","The food is good."]},
+"a1-178":{e:["Das Wetter ist schlecht.","The weather is bad."]},
+"a1-179":{e:["Der Mann ist groß.","The man is tall."]},
+"a1-180":{e:["Das Kind ist klein.","The child is small."]},
+"a1-181":{e:["Mein Auto ist alt.","My car is old."]},
+"a1-182":{e:["Sie ist noch jung.","She is still young."]},
+"a1-183":{e:["Das Buch ist neu.","The book is new."]},
+"a1-184":{e:["Die Blume ist schön.","The flower is beautiful."]},
+"a1-185":{e:["Der Weg ist lang.","The way is long."]},
+"a1-186":{e:["Der Film ist kurz.","The movie is short."]},
+"a1-187":{e:["Das Auto fährt schnell.","The car drives fast."]},
+"a1-188":{e:["Die Schildkröte ist langsam.","The turtle is slow."]},
+"a1-189":{e:["Das Wasser ist warm.","The water is warm."]},
+"a1-190":{e:["Im Winter ist es kalt.","It's cold in winter."]},
+"a1-191":{e:["Der Tee ist sehr heiß.","The tea is very hot."]},
+"a1-192":{e:["Das Glas ist voll.","The glass is full."]},
+"a1-193":{e:["Die Flasche ist leer.","The bottle is empty."]},
+"a1-194":{e:["Die Aufgabe ist leicht.","The task is easy."]},
+"a1-195":{e:["Der Koffer ist schwer.","The suitcase is heavy."]},
+"a1-196":{e:["Die Antwort ist richtig.","The answer is correct."]}
 };
 
 // Merge examples into cards (overrides existing example if present)
@@ -971,22 +1228,30 @@ function renderPractice() {
   const genderBadge = isNoun && card.gender ? '<div class="gender-badge gender-'+card.gender+'">'+card.gender+'</div>' : '';
   const flipHint = '<div class="flip-hint">'+(state.session.revealed?'Tap to hide':'Tap to flip')+'</div>';
 
-  let backContent = '';
+  // Find the primary example sentence (appears on front in German, on back with translation)
+  let primaryEx = null;
+  if (isNoun && card.nom) primaryEx = card.nom;
+  else if (card.example) primaryEx = card.example;
+  else if (card.exampleSentenceGerman) primaryEx = { de: card.exampleSentenceGerman, en: card.exampleSentenceEnglish || "" };
+
+  let cardContent;
   if (state.session.revealed) {
-    backContent = '<div class="translation">'+escapeHtml(card.translation)+'</div>'+
+    let backContent = '<div class="translation">'+escapeHtml(card.translation)+'</div>'+
       (card.meaning ? '<div class="meaning">'+escapeHtml(card.meaning)+'</div>' : '');
     if (isNoun && (card.nom || card.akk || card.dat)) {
       backContent += renderExample('Nominativ', card.nom, 'case-nom');
       backContent += renderExample('Akkusativ', card.akk, 'case-akk');
       backContent += renderExample('Dativ', card.dat, 'case-dat');
-    } else if (card.example) {
-      backContent += renderExample('', card.example, '');
-    } else if (card.exampleSentenceGerman) {
-      backContent += renderExample('', { de: card.exampleSentenceGerman, en: card.exampleSentenceEnglish }, '');
+    } else if (primaryEx) {
+      backContent += renderExample('', primaryEx, '');
     }
+    cardContent = flipHint + genderBadge + '<div class="german">'+escapeHtml(card.german)+'</div>' + backContent;
+  } else {
+    const frontExHtml = primaryEx ? '<div class="front-example">„'+escapeHtml(primaryEx.de)+'"</div>' : '';
+    cardContent = flipHint + genderBadge + '<div class="german">'+escapeHtml(card.german)+'</div>' + frontExHtml;
   }
 
-  const body = '<div class="card flashcard" onclick="toggleFlip()">'+flipHint+genderBadge+'<div class="german">'+escapeHtml(card.german)+'</div>'+backContent+'</div>';
+  const body = '<div class="card flashcard" onclick="toggleFlip()">' + cardContent + '</div>';
 
   const actions = state.session.revealed
     ? '<div class="grid-2"><button class="btn-danger" onclick="rate(\'again\')">↺ Repeat</button><button class="btn-secondary" onclick="rate(\'good\')">Next →</button><button class="btn-subtle" onclick="rate(\'hard\')">Hard</button><button class="btn-primary" onclick="rate(\'easy\')">Easy</button></div>'
