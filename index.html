@@ -59,6 +59,7 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .size-row button{margin-bottom:0;padding:10px}
 .size-row button.active{background:#111827;color:#fff;border-color:#111827}
 .level-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;letter-spacing:0.5px}
+.level-chip.chip-cases{background:#fef3c7;color:#92400e}
 .grammar-card{cursor:pointer;display:flex;flex-direction:column;gap:6px}
 .grammar-card-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .grammar-rule-card{text-align:left;padding:24px}
@@ -1255,6 +1256,44 @@ const GRAMMAR = [
   {topic:"learn_with_patterns",rule:"Learn B1 grammar as sentence patterns, not isolated rules.",examples:["Ich denke, dass ...","Wenn ich Zeit hätte, würde ich ...","Das ist etwas, das ..."]},
   {topic:"focus_on_connectors",rule:"B1 improves a lot when you master connectors AND their word-order behavior.",examples:["weil (verb at end)","obwohl (verb at end)","deshalb (inversion)","trotzdem (inversion)","damit (verb at end)"]},
   {topic:"active_output",rule:"Practice speaking and writing with longer answers instead of single sentences.",examples:["Erzähle von einem Erlebnis.","Beschreibe ein Problem und eine Lösung.","Gib deine Meinung mit Gründen."]}
+]},
+{level:"Cases",category:"case_meanings",title:"What the cases mean",items:[
+  {topic:"nominativ",rule:"Nominativ is the subject of the sentence — the person or thing DOING the action.",examples:["Der Mann liest.","Die Frau spricht.","Das Kind spielt."]},
+  {topic:"akkusativ",rule:"Akkusativ is the direct object — the person or thing RECEIVING the action.",examples:["Ich sehe den Mann.","Sie kauft das Buch.","Er besucht die Frau."]},
+  {topic:"dativ",rule:"Dativ is the indirect object (recipient) OR appears after dative prepositions and dative verbs.",examples:["Ich gebe dem Mann das Buch.","Sie hilft der Frau.","Wir danken den Kindern."]}
+]},
+{level:"Cases",category:"definite_articles",title:"Definite article table",items:[
+  {topic:"nominativ_definite",rule:"Nominativ definite articles by gender.",examples:["Maskulin: der","Neutrum: das","Feminin: die","Plural: die"]},
+  {topic:"akkusativ_definite",rule:"Akkusativ changes ONLY the masculine article (der → den). Everything else stays the same.",examples:["Maskulin: den","Neutrum: das","Feminin: die","Plural: die"]},
+  {topic:"dativ_definite",rule:"Dativ changes all singular articles. Plural takes 'den' and adds -n to the noun.",examples:["Maskulin: dem","Neutrum: dem","Feminin: der","Plural: den (+ -n on noun)"]}
+]},
+{level:"Cases",category:"indefinite_articles",title:"Indefinite article table",items:[
+  {topic:"nominativ_indefinite",rule:"Nominativ indefinite articles. Note: German has no plural indefinite article — you simply drop it.",examples:["Maskulin: ein","Neutrum: ein","Feminin: eine","Plural: — (no article)"]},
+  {topic:"akkusativ_indefinite",rule:"Akkusativ changes only the masculine indefinite (ein → einen).",examples:["Maskulin: einen","Neutrum: ein","Feminin: eine","Plural: — (no article)"]},
+  {topic:"dativ_indefinite",rule:"Dativ changes all singular indefinites.",examples:["Maskulin: einem","Neutrum: einem","Feminin: einer","Plural: — (no article)"]}
+]},
+{level:"Cases",category:"how_they_change",title:"How the articles change",items:[
+  {topic:"nominativ_change",rule:"Nominativ keeps the base form.",examples:["der, das, die, die","ein, ein, eine"]},
+  {topic:"akkusativ_change",rule:"Akkusativ ONLY changes the masculine article. Neuter, feminine, and plural stay identical to nominativ.",examples:["der → den","ein → einen"]},
+  {topic:"dativ_change",rule:"Dativ changes ALL singular forms; plural takes 'den' and adds -n to the noun.",examples:["der → dem","das → dem","die → der","die (plural) → den","ein → einem","eine → einer"]}
+]},
+{level:"Cases",category:"case_usage",title:"When to use each case",items:[
+  {topic:"nominativ_usage",rule:"Use Nominativ for the subject of the sentence (the WHO).",examples:["Der Hund schläft.","Die Lehrerin arbeitet.","Das Auto ist neu."]},
+  {topic:"akkusativ_usage",rule:"Use Akkusativ for the direct object (the WHAT/WHOM being acted on).",examples:["Ich habe den Hund.","Er sieht die Lehrerin.","Wir kaufen das Auto."]},
+  {topic:"dativ_usage",rule:"Use Dativ for the indirect object (TO WHOM) OR after dative prepositions/verbs.",examples:["Ich gebe dem Hund Wasser.","Er hilft der Lehrerin.","Wir fahren mit dem Auto."]}
+]},
+{level:"Cases",category:"prepositions_cases",title:"Prepositions by case",items:[
+  {topic:"dativ_prepositions",rule:"These ALWAYS take dative. Memorize them as a group: aus-bei-mit-nach-seit-von-zu.",examples:["aus","bei","mit","nach","seit","von","zu"]},
+  {topic:"akkusativ_prepositions",rule:"These ALWAYS take accusative. Memorize: durch-für-gegen-ohne-um.",examples:["durch","für","gegen","ohne","um"]},
+  {topic:"two_way_prepositions",rule:"Two-way prepositions (Wechselpräpositionen): accusative for MOVEMENT/direction (wohin?), dative for LOCATION (wo?).",examples:["an","auf","hinter","in","neben","über","unter","vor","zwischen"]}
+]},
+{level:"Cases",category:"case_examples",title:"Examples by case",items:[
+  {topic:"nominativ_examples",rule:"Examples with the subject in Nominativ.",examples:["Der Hund schläft.","Die Lehrerin arbeitet.","Das Kind spielt.","Die Kinder spielen."]},
+  {topic:"akkusativ_examples",rule:"Examples with a direct object in Akkusativ.",examples:["Ich habe den Hund.","Er sieht die Lehrerin.","Wir kaufen das Auto.","Sie kennt die Kinder."]},
+  {topic:"dativ_examples",rule:"Examples where Dativ is used (indirect object or after dative preposition).",examples:["Ich gebe dem Hund Wasser.","Er hilft der Lehrerin.","Wir fahren mit dem Auto.","Sie spricht mit den Kindern."]}
+]},
+{level:"Cases",category:"memory_trick",title:"Quick memory trick",items:[
+  {topic:"role_summary",rule:"Nominativ = WHO does it. Akkusativ = WHAT/WHOM is being acted on. Dativ = TO WHOM, or after dative prepositions/verbs.",examples:["Der Mann gibt dem Kind den Ball.","→ Der Mann (Nom: subject — who gives)","→ dem Kind (Dat: indirect object — to whom)","→ den Ball (Akk: direct object — what)"]}
 ]}
 ];
 
@@ -1470,7 +1509,7 @@ function renderGrammar() {
     const total = section.items.length;
     const done = seen === total;
     return '<div class="card grammar-card" onclick="openGrammarSection('+i+')">'+
-      '<div class="grammar-card-head"><h2>'+escapeHtml(section.title)+'</h2><span class="level-chip">'+section.level+'</span></div>'+
+      '<div class="grammar-card-head"><h2>'+escapeHtml(section.title)+'</h2><span class="level-chip'+(section.level==="Cases"?" chip-cases":"")+'">'+section.level+'</span></div>'+
       '<div class="grammar-section-progress">'+seen+' / '+total+' topics seen'+(done?' ✓':'')+'</div>'+
     '</div>';
   }).join("");
