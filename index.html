@@ -58,6 +58,66 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .size-row{display:flex;gap:8px;margin-bottom:16px}
 .size-row button{margin-bottom:0;padding:10px}
 .size-row button.active{background:#111827;color:#fff;border-color:#111827}
+/* Audio button on flashcard */
+.audio-btn{position:absolute;top:12px;left:14px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;padding:0;margin:0;line-height:1}
+.audio-btn:hover{background:#f3f4f6}
+.audio-btn:active{transform:scale(0.92)}
+.audio-btn.speaking{background:#dbeafe;border-color:#3b82f6}
+/* Card flip animation */
+.flashcard.flip-anim{animation:flipIn 0.28s ease}
+@keyframes flipIn{from{opacity:0;transform:rotateY(-90deg)}to{opacity:1;transform:rotateY(0)}}
+/* Streak chip on home */
+.streak-chip{display:inline-flex;align-items:center;gap:6px;background:#fef3c7;color:#92400e;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:600;margin-bottom:12px}
+/* Session summary */
+.summary-stat{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid #e5e7eb}
+.summary-stat:last-child{border-bottom:none}
+.summary-stat .label{color:#6b7280;font-size:14px}
+.summary-stat .value{font-weight:700;font-size:20px;color:#111827}
+.summary-emoji{font-size:48px;text-align:center;margin-bottom:8px;display:block}
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  body{background:#0f1419;color:#e8e8e8}
+  h1,h2{color:#e8e8e8}
+  p{color:#d1d5db}
+  .muted{color:#8a8a8a}
+  .card{background:#1a2026;border-color:#2a3038;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+  .card.active{border-color:#fff}
+  button{}
+  .btn-primary{background:#e8e8e8;color:#0f1419;border-color:#e8e8e8}
+  .btn-secondary{background:#1a2026;color:#e8e8e8;border-color:#2a3038}
+  .btn-danger{background:#4a1e1e;color:#fca5a5;border-color:#5a2828}
+  .btn-subtle{background:#222831;color:#e8e8e8;border-color:#2a3038}
+  .size-row button.active{background:#e8e8e8;color:#0f1419;border-color:#e8e8e8}
+  .flashcard .german{color:#e8e8e8}
+  .flashcard .translation{color:#e8e8e8}
+  .flashcard .meaning{color:#a8a8a8}
+  .flashcard .front-example{color:#a8a8a8}
+  .flashcard .flip-hint{color:#6a6a6a}
+  .example-block{background:#0f1419;border-color:#2a3038}
+  .example-block .ex-de{color:#e8e8e8}
+  .example-block .ex-en{color:#8a8a8a}
+  .audio-btn{background:#1a2026;border-color:#2a3038;color:#e8e8e8}
+  .audio-btn:hover{background:#222831}
+  .audio-btn.speaking{background:#1e3a5f;border-color:#3b82f6}
+  .streak-chip{background:#3d2a0a;color:#fbbf24}
+  .summary-stat{border-color:#2a3038}
+  .summary-stat .value{color:#e8e8e8}
+  .level-chip{background:#222831;color:#a8a8a8}
+  .level-chip.chip-cases{background:#3d2a0a;color:#fbbf24}
+  .case-table{background:#1a2026;border-color:#2a3038}
+  .case-table th{background:#0f1419;color:#a8a8a8}
+  .case-table th,.case-table td{border-color:#2a3038}
+  .case-table td:first-child{color:#e8e8e8}
+  .grammar-rule-text{color:#e8e8e8}
+  .grammar-examples-block{background:#0f1419}
+  .grammar-example{color:#e8e8e8}
+  .grammar-topic{color:#8a8a8a}
+  .gender-der{background:#1e3a5f;color:#93c5fd}
+  .gender-die{background:#5a1e3a;color:#fbcfe8}
+  .gender-das{background:#1e4a30;color:#86efac}
+  .dot-progress .dot{background:#3a3f48}
+  .dot-progress .dot.done{background:#e8e8e8}
+}
 .level-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;letter-spacing:0.5px}
 .level-chip.chip-cases{background:#fef3c7;color:#92400e}
 .grammar-filter-row{display:flex;gap:6px;margin-bottom:16px}
@@ -2436,9 +2496,80 @@ function formatTopic(s) { return s.replace(/_/g, " ").replace(/^./, function(c){
 // Storage
 const STORAGE_KEY = "GERMAN_FLASHCARDS_PROGRESS_V1";
 const GRAMMAR_KEY = "GERMAN_GRAMMAR_PROGRESS_V1";
+const STREAK_KEY = "GERMAN_FLASHCARDS_STREAK_V1";
 function loadProgress(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e) { return {}; } }
 function loadGrammarProgress(){ try { return JSON.parse(localStorage.getItem(GRAMMAR_KEY) || "{}"); } catch(e) { return {}; } }
 function saveGrammarProgress(){ localStorage.setItem(GRAMMAR_KEY, JSON.stringify(state.grammarProgress)); }
+function loadStreak(){ try { return JSON.parse(localStorage.getItem(STREAK_KEY) || '{"count":0,"lastStudyDate":null}'); } catch(e) { return {count:0, lastStudyDate:null}; } }
+function saveStreak(){ localStorage.setItem(STREAK_KEY, JSON.stringify(state.streak)); }
+
+// Audio (German TTS via browser SpeechSynthesis API)
+function speak(text, lang) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang || 'de-DE';
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  } catch (e) { /* ignore */ }
+}
+function speakCurrent() {
+  if (!state.session || !state.session.queue.length) return;
+  const cardId = state.session.queue[0];
+  const card = CARDS.find(function(c){ return c.id === cardId; });
+  if (!card) return;
+  let text = card.german;
+  let exDe = null;
+  if (card.type === 'noun' && card.nom) exDe = card.nom.de;
+  else if (card.example) exDe = card.example.de;
+  else if (card.exampleSentenceGerman) exDe = card.exampleSentenceGerman;
+  if (exDe) text = text + '. ' + exDe;
+  speak(text, 'de-DE');
+}
+
+// Touch gestures (swipe right = next/good, swipe left = repeat/again)
+let _touchStartX = null;
+let _touchStartY = null;
+function touchStart(e) {
+  if (e.touches && e.touches[0]) {
+    _touchStartX = e.touches[0].clientX;
+    _touchStartY = e.touches[0].clientY;
+  }
+}
+function touchEnd(e) {
+  if (_touchStartX === null) return;
+  const endX = e.changedTouches[0].clientX;
+  const endY = e.changedTouches[0].clientY;
+  const dx = endX - _touchStartX;
+  const dy = endY - _touchStartY;
+  _touchStartX = null;
+  _touchStartY = null;
+  if (!state.session || !state.session.revealed) return;
+  // Horizontal swipe must be larger than vertical and exceed threshold
+  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 0) rate('good');
+    else rate('again');
+  }
+}
+
+// Daily streak — call when user completes any review
+function updateStreakOnStudy() {
+  const today = new Date().toISOString().slice(0, 10);
+  const last = state.streak.lastStudyDate;
+  if (last === today) return; // already counted today
+  if (!last) {
+    state.streak.count = 1;
+  } else {
+    const lastDate = new Date(last);
+    const todayDate = new Date(today);
+    const diff = Math.round((todayDate - lastDate) / 86400000);
+    if (diff === 1) state.streak.count += 1;
+    else if (diff > 1) state.streak.count = 1;
+  }
+  state.streak.lastStudyDate = today;
+  saveStreak();
+}
 function saveProgress(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress)); }
 
 // Scheduler
@@ -2478,7 +2609,8 @@ const state = {
   grammarSectionIdx: 0,
   grammarItemIdx: 0,
   grammarFilter: "A1",
-  grammarProgress: loadGrammarProgress()
+  grammarProgress: loadGrammarProgress(),
+  streak: loadStreak()
 };
 
 // Actions
@@ -2512,7 +2644,11 @@ function startSession() {
   const shuffled = shuffle(cards);
   shuffled.sort(function(a,b){ return dueScore(state.progress[a.id], now) - dueScore(state.progress[b.id], now); });
   const limited = state.sessionSize === 0 ? shuffled : shuffled.slice(0, state.sessionSize);
-  state.session = { queue: limited.map(function(c){ return c.id; }), revealed:false };
+  state.session = {
+    queue: limited.map(function(c){ return c.id; }),
+    revealed: false,
+    metrics: { startTime: Date.now(), ratings: [] }
+  };
   state.screen = "practice";
   render();
 }
@@ -2521,11 +2657,18 @@ function reveal() { if (state.session) { state.session.revealed = true; render()
 function rate(rating) {
   if (!state.session || state.session.queue.length === 0) return;
   const cardId = state.session.queue[0];
+  const wasNew = getStatus(state.progress[cardId]) === "new";
   state.progress[cardId] = applyRating(state.progress[cardId], rating, cardId);
   saveProgress();
+  if (state.session.metrics) state.session.metrics.ratings.push({ cardId: cardId, rating: rating, wasNew: wasNew });
+  updateStreakOnStudy();
   if (rating === "again") { state.session.queue.shift(); state.session.queue.push(cardId); }
   else state.session.queue.shift();
   state.session.revealed = false;
+  // If session finished, show summary
+  if (state.session.queue.length === 0) {
+    state.screen = "summary";
+  }
   render();
 }
 function skipCard() {
@@ -2553,7 +2696,10 @@ function renderHome() {
     const mastery = s.total === 0 ? 0 : Math.round((s.learned / s.total) * 100);
     return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' / '+s.total+' seen</div><div style="margin-top:4px;font-weight:600;">'+mastery+'% mastered</div></div>';
   }).join("");
-  return '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="openGrammar()">Grammar guide</button><button class="btn-subtle" onclick="go(\'progress\')">View detailed progress</button>';
+  const streakBadge = state.streak.count > 0
+    ? '<div class="streak-chip">🔥 '+state.streak.count+'-day streak</div>'
+    : '';
+  return streakBadge + '<h1>Lerne Deutsch</h1><p>Pick a level or combine several. Cards you struggle with come back sooner.</p><div class="grid-3">'+cards+'</div><button class="btn-primary" onclick="go(\'levels\')">Start practicing</button><button class="btn-secondary" onclick="openGrammar()">Grammar guide</button><button class="btn-subtle" onclick="go(\'progress\')">View detailed progress</button>';
 }
 
 function renderLevels() {
@@ -2619,7 +2765,8 @@ function renderPractice() {
     cardContent = flipHint + genderBadge + '<div class="german">'+escapeHtml(card.german)+'</div>' + frontExHtml;
   }
 
-  const body = '<div class="card flashcard" onclick="toggleFlip()">' + cardContent + '</div>';
+  const audioBtn = '<button class="audio-btn" onclick="event.stopPropagation(); speakCurrent();" aria-label="Hear word">🔊</button>';
+  const body = '<div class="card flashcard flip-anim" onclick="toggleFlip()" ontouchstart="touchStart(event)" ontouchend="touchEnd(event)">' + audioBtn + cardContent + '</div>';
 
   const actions = state.session.revealed
     ? '<div class="row"><button class="btn-danger" onclick="rate(\'again\')">↺ Repeat</button><button class="btn-primary" onclick="rate(\'good\')">Next →</button></div>'
@@ -2637,6 +2784,44 @@ function renderProgress() {
     return '<div class="card"><h2>'+level+'</h2><div class="muted">'+s.reviewed+' of '+s.total+' cards reviewed at least once</div><div class="stats-row"><span>New</span><span class="val">'+s.new+'</span></div><div class="stats-row"><span>Learning</span><span class="val">'+s.learning+'</span></div><div class="stats-row"><span>Learned</span><span class="val">'+s.learned+'</span></div></div>';
   }).join("");
   return '<h1>Your progress</h1><p>Status is derived from how long the scheduler will wait before showing a card again.</p>'+cards+'<button class="btn-danger" onclick="resetProgress()">Reset all progress</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
+}
+
+function renderSummary() {
+  if (!state.session || !state.session.metrics) {
+    return '<h1>Session complete!</h1><button class="btn-primary" onclick="endSession()">Back to Home</button>';
+  }
+  const m = state.session.metrics;
+  const elapsed = Math.max(1, Math.round((Date.now() - m.startTime) / 1000));
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const reviewed = m.ratings.length;
+  const newLearned = m.ratings.filter(function(r){ return r.wasNew; }).length;
+  const correct = m.ratings.filter(function(r){ return r.rating !== "again"; }).length;
+  const accuracy = reviewed > 0 ? Math.round((correct / reviewed) * 100) : 0;
+  const timeStr = mins > 0 ? mins + "m " + secs + "s" : secs + "s";
+
+  // Pick a celebration emoji based on accuracy
+  let emoji = "🎉";
+  if (accuracy >= 90) emoji = "🏆";
+  else if (accuracy >= 75) emoji = "🌟";
+  else if (accuracy < 50) emoji = "💪";
+
+  const streakLine = state.streak.count > 1
+    ? '<p style="text-align:center;margin-top:8px">🔥 ' + state.streak.count + '-day streak — keep it going!</p>'
+    : '';
+
+  return '<span class="summary-emoji">'+emoji+'</span>'+
+    '<h1 style="text-align:center">Nice work!</h1>'+
+    '<p style="text-align:center">You finished your session.</p>'+
+    streakLine +
+    '<div class="card">'+
+      '<div class="summary-stat"><span class="label">Cards reviewed</span><span class="value">'+reviewed+'</span></div>'+
+      '<div class="summary-stat"><span class="label">New words learned</span><span class="value">'+newLearned+'</span></div>'+
+      '<div class="summary-stat"><span class="label">Time</span><span class="value">'+timeStr+'</span></div>'+
+      '<div class="summary-stat"><span class="label">Accuracy</span><span class="value">'+accuracy+'%</span></div>'+
+    '</div>'+
+    '<button class="btn-primary" onclick="startSession()">Start another session</button>'+
+    '<button class="btn-secondary" onclick="endSession()">Back to Home</button>';
 }
 
 function renderGrammar() {
@@ -2717,6 +2902,7 @@ function render() {
   else if (state.screen === "progress") app.innerHTML = renderProgress();
   else if (state.screen === "grammar") app.innerHTML = renderGrammar();
   else if (state.screen === "grammar-section") app.innerHTML = renderGrammarSection();
+  else if (state.screen === "summary") app.innerHTML = renderSummary();
 }
 
 render();
