@@ -117,6 +117,10 @@ button:disabled{opacity:0.5;cursor:not-allowed}
   .gender-das{background:#1e4a30;color:#86efac}
   .dot-progress .dot{background:#3a3f48}
   .dot-progress .dot.done{background:#e8e8e8}
+  .fav-btn{color:#4a5058}
+  .fav-btn.active{color:#fbbf24}
+  .fav-card-meta{color:#8a8a8a}
+  .fav-card-meta::before{color:#fbbf24}
 }
 .level-chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;letter-spacing:0.5px}
 .level-chip.chip-cases{background:#fef3c7;color:#92400e}
@@ -140,6 +144,14 @@ button:disabled{opacity:0.5;cursor:not-allowed}
 .dot-progress{display:flex;gap:4px;align-items:center}
 .dot-progress .dot{width:6px;height:6px;border-radius:999px;background:#d1d5db}
 .dot-progress .dot.done{background:#111827}
+.grammar-topic-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
+.grammar-topic-row .grammar-topic{margin-bottom:0;flex:1;min-width:0}
+.fav-btn{background:transparent;border:none;font-size:26px;cursor:pointer;padding:0 4px;margin:0;width:auto;color:#d1d5db;transition:transform 0.15s ease,color 0.15s ease;line-height:1;flex-shrink:0}
+.fav-btn:hover{transform:scale(1.15)}
+.fav-btn:active{transform:scale(0.95)}
+.fav-btn.active{color:#f59e0b}
+.fav-card-meta{display:flex;align-items:center;gap:6px;color:#6b7280;font-size:13px}
+.fav-card-meta::before{content:"★";color:#f59e0b}
 </style>
 </head>
 <body>
@@ -2504,6 +2516,25 @@ function saveGrammarProgress(){ localStorage.setItem(GRAMMAR_KEY, JSON.stringify
 function loadStreak(){ try { return JSON.parse(localStorage.getItem(STREAK_KEY) || '{"count":0,"lastStudyDate":null}'); } catch(e) { return {count:0, lastStudyDate:null}; } }
 function saveStreak(){ localStorage.setItem(STREAK_KEY, JSON.stringify(state.streak)); }
 
+// Grammar favorites
+const FAVORITES_KEY = "GERMAN_GRAMMAR_FAVORITES_V1";
+function loadGrammarFavorites(){ try { return JSON.parse(localStorage.getItem(FAVORITES_KEY) || "{}"); } catch(e) { return {}; } }
+function saveGrammarFavorites(){ localStorage.setItem(FAVORITES_KEY, JSON.stringify(state.grammarFavorites)); }
+function favKey(s, i) { return s + ":" + i; }
+function isFavorite(sIdx, iIdx) { return !!state.grammarFavorites[favKey(sIdx, iIdx)]; }
+function favoritesCount() { return Object.keys(state.grammarFavorites).length; }
+function getFavorites() {
+  const out = [];
+  for (const k in state.grammarFavorites) {
+    const parts = k.split(":");
+    const sIdx = parseInt(parts[0], 10), iIdx = parseInt(parts[1], 10);
+    if (GRAMMAR[sIdx] && GRAMMAR[sIdx].items[iIdx]) {
+      out.push({ sectionIdx: sIdx, itemIdx: iIdx, section: GRAMMAR[sIdx], item: GRAMMAR[sIdx].items[iIdx] });
+    }
+  }
+  return out;
+}
+
 // Audio (German TTS via browser SpeechSynthesis API)
 function speak(text, lang) {
   if (!('speechSynthesis' in window)) return;
@@ -2611,6 +2642,7 @@ const state = {
   grammarItemIdx: 0,
   grammarFilter: "A1",
   grammarProgress: loadGrammarProgress(),
+  grammarFavorites: loadGrammarFavorites(),
   streak: loadStreak()
 };
 
@@ -2622,6 +2654,19 @@ function setSessionSize(n) { state.sessionSize = n; render(); }
 
 function openGrammar() { state.screen = "grammar"; render(); }
 function setGrammarFilter(f) { state.grammarFilter = f; render(); }
+function toggleCurrentFavorite() {
+  const k = favKey(state.grammarSectionIdx, state.grammarItemIdx);
+  if (state.grammarFavorites[k]) delete state.grammarFavorites[k];
+  else state.grammarFavorites[k] = true;
+  saveGrammarFavorites();
+  render();
+}
+function openGrammarItem(sIdx, iIdx) {
+  state.grammarSectionIdx = sIdx;
+  state.grammarItemIdx = iIdx;
+  state.screen = "grammar-section";
+  render();
+}
 function openGrammarSection(i) { state.grammarSectionIdx = i; state.grammarItemIdx = 0; state.screen = "grammar-section"; render(); }
 function nextGrammarItem() {
   const section = GRAMMAR[state.grammarSectionIdx];
@@ -2807,11 +2852,33 @@ function renderSummary() {
 }
 
 function renderGrammar() {
-  const filters = ["A1", "A2", "B1", "Cases"];
+  const filters = ["A1", "A2", "B1", "Cases", "★"];
+  const favCount = favoritesCount();
   const filterButtons = filters.map(function(f) {
     const cls = state.grammarFilter === f ? "btn-primary" : "btn-secondary";
-    return '<button class="'+cls+'" onclick="setGrammarFilter(\''+f+'\')">'+f+'</button>';
+    const label = (f === "★" && favCount > 0) ? ("★ " + favCount) : f;
+    return '<button class="'+cls+'" onclick="setGrammarFilter(\''+f+'\')">'+label+'</button>';
   }).join("");
+
+  // Favorites view: flat list of bookmarked items
+  if (state.grammarFilter === "★") {
+    const favs = getFavorites();
+    let content;
+    if (favs.length === 0) {
+      content = '<div class="card"><p style="margin:0;color:#6b7280">No favorites yet. Open any grammar topic and tap the ☆ next to its title to bookmark it here.</p></div>';
+    } else {
+      content = favs.map(function(f) {
+        return '<div class="card grammar-card" onclick="openGrammarItem('+f.sectionIdx+','+f.itemIdx+')">'+
+          '<div class="grammar-card-head"><h2>'+escapeHtml(formatTopic(f.item.topic))+'</h2><span class="level-chip'+(f.section.level==="Cases"?" chip-cases":"")+'">'+f.section.level+'</span></div>'+
+          '<div class="fav-card-meta">'+escapeHtml(f.section.title)+'</div>'+
+        '</div>';
+      }).join("");
+    }
+    return '<h1>Grammar guide</h1>'+
+      '<div class="grammar-filter-row">'+filterButtons+'</div>'+
+      content +
+      '<button class="btn-secondary" onclick="go(\'home\')">Back to Home</button>';
+  }
 
   const filtered = GRAMMAR.map(function(s, i){ return {s:s, i:i}; }).filter(function(e) {
     const lv = e.s.level;
@@ -2863,7 +2930,10 @@ function renderGrammarSection() {
     '</div>'+
     '<div class="dot-progress" style="margin-bottom:12px">'+dots+'</div>'+
     '<div class="card grammar-rule-card">'+
-      '<div class="grammar-topic">'+escapeHtml(formatTopic(item.topic))+'</div>'+
+      '<div class="grammar-topic-row">'+
+        '<div class="grammar-topic">'+escapeHtml(formatTopic(item.topic))+'</div>'+
+        '<button class="fav-btn'+(isFavorite(state.grammarSectionIdx, idx)?' active':'')+'" onclick="toggleCurrentFavorite()" aria-label="Toggle favorite">'+(isFavorite(state.grammarSectionIdx, idx)?'★':'☆')+'</button>'+
+      '</div>'+
       '<div class="grammar-rule-text">'+escapeHtml(item.rule)+'</div>'+
       tableHtml +
       examplesHtml +
