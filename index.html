@@ -352,22 +352,23 @@ const _D = [
 ["a1-199","A1","n","der","Bus","bus","Public transport vehicle."],
 ["a1-200","A1","n","der","Zug","train","Rail transport."],
 // ===== A1 expansion (201-300) =====
-// Numbers
-["a1-201","A1","p","null","zero","The digit 0."],
-["a1-202","A1","p","eins","one","The number 1. Drop the -s when counting in a series ('ein, zwei, drei')."],
-["a1-203","A1","p","zwei","two","The number 2."],
-["a1-204","A1","p","drei","three","The number 3."],
-["a1-205","A1","p","vier","four","The number 4."],
-["a1-206","A1","p","fünf","five","The number 5."],
-["a1-207","A1","p","sechs","six","The number 6."],
-["a1-208","A1","p","sieben","seven","The number 7."],
-["a1-209","A1","p","acht","eight","The number 8."],
-["a1-210","A1","p","neun","nine","The number 9."],
-["a1-211","A1","p","zehn","ten","The number 10."],
-["a1-212","A1","p","zwanzig","twenty","The number 20. Tens end in -zig (except dreißig)."],
-["a1-213","A1","p","dreißig","thirty","The number 30. Note: -ßig, not -zig."],
-["a1-214","A1","p","hundert","hundred","The number 100. Often 'einhundert' in formal contexts."],
-["a1-215","A1","p","tausend","thousand","The number 1000."],
+// Frequency adverbs & common little words
+["a1-201","A1","p","immer","always","Every time, without exception."],
+["a1-202","A1","p","nie","never","Not at any time."],
+["a1-203","A1","p","oft","often","Many times."],
+["a1-204","A1","p","manchmal","sometimes","Occasionally."],
+["a1-205","A1","p","selten","rarely","Not often."],
+["a1-206","A1","p","auch","also / too","Adds to a previous statement."],
+["a1-207","A1","p","noch","still / yet","Continues a state ('Bist du noch da?') or adds ('noch ein Bier')."],
+["a1-208","A1","p","schon","already","Earlier than expected."],
+["a1-209","A1","p","nur","only","Limits scope."],
+["a1-210","A1","p","sehr","very","Intensifier for adjectives and adverbs."],
+// Common nouns
+["a1-211","A1","n","der","Geburtstag","birthday","Annual celebration day."],
+["a1-212","A1","n","das","Geschenk","gift","Present."],
+["a1-213","A1","n","das","Wetter","weather","Atmospheric conditions."],
+["a1-214","A1","n","die","Sache","thing / matter","An object or an issue."],
+["a1-215","A1","n","die","Farbe","color","Color (the noun, vs. specific colors like rot/blau)."],
 // More family
 ["a1-216","A1","n","der","Großvater","grandfather","Father's or mother's father. Informal: Opa."],
 ["a1-217","A1","n","die","Großmutter","grandmother","Father's or mother's mother. Informal: Oma."],
@@ -1986,22 +1987,22 @@ const _E = {
 "a1-238":{n:["Der Schnee ist weiß.","The snow is white."],a:["Ich liebe den Schnee.","I love the snow."],d:["Im Schnee spielen die Kinder.","The children play in the snow."]},
 "a1-239":{n:["Der Wind ist kalt.","The wind is cold."],a:["Ich spüre den Wind.","I feel the wind."],d:["Mit dem Wind kommt der Sturm.","The storm comes with the wind."]},
 "a1-240":{n:["Die Wolke ist groß.","The cloud is big."],a:["Ich sehe die Wolke.","I see the cloud."],d:["Hinter der Wolke ist die Sonne.","The sun is behind the cloud."]},
-// A1 expansion adjective + number + connector examples (201-215, 271-300)
-"a1-201":{e:["Ich habe null Probleme.","I have zero problems."]},
-"a1-202":{e:["Ich brauche eins.","I need one."]},
-"a1-203":{e:["Ich habe zwei Kinder.","I have two children."]},
-"a1-204":{e:["Wir sind zu dritt — drei Personen.","There are three of us."]},
-"a1-205":{e:["Ich nehme vier Brötchen.","I'll take four bread rolls."]},
-"a1-206":{e:["Wir treffen uns um fünf Uhr.","We're meeting at five o'clock."]},
-"a1-207":{e:["Ich bin sechs Jahre alt.","I am six years old."]},
-"a1-208":{e:["Sieben Tage hat eine Woche.","A week has seven days."]},
-"a1-209":{e:["Es ist acht Uhr.","It is eight o'clock."]},
-"a1-210":{e:["Sie hat neun Freunde.","She has nine friends."]},
-"a1-211":{e:["Ich zähle bis zehn.","I'm counting to ten."]},
-"a1-212":{e:["Er ist zwanzig Jahre alt.","He is twenty years old."]},
-"a1-213":{e:["Ich bin dreißig.","I am thirty."]},
-"a1-214":{e:["Hundert Euro sind viel.","A hundred euros is a lot."]},
-"a1-215":{e:["Tausend Dank!","A thousand thanks!"]},
+// A1 expansion: examples for replacement adverbs (201-210) and case examples for new nouns (211-215)
+"a1-201":{e:["Ich bin immer pünktlich.","I'm always on time."]},
+"a1-202":{e:["Ich trinke nie Alkohol.","I never drink alcohol."]},
+"a1-203":{e:["Wir gehen oft ins Kino.","We often go to the cinema."]},
+"a1-204":{e:["Manchmal arbeite ich am Wochenende.","Sometimes I work on weekends."]},
+"a1-205":{e:["Er kommt selten zu spät.","He rarely comes late."]},
+"a1-206":{e:["Ich komme auch mit.","I'm coming along too."]},
+"a1-207":{e:["Bist du noch wach?","Are you still awake?"]},
+"a1-208":{e:["Ich bin schon fertig.","I'm already done."]},
+"a1-209":{e:["Ich habe nur fünf Minuten.","I only have five minutes."]},
+"a1-210":{e:["Das ist sehr gut.","That's very good."]},
+"a1-211":{n:["Der Geburtstag ist morgen.","The birthday is tomorrow."],a:["Wir feiern den Geburtstag.","We're celebrating the birthday."],d:["Zu dem Geburtstag bringe ich ein Geschenk.","I'm bringing a gift to the birthday."]},
+"a1-212":{n:["Das Geschenk ist schön.","The gift is lovely."],a:["Ich öffne das Geschenk.","I'm opening the gift."],d:["Über das Geschenk freue ich mich.","I'm happy about the gift."]},
+"a1-213":{n:["Das Wetter ist schön.","The weather is nice."],a:["Ich mag das Wetter.","I like the weather."],d:["Bei diesem Wetter bleibe ich zu Hause.","I'm staying home in this weather."]},
+"a1-214":{n:["Die Sache ist kompliziert.","The matter is complicated."],a:["Ich verstehe die Sache nicht.","I don't understand the matter."],d:["Bei dieser Sache hilft mir niemand.","Nobody helps me with this matter."]},
+"a1-215":{n:["Die Farbe ist schön.","The color is beautiful."],a:["Ich mag diese Farbe.","I like this color."],d:["Mit dieser Farbe male ich gerne.","I like painting with this color."]},
 "a1-271":{e:["Ich war den ganzen Tag müde.","I was tired the whole day."]},
 "a1-272":{e:["Es ist halb sieben.","It's half past six."]},
 "a1-273":{e:["Ich habe viel zu tun.","I have a lot to do."]},
@@ -2786,41 +2787,22 @@ function renderProgress() {
   return '<h1>Your progress</h1><p>Status is derived from how long the scheduler will wait before showing a card again.</p>'+cards+'<button class="btn-danger" onclick="resetProgress()">Reset all progress</button><button class="btn-secondary" onclick="go(\'home\')">Back</button>';
 }
 
+function newSessionFromSummary() {
+  state.session = null;
+  state.screen = "levels";
+  render();
+}
+
 function renderSummary() {
-  if (!state.session || !state.session.metrics) {
-    return '<h1>Session complete!</h1><button class="btn-primary" onclick="endSession()">Back to Home</button>';
-  }
-  const m = state.session.metrics;
-  const elapsed = Math.max(1, Math.round((Date.now() - m.startTime) / 1000));
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
-  const reviewed = m.ratings.length;
-  const newLearned = m.ratings.filter(function(r){ return r.wasNew; }).length;
-  const correct = m.ratings.filter(function(r){ return r.rating !== "again"; }).length;
-  const accuracy = reviewed > 0 ? Math.round((correct / reviewed) * 100) : 0;
-  const timeStr = mins > 0 ? mins + "m " + secs + "s" : secs + "s";
-
-  // Pick a celebration emoji based on accuracy
-  let emoji = "🎉";
-  if (accuracy >= 90) emoji = "🏆";
-  else if (accuracy >= 75) emoji = "🌟";
-  else if (accuracy < 50) emoji = "💪";
-
   const streakLine = state.streak.count > 1
     ? '<p style="text-align:center;margin-top:8px">🔥 ' + state.streak.count + '-day streak — keep it going!</p>'
     : '';
-
-  return '<span class="summary-emoji">'+emoji+'</span>'+
+  return '<span class="summary-emoji">🎉</span>'+
     '<h1 style="text-align:center">Nice work!</h1>'+
     '<p style="text-align:center">You finished your session.</p>'+
     streakLine +
-    '<div class="card">'+
-      '<div class="summary-stat"><span class="label">Cards reviewed</span><span class="value">'+reviewed+'</span></div>'+
-      '<div class="summary-stat"><span class="label">New words learned</span><span class="value">'+newLearned+'</span></div>'+
-      '<div class="summary-stat"><span class="label">Time</span><span class="value">'+timeStr+'</span></div>'+
-      '<div class="summary-stat"><span class="label">Accuracy</span><span class="value">'+accuracy+'%</span></div>'+
-    '</div>'+
-    '<button class="btn-primary" onclick="startSession()">Start another session</button>'+
+    '<div class="spacer"></div>'+
+    '<button class="btn-primary" onclick="newSessionFromSummary()">Start another session</button>'+
     '<button class="btn-secondary" onclick="endSession()">Back to Home</button>';
 }
 
